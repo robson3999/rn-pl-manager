@@ -1,0 +1,3 @@
+rootProject.name = 'playlistManager'
+
+include ':app'
