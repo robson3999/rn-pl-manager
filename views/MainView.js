@@ -134,7 +134,7 @@ export default class MainView extends React.Component {
                         />
                     </Item>
                     <Right>
-                        <Button transparent title="Finalizuj"><Icon style={{color: 'white'}} name="arrow-forward" /></Button>
+                        <Button transparent onPress={() => this.props.navigation.navigate('SummaryView', this.state.choosenSongs)}><Icon style={{color: 'white'}} name="arrow-forward" /></Button>
                     </Right>
                 </Header>
                 <View style={{flex: 1}}>
@@ -163,7 +163,7 @@ export default class MainView extends React.Component {
                                     <Text><Icon name="ios-cash-outline" />  Koszt: {this.state.overallCost} PLN</Text>
                             </View>
                         </View>
-                        <ScrollView style={styles.bottomListScrollView}>
+                        <ScrollView>
                         <FlatList
                           data={this.state.choosenSongs}
                                 renderItem={({ item }) => 
