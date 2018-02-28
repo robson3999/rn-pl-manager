@@ -13,6 +13,7 @@ export default class SummaryView extends React.Component {
         }
         songs = props.navigation.state.params
         order = Object.keys(props.navigation.state.params)
+        this.removeSongFromPlaylist = this.removeSongFromPlaylist.bind(this)
     }
     static navigationOptions = {
         header: null
@@ -59,7 +60,7 @@ export default class SummaryView extends React.Component {
                         order.splice(e.to, 0, order.splice(e.from, 1)[0]);
                         this.forceUpdate();
                         }}
-                    renderRow={ row => <RowComponent data={row} /> }
+                    renderRow={ row => <RowComponent data={row} onRemoveRequest={() => this.removeSongFromPlaylist(row) } /> }
                     />
                 </View>
             </Container>
@@ -68,6 +69,14 @@ export default class SummaryView extends React.Component {
 }
 
 class RowComponent extends React.Component {
+    constructor(props){
+        super(props)
+        this.handleDeletingSong = this.handleDeletingSong.bind(this)
+    }
+    
+    handleDeletingSong(){
+        this.props.onRemoveRequest()
+    }
     render(){
         return (
             <ListItem style={styles.listItem}>
@@ -83,7 +92,7 @@ class RowComponent extends React.Component {
                 >
                 <Text>{this.props.data.author} - {this.props.data.title}</Text>
                 </TouchableHighlight>
-                <Button light>
+                <Button light onPress={this.handleDeletingSong}>
                     <Icon name="ios-trash" />
                 </Button>
             </ListItem>
