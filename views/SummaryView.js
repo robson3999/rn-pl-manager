@@ -1,15 +1,18 @@
 import React from 'react'
-import { StyleSheet, ScrollView, FlatList, View } from 'react-native'
-import { Container, Header, Content, Left, Body, ListItem, Text, Title, Button, H1, Card, CardItem, Icon } from 'native-base';
+import { StyleSheet, View, TouchableHighlight } from 'react-native'
+import { Container, Header, Content, Left, Body, List, ListItem, Text, Title, Button, H1, Card, CardItem, Icon } from 'native-base';
+import SortableListView from 'react-native-sortable-listview'
 
 
-
-export default class DetailView extends React.Component {
+let order, songs
+export default class SummaryView extends React.Component {
     constructor(props) {
         super(props)
         this.state = {
             choosenSongs: props.navigation.state.params
         }
+        songs = props.navigation.state.params
+        order = Object.keys(props.navigation.state.params)
     }
     static navigationOptions = {
         header: null
@@ -33,6 +36,7 @@ export default class DetailView extends React.Component {
     }
 
     render() {
+        console.log(songs)
         return (
             <Container>
                 <Header style={styles.headerBar} androidStatusBarColor={"powderblue"}>
@@ -45,22 +49,44 @@ export default class DetailView extends React.Component {
                         <Title>Podsumowanie</Title>
                     </Body>
                 </Header>
-                <View>
-                        <ScrollView>
-                            <FlatList
-                                data={this.state.choosenSongs}
-                                renderItem={({ item }) =>
-                                    <ListItem style={styles.listItem}>
-                                        <Text>{item.author} - {item.title}</Text>
-                                        <Button light onPress={() => this.removeSongFromPlaylist(item) }>
-                                            <Icon name="ios-trash" />
-                                        </Button>
-                                    </ListItem>
-                                }
-                            />
-                        </ScrollView>
+                <View style={{flex: 1}}>
+                    <SortableListView
+                    style={{ flex: 1, marginBottom: 0 }}
+                    data={songs}
+                    order={order}
+                    onRowMoved={e => {
+                        console.log(order)
+                        order.splice(e.to, 0, order.splice(e.from, 1)[0]);
+                        this.forceUpdate();
+                        }}
+                    renderRow={ row => <RowComponent data={row} /> }
+                    />
                 </View>
             </Container>
+        )
+    }
+}
+
+class RowComponent extends React.Component {
+    render(){
+        return (
+            <ListItem style={styles.listItem}>
+                <TouchableHighlight
+                    underlayColor={'#eee'}
+                    style={{
+                        padding: 25,
+                        backgroundColor: '#F8F8F8',
+                        borderBottomWidth: 1,
+                        borderColor: '#eee',
+                    }}
+                {...this.props.sortHandlers}
+                >
+                <Text>{this.props.data.author} - {this.props.data.title}</Text>
+                </TouchableHighlight>
+                <Button light>
+                    <Icon name="ios-trash" />
+                </Button>
+            </ListItem>
         )
     }
 }
