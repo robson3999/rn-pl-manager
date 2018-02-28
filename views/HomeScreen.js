@@ -1,6 +1,6 @@
 import React from 'react'
-import { StyleSheet, Image, View } from 'react-native'
-import { Container, Content, Button, Text, Thumbnail } from 'native-base';
+import { StyleSheet, Image, View, TouchableHighlight } from 'react-native'
+import { Container, Content, Text } from 'native-base';
 
 export default class HomeScreen extends React.Component {
     constructor(props){
@@ -9,12 +9,16 @@ export default class HomeScreen extends React.Component {
     static navigationOptions = {
         header: null
     }
+   componentDidMount(){
+       setTimeout(()=>{
+           this.props.navigation.navigate('MainView')
+       }, 300)
+   } 
     render() {
         return (
             // <Container style={styles.container}>
                 <View center style={styles.content}>
-                    <Image style={styles.image} source={require('../assets/Jukebox.png')} />
-                    <Button success full rounded onPress={()=> this.props.navigation.navigate('MainView')}><Text style={styles.button}>Choose song</Text></Button>
+                        <Image source={require('../assets/Jukebox.png')} />
                 </View>
             // </Container>
         )
@@ -33,7 +37,5 @@ const styles = StyleSheet.create({
     },
     button: {
         color: 'black'
-    },
-    image: {
     }
 })

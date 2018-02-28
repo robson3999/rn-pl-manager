@@ -1,4 +1,5 @@
 import React from 'react';
+import { Root } from 'native-base'
 import { StackNavigator } from 'react-navigation'
 import HomeScreen from './views/HomeScreen'
 import MainView from './views/MainView'
@@ -24,7 +25,9 @@ const RootStack = StackNavigator(
 export default class App extends React.Component {
   render() {
     return (
-      <RootStack />
+      <Root>
+        <RootStack />
+      </Root>
     )
   }
 }

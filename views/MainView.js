@@ -1,92 +1,228 @@
 import React from 'react';
-import { StyleSheet, SectionList } from 'react-native'
-import { Container, Header, Body, Title, Item, Icon, Input, Content, Button, Text } from 'native-base';
+import { StyleSheet, SectionList, TouchableHighlight, View, ScrollView, FlatList, Keyboard } from 'react-native'
+import { 
+        Container, 
+        Header,
+        H2,
+        H3,
+        Body,
+        ListItem,
+        Title,
+        Item,
+        Icon,
+        Text,
+        Input,
+        Content,
+        Button,
+        Spinner,
+        CheckBox,
+        Toast,
+        Right
+     } from 'native-base';
 
 export default class MainView extends React.Component {
     constructor(props){
         super(props)
         this.state = {
+            isLoading: true,
             searchText: null,
-            songsList: [
-                   { title: 'A', data: ['Abracadabra', 'Aaaaa'] },
-                   { title: 'B', data: ['B is the title', 'BombsAway'] },
-                   { title: 'D', data: ['Devin'] },
-                   { title: 'J', data: ['Jackson', 'James', 'Jillian', 'Jimmy', 'Joel', 'John', 'Julie'] },
-                   { title: 'Z', data: ['ZZ TOP', 'Zimbabwe'] },
-               ]
+            customHeight: 50,
+            songsList: [],
+            filteredSongs: [],
+            showToast: false,
+            choosenSongs: [],
+            overallCost: 0
         }
+    }
+
+    async componentDidMount(){
+        let songs = []
+        await fetch('http://192.168.1.101:3000/genres')
+        .then(response => response.json())
+        .then(response => {
+            songs = response
+        })
+        .catch(err => console.log(err))
+        this.setState({
+            isLoading: false,
+            songsList: songs,
+        })
     }
 
     static navigationOptions = {
         header: null
     }
 
-    setSearchText(event){
-        let searchText = event.nativeEvent.text
-        this.setState({searchText})
-        this.filterSongs(searchText)
-    }
 
-    filterSongs(searchText){
-        if(searchText){
-          let text = searchText.toLowerCase()
-          return this.state.songsList.filter((s) => {
-              console.log(s)
-              return s == text
-          })
+    _keyExtractor = (item, index) => item.id
+    
+    setSearchText(event){
+        console.log(this.state)
+        // let searchText = event.nativeEvent.text
+        // text = searchText.trim().toLowerCase()
+        // filteredSongs = this.state.songsList.filter(s => {
+        //         // s.data.forEach(title => {
+        //         //     return title.toLowerCase().match( text )
+        //         // })
+        //         return s.title.toLowerCase().match(text) || s.author.toLowerCase().match(text)
+        //     })
+
+        //  this.setState({ filteredSongs })
+    }
+    addSongToPlaylist(song){
+        let actualPlaylist = this.state.choosenSongs
+        if((actualPlaylist.filter(item => item.id !== song.id).length) == actualPlaylist.length){
+            let actualCost = this.state.overallCost
+            actualCost++
+            let customHeight = this.state.customHeight
+            customHeight += 50
+            this.setState({
+                choosenSongs: [...this.state.choosenSongs, song],
+                overallCost: actualCost,
+                customHeight: customHeight
+            })
+            Toast.show({
+                text: `Dodano piosenkę: ${song.title}`,
+                position: 'bottom',
+                buttonText: 'OK'
+            })
         } else {
-            return 0
+            Toast.show({
+                text: 'Już dodano tą piosenkę',
+                position: 'bottom',
+                buttonText: 'OK'
+            })
         }
 
     }
+    removeSongFromPlaylist(song){
+        let actualPlaylist = this.state.choosenSongs
+        let actualCost = this.state.overallCost
+        actualCost--
+        actualPlaylist = actualPlaylist.filter((item) => {
+            return item.id !== song.id
+        })
+        this.setState({
+            choosenSongs: actualPlaylist,
+            overallCost: actualCost
+        })
+        console.log(this.state.choosenSongs)
+    }
+
     
     render() {
-        
-        return (
-            <Container>
-            <Header searchBar rounded>
-                <Item>
-                    <Icon name="ios-search" />
-                    <Input 
-                        placeholder="Search"
-                        value={this.state.searchText}
-                        onChange={this.setSearchText.bind(this)}
-                    />
-                </Item>
-            </Header>
-            <Content>
-            <SectionList
-            sections={this.state.songsList}
-            renderItem={({ item }) => <Button full light onPress={() => this.props.navigation.navigate('DetailView', item)}
-                style={styles.item} 
-                title={item}>
-            <Text>{item}</Text>
-            </Button>}
-            renderSectionHeader={({ section }) => <Text style={styles.sectionHeader}>{section.title}</Text>}
-            keyExtractor={(item, index) => index}
-            />
-            </Content>
-            </Container>
-        );
+        let _customHeight = {}
+        if (this.state.isLoading){
+            return (
+                <Container style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+                    <View>
+                        <Text>Loading...</Text>
+                        <Spinner color='powderblue' />
+                    </View>          
+                </Container>
+            )
+        } else {
+            return (
+                <Container>
+                    <Header searchBar rounded style={styles.headerBar} androidStatusBarColor={"powderblue"}>
+                    <Item>
+                        <Icon name="ios-search" />
+                        <Input 
+                            placeholder="Szukaj"
+                            value={this.state.searchText}
+                            onChange={this.setSearchText.bind(this)}
+                        />
+                    </Item>
+                    <Right>
+                        <Button transparent title="Finalizuj"><Icon style={{color: 'white'}} name="arrow-forward" /></Button>
+                    </Right>
+                </Header>
+                <View style={{flex: 1}}>
+                    <ScrollView>
+                        <SectionList
+                        sections={this.state.songsList}
+                        renderItem={({ item }) =>
+                        <ListItem style={styles.listItem}>
+                        <Text style={styles.item}>{item.author} - {item.title}</Text>
+                        <Button light onPress={() => this.addSongToPlaylist(item)}>
+                        <Icon name='ios-add' />
+                        </Button>
+                        </ListItem>
+                        }
+                        keyExtractor={(item, index) => item.id}
+                        renderSectionHeader={({section}) => <Text style={styles.sectionHeader}>{section.title.toUpperCase()}</Text>}
+                        />
+                    </ScrollView>
+                        <View style={[styles.placeholder ,{height: this.state.customHeight}]}></View>
+                        <View style={[styles.bottomList, { height: this.state.customHeight }]}>
+                        <View style={styles.bottomHeaderBar}>
+                            <View style={styles.bottomHeaderItem}>
+                                    <Text><Icon name="md-musical-notes" />  Playlista</Text>
+                            </View>
+                            <View style={styles.bottomHeaderItem}>
+                                    <Text><Icon name="ios-cash-outline" />  Koszt: {this.state.overallCost} PLN</Text>
+                            </View>
+                        </View>
+                        <ScrollView style={styles.bottomListScrollView}>
+                        <FlatList
+                          data={this.state.choosenSongs}
+                                renderItem={({ item }) => 
+                                <ListItem style={styles.listItem}>
+                                    <Text>{item.author} - {item.title}</Text>
+                                    <Button light onPress={() => this.removeSongFromPlaylist(item)}>
+                                    <Icon name="ios-trash"/>
+                                    </Button>
+                                </ListItem>
+                                }
+                            />
+                            </ScrollView>
+                    </View>
+                </View>
+                </Container>
+            );
+        }        
     }
  }
 
 const styles = StyleSheet.create({
     container: {
-        flex: 1,
-        paddingTop: 22
+    },
+    headerBar: {
+        backgroundColor: 'powderblue',
+        justifyContent: 'space-between'
+    },
+    bottomHeaderBar: {
+        backgroundColor: 'powderblue',
+        flexDirection: 'row',
+        justifyContent: 'space-between',
     },
     sectionHeader: {
-        paddingTop: 2,
+        paddingTop: 5,
         paddingLeft: 10,
         paddingRight: 10,
-        paddingBottom: 2,
-        fontSize: 14,
+        paddingBottom: 5,
+        fontSize: 16,
         fontWeight: 'bold',
         backgroundColor: 'rgba(247,247,247,1.0)',
     },
-    item: {
-        padding: 30,
-        height: 64,
+    listItem: {
+        justifyContent: 'space-between'
     },
+    item: {
+        padding: 10,
+    },
+    bottomHeaderItem: {
+        padding: 10
+    },
+    bottomList: { 
+        position: 'absolute', 
+        left: 0, 
+        right: 0, 
+        bottom: 0,
+        backgroundColor: '#F5F5F5',
+        maxHeight: 200
+    },
+    placeholder: {
+        maxHeight: 200        
+    }
 });

@@ -1,5 +1,5 @@
 import React from 'react'
-import { Container, Header, Body, Left, Title, Content, Icon, Button, Text, Card, CardItem, H1 } from 'native-base';
+import { Container, Header, Body, Left, Title, Content, Icon, Button, Text, Card, CardItem, H1, H2 } from 'native-base';
 
 
 
@@ -7,7 +7,7 @@ export default class DetailView extends React.Component {
     constructor(props){
         super(props)
         this.state = {
-            songTitle: props.navigation.state.params
+            song: props.navigation.state.params
         }
     }
     static navigationOptions = {
@@ -34,7 +34,7 @@ export default class DetailView extends React.Component {
                 <Content>
                     <Card>
                         <CardItem header>
-                            <H1>{ this.state.songTitle }</H1>
+                            <H1>{ this.state.song.title }</H1><H2> - { this.state.song.author }</H2>
                         </CardItem>
                         <CardItem>
                             <Body>
@@ -44,7 +44,7 @@ export default class DetailView extends React.Component {
                             </Body>
                         </CardItem>
                         <CardItem footer>
-                            <Button rounded success><Text>Order this song!</Text></Button>
+                            <Button rounded success><Text>Order this song</Text></Button>
                         </CardItem>
                     </Card>
                 </Content>
