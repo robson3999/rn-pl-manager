@@ -9,34 +9,37 @@ export default class SummaryView extends React.Component {
     constructor(props) {
         super(props)
         this.state = {
-            choosenSongs: props.navigation.state.params
+            choosenSongs: props.navigation.state.params,
+            overallCost: null
         }
-        songs = props.navigation.state.params
-        order = Object.keys(props.navigation.state.params)
+        songs = this.state.choosenSongs
+        order = Object.keys(this.state.choosenSongs)
         this.removeSongFromPlaylist = this.removeSongFromPlaylist.bind(this)
     }
     static navigationOptions = {
         header: null
     }
     componentDidMount() {
+        this.setState({
+            overallCost: this.state.choosenSongs.length
+        })
+        
         console.log(this.state)
         console.log(this.props)
     }
     removeSongFromPlaylist(song){
         let actualPlaylist = this.state.choosenSongs
-        // let actualCost = this.state.overallCost
-        // actualCost--
         actualPlaylist = actualPlaylist.filter((item) => {
             return item.id !== song.id
         })
         this.setState({
             choosenSongs: actualPlaylist,
-            // overallCost: actualCost
         })
-        console.log(this.state.choosenSongs)
+        songs = this.state.choosenSongs
     }
 
     render() {
+        
         console.log(songs)
         return (
             <Container>
@@ -60,8 +63,18 @@ export default class SummaryView extends React.Component {
                         order.splice(e.to, 0, order.splice(e.from, 1)[0]);
                         this.forceUpdate();
                         }}
-                    renderRow={ row => <RowComponent data={row} onRemoveRequest={() => this.removeSongFromPlaylist(row) } /> }
+                    renderRow={ row => <RowComponent data={row} /> }
                     />
+                </View>
+                <View style={styles.bottomList}>
+                    <View style={styles.bottomHeaderBar}>
+                        <View style={styles.bottomHeaderItem}>
+                            <Button transparent><Icon style={styles.footerText} name="ios-cash-outline" /><Text style={styles.footerText}>Suma: {this.state.overallCost} PLN</Text></Button>
+                        </View>
+                        <View style={styles.bottomHeaderItem}>
+                            <Button transparent><Text style={styles.footerText}>Zapłać </Text><Icon style={styles.footerText} name="arrow-forward" /></Button>
+                        </View>
+                    </View>
                 </View>
             </Container>
         )
@@ -74,32 +87,34 @@ class RowComponent extends React.Component {
         this.handleDeletingSong = this.handleDeletingSong.bind(this)
     }
     
-    handleDeletingSong(){
-        this.props.onRemoveRequest()
+    handleDeletingSong(e){
+        this.props.onRemoveRequest(e)
+        this.forceUpdate()        
     }
     render(){
+        const song = this.props.data
         return (
             <ListItem style={styles.listItem}>
-                <TouchableHighlight
-                    underlayColor={'#eee'}
+            <TouchableHighlight
+                underlayColor={'#eee'}
                     style={{
-                        padding: 25,
-                        backgroundColor: '#F8F8F8',
+                        padding: 20,
+                        // backgroundColor: '#F8F8F8',
                         borderBottomWidth: 1,
                         borderColor: '#eee',
                     }}
                 {...this.props.sortHandlers}
                 >
-                <Text>{this.props.data.author} - {this.props.data.title}</Text>
+                <Text>{song.author} - {song.title}</Text>
                 </TouchableHighlight>
-                <Button light onPress={this.handleDeletingSong}>
-                    <Icon name="ios-trash" />
-                </Button>
             </ListItem>
-        )
+            )
+        }
     }
-}
-
+    // <Button light onPress={()=>this.handleDeletingSong(song)}>
+    //     <Icon name="ios-trash" />
+    // </Button>
+    
 const styles = StyleSheet.create({
     container: {
     },
@@ -110,4 +125,23 @@ const styles = StyleSheet.create({
     listItem: {
         justifyContent: 'space-between'
     },
+    bottomList: {
+        position: 'absolute',
+        left: 0,
+        right: 0,
+        bottom: 0,
+        backgroundColor: '#F5F5F5',
+        maxHeight: 50
+    },
+    bottomHeaderBar: {
+        backgroundColor: 'powderblue',
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+    },
+    bottomHeaderItem: {
+        // padding: 10
+    },
+    footerText:{ 
+        color: 'black'
+    }
 })
