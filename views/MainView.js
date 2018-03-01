@@ -20,36 +20,59 @@ import {
         Right
      } from 'native-base';
 
+let songs
+
 export default class MainView extends React.Component {
     constructor(props){
         super(props)
         this.state = {
             isLoading: true,
             searchText: null,
-            customHeight: 50,
             songsList: [],
             filteredSongs: [],
-            showToast: false,
-            choosenSongs: [],
-            overallCost: 0
+            showToast: false
         }
     }
 
     async componentDidMount(){
-        let songs = []
-        await fetch('http://192.168.1.101:3000/genres')
+        songs = []
+        let passedData = this.props.navigation.state.params
+        await fetch('https://my-json-server.typicode.com/robson3999/songs-db/genres')
         .then(response => response.json())
         .then(response => {
             songs = response
         })
         .catch(err => console.log(err))
+        console.log(passedData)
+        if (passedData){
+            if (passedData.length > 0){
+                let overallCost = passedData.length
+                let calculatedHeight = overallCost*50+50
+                this.setState({
+                    isLoading: false,
+                    songsList: songs,
+                    filteredSongs: songs,
+                    choosenSongs: passedData,
+                    customHeight: calculatedHeight,
+                    overallCost: overallCost
+                })
+            } else {
+                this.setStateToStart()
+            }
+        } else {
+            this.setStateToStart()
+        }
+    }
+    setStateToStart(){
         this.setState({
             isLoading: false,
             songsList: songs,
-            filteredSongs: songs
+            filteredSongs: songs,
+            choosenSongs: [],
+            customHeight: 50,
+            overallCost: 0
         })
     }
-
     static navigationOptions = {
         header: null
     }
@@ -91,13 +114,15 @@ export default class MainView extends React.Component {
             Toast.show({
                 text: `Dodano piosenkę: ${song.title}`,
                 position: 'bottom',
-                buttonText: 'OK'
+                buttonText: 'OK',
+                // type: 'success'
             })
         } else {
             Toast.show({
                 text: 'Już dodano tą piosenkę',
                 position: 'bottom',
-                buttonText: 'OK'
+                buttonText: 'OK',
+                // type: 'warning'                
             })
         }
 
@@ -106,14 +131,17 @@ export default class MainView extends React.Component {
         let actualPlaylist = this.state.choosenSongs
         let actualCost = this.state.overallCost
         actualCost--
+        // if()
+        let customHeight = this.state.customHeight
+        customHeight-=50
         actualPlaylist = actualPlaylist.filter((item) => {
             return item.id !== song.id
         })
         this.setState({
             choosenSongs: actualPlaylist,
-            overallCost: actualCost
+            overallCost: actualCost,
+            customHeight: customHeight
         })
-        console.log(this.state.choosenSongs)
     }
 
     
@@ -123,7 +151,7 @@ export default class MainView extends React.Component {
             return (
                 <Container style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
                     <View>
-                        <Text>Loading...</Text>
+                        <Text>Pobieranie piosenek...</Text>
                         <Spinner color='powderblue' />
                     </View>          
                 </Container>

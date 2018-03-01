@@ -1,5 +1,5 @@
 import React from 'react'
-import { StyleSheet, View, TouchableHighlight, Modal } from 'react-native'
+import { StyleSheet, View, TouchableNativeFeedback, TouchableHighlight, Modal } from 'react-native'
 import { Container, Header, Content, Left, Body, List, ListItem, Spinner, Text, Title, Button, H1, Card, CardItem, Icon } from 'native-base';
 import SortableListView from 'react-native-sortable-listview'
 
@@ -24,9 +24,6 @@ export default class SummaryView extends React.Component {
         this.setState({
             overallCost: this.state.choosenSongs.length
         })
-        
-        console.log(this.state)
-        console.log(this.props)
     }
     removeSongFromPlaylist(song){
         let actualPlaylist = this.state.choosenSongs
@@ -44,13 +41,11 @@ export default class SummaryView extends React.Component {
     }
 
     render() {
-        
-        console.log(songs)
         return (
             <Container>
                 <Header style={styles.headerBar} androidStatusBarColor={"#49a7cc"}>
                     <Left>
-                        <Button transparent onPress={() => this.props.navigation.navigate('MainView')}>
+                        <Button transparent onPress={() => this.props.navigation.navigate('MainView', this.state.choosenSongs)}>
                             <Icon style={{ color: 'black' }} name='arrow-back' />
                         </Button>
                     </Left>
@@ -69,12 +64,13 @@ export default class SummaryView extends React.Component {
                     <View style={styles.modal}>
                     <Text>Sfinalizuj transakcję...</Text>
                     <Spinner color="#49a7cc"/>
-                    <TouchableHighlight
+                    <TouchableNativeFeedback
                       onPress={() => {
                           this.setModalVisibility(!this.state.modalVisible)
-                      }}>
+                      }}
+                      background={TouchableNativeFeedback.SelectableBackground()}>
                         <Text style={{ color: "#49a7cc"}}>Anuluj</Text>
-                    </TouchableHighlight>
+                    </TouchableNativeFeedback>
                     </View>
                   </View>
                 </Modal>
@@ -85,7 +81,6 @@ export default class SummaryView extends React.Component {
                     data={songs}
                     order={order}
                     onRowMoved={e => {
-                        console.log(order)
                         order.splice(e.to, 0, order.splice(e.from, 1)[0]);
                         this.forceUpdate();
                         }}
@@ -125,22 +120,23 @@ class RowComponent extends React.Component {
             <TouchableHighlight
                 underlayColor={'#eee'}
                     style={{
-                        padding: 20,
+                        padding: 10,
                         // backgroundColor: '#6ff9ff',
                         borderBottomWidth: 1,
                         borderColor: '#eee',
                     }}
                 {...this.props.sortHandlers}
                 >
-                <Text>{song.author} - {song.title}</Text>
+                <Icon name="md-menu" />
                 </TouchableHighlight>
+                <Text style={{maxWidth: '75%'}}>  {song.author} - {song.title}</Text>
+                <Button rounded style={{ backgroundColor: '#80d8ff'}} onPress={()=>this.handleDeletingSong(song)}>
+                <Icon style={{color: 'black'}} name="md-trash" />
+                </Button>
             </ListItem>
             )
         }
     }
-    // <Button light onPress={()=>this.handleDeletingSong(song)}>
-    //     <Icon name="ios-trash" />
-    // </Button>
     
 const styles = StyleSheet.create({
     container: {
@@ -155,7 +151,8 @@ const styles = StyleSheet.create({
         padding: 10
     },
     listItem: {
-        justifyContent: 'space-between'
+        justifyContent: 'space-between',
+        padding: 10
     },
     bottomList: {
         position: 'absolute',
