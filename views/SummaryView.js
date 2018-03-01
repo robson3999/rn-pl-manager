@@ -30,10 +30,12 @@ export default class SummaryView extends React.Component {
         actualPlaylist = actualPlaylist.filter((item) => {
             return item.id !== song.id
         })
-        this.setState({
-            choosenSongs: actualPlaylist,
+        this.setState((previousState) => {
+            return {
+                choosenSongs: actualPlaylist,
+                overallCost: --previousState.overallCost
+            }
         })
-        songs = this.state.choosenSongs
     }
 
     setModalVisibility(visibility){
@@ -78,13 +80,13 @@ export default class SummaryView extends React.Component {
                 <View style={{flex: 1}}>
                     <SortableListView
                     style={{ flex: 1, marginBottom: 0 }}
-                    data={songs}
+                    data={this.state.choosenSongs}
                     order={order}
                     onRowMoved={e => {
                         order.splice(e.to, 0, order.splice(e.from, 1)[0]);
                         this.forceUpdate();
                         }}
-                    renderRow={ row => <RowComponent data={row} /> }
+                    renderRow={ row => <RowComponent data={row} onRemoveRequest={(song) => this.removeSongFromPlaylist(song)} /> }
                     />
                 </View>
                 <View style={styles.placeholder}></View>
@@ -109,32 +111,39 @@ class RowComponent extends React.Component {
         this.handleDeletingSong = this.handleDeletingSong.bind(this)
     }
     
-    handleDeletingSong(e){
-        this.props.onRemoveRequest(e)
-        this.forceUpdate()        
+    async handleDeletingSong(e){
+        await this.props.onRemoveRequest(e)
+        this.forceUpdate()
     }
     render(){
         const song = this.props.data
-        return (
-            <ListItem style={styles.listItem}>
-            <TouchableHighlight
-                underlayColor={'#eee'}
-                    style={{
-                        padding: 10,
-                        // backgroundColor: '#6ff9ff',
-                        borderBottomWidth: 1,
-                        borderColor: '#eee',
-                    }}
-                {...this.props.sortHandlers}
-                >
-                <Icon name="md-menu" />
-                </TouchableHighlight>
-                <Text style={{maxWidth: '75%'}}>  {song.author} - {song.title}</Text>
-                <Button rounded style={{ backgroundColor: '#80d8ff'}} onPress={()=>this.handleDeletingSong(song)}>
-                <Icon style={{color: 'black'}} name="md-trash" />
-                </Button>
-            </ListItem>
+        if (song){
+            return (
+                <ListItem style={styles.listItem}>
+                    <TouchableHighlight
+                        underlayColor={'#eee'}
+                        style={{
+                            padding: 10,
+                            // backgroundColor: '#6ff9ff',
+                            borderBottomWidth: 1,
+                            borderColor: '#eee',
+                        }}
+                        {...this.props.sortHandlers}
+                    >
+                        <Icon name="md-menu" />
+                    </TouchableHighlight>
+                    <Text style={{ maxWidth: '75%' }}>  {song.author} - {song.title}</Text>
+                    <Button rounded style={{ backgroundColor: '#80d8ff' }} onPress={() => this.handleDeletingSong(song)}>
+                        <Icon style={{ color: 'black' }} name="md-trash" />
+                    </Button>
+                </ListItem>
             )
+        } else { //filthy workaround o.o
+            return (
+                <View></View>
+            )
+        }
+        
         }
     }
     

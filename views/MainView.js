@@ -102,14 +102,12 @@ export default class MainView extends React.Component {
     addSongToPlaylist(song){
         let actualPlaylist = this.state.choosenSongs
         if((actualPlaylist.filter(item => item.id !== song.id).length) == actualPlaylist.length){
-            let actualCost = this.state.overallCost
-            actualCost++
-            let customHeight = this.state.customHeight
-            customHeight += 50
-            this.setState({
-                choosenSongs: [...this.state.choosenSongs, song],
-                overallCost: actualCost,
-                customHeight: customHeight
+            this.setState((prevState) => {
+                return {
+                    choosenSongs: [...this.state.choosenSongs, song],
+                    overallCost: ++prevState.overallCost,
+                    customHeight: prevState.customHeight+50
+                }
             })
             Toast.show({
                 text: `Dodano piosenkę: ${song.title}`,
@@ -129,18 +127,19 @@ export default class MainView extends React.Component {
     }
     removeSongFromPlaylist(song){
         let actualPlaylist = this.state.choosenSongs
-        let actualCost = this.state.overallCost
-        actualCost--
-        // if()
-        let customHeight = this.state.customHeight
-        customHeight-=50
+        // let actualCost = this.state.overallCost
+        // actualCost--
+        // let customHeight = this.state.customHeight
+        // customHeight-=50
         actualPlaylist = actualPlaylist.filter((item) => {
             return item.id !== song.id
         })
-        this.setState({
-            choosenSongs: actualPlaylist,
-            overallCost: actualCost,
-            customHeight: customHeight
+        this.setState((prevState) => {
+            return {    
+                choosenSongs: actualPlaylist,
+                overallCost: --prevState.overallCost,
+                customHeight: prevState.customHeight-50
+            }
         })
     }
 
