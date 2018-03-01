@@ -1,6 +1,6 @@
 import React from 'react'
 import { StyleSheet, View, TouchableNativeFeedback, TouchableHighlight, Modal } from 'react-native'
-import { Container, Header, Content, Left, Body, List, ListItem, Spinner, Text, Title, Button, H1, Card, CardItem, Icon } from 'native-base';
+import { Container, Header, Content, Left, Body, List, ListItem, Spinner, Text, Title, Button, H1, Card, CardItem, Icon, Toast } from 'native-base';
 import SortableListView from 'react-native-sortable-listview'
 
 
@@ -111,10 +111,15 @@ class RowComponent extends React.Component {
         this.handleDeletingSong = this.handleDeletingSong.bind(this)
     }
     
-    async handleDeletingSong(e){
-        await this.props.onRemoveRequest(e)
-        this.forceUpdate()
+    handleDeletingSong(e){
+        this.props.onRemoveRequest(e)
+        Toast.show({
+            text: 'Usunięto piosenkę',
+            position: 'bottom',
+            buttonText: 'OK',
+        })
     }
+
     render(){
         const song = this.props.data
         if (song){
@@ -143,7 +148,6 @@ class RowComponent extends React.Component {
                 <View></View>
             )
         }
-        
         }
     }
     

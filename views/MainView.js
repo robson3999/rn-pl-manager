@@ -142,7 +142,6 @@ export default class MainView extends React.Component {
             }
         })
     }
-
     
     render() {
         let _customHeight = {}
