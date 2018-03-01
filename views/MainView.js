@@ -21,6 +21,7 @@ import {
      } from 'native-base';
 
 let songs
+let errorMessage = null
 
 export default class MainView extends React.Component {
     constructor(props){
@@ -37,13 +38,17 @@ export default class MainView extends React.Component {
     async componentDidMount(){
         songs = []
         let passedData = this.props.navigation.state.params
+        // await fetch('https://my-json-server.typicode.com/robson3999/songs-db/ges')
         await fetch('https://my-json-server.typicode.com/robson3999/songs-db/genres')
-        .then(response => response.json())
         .then(response => {
-            songs = response
+            response.ok ? response.json().then(resp => songs = resp) : this.setState({isLoading: false, noInternet: true})
         })
+        // .then(response => {
+        //     console.log(response)
+        //     songs = response
+        // })
         .catch(err => console.log(err))
-        console.log(passedData)
+        // console.log(passedData)
         if (passedData){
             if (passedData.length > 0){
                 let overallCost = passedData.length
@@ -155,6 +160,13 @@ export default class MainView extends React.Component {
                 </Container>
             )
         } else {
+            if(this.state.noInternet){
+                return (
+                    <Container style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+                        <View><Text>Wygląda na to, że nie masz połączenia z internetem :(</Text></View>
+                    </Container>
+                )
+            } else {
             return (
                 <Container style={styles.container}>
                     <Header searchBar rounded style={styles.headerBar} androidStatusBarColor={"#49a7cc"}>
@@ -216,6 +228,7 @@ export default class MainView extends React.Component {
                 </View>
                 </Container>
             );
+            }            
         }        
     }
  }
