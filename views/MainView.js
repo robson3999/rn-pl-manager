@@ -46,6 +46,7 @@ export default class MainView extends React.Component {
         this.setState({
             isLoading: false,
             songsList: songs,
+            filteredSongs: songs
         })
     }
 
@@ -57,18 +58,25 @@ export default class MainView extends React.Component {
     _keyExtractor = (item, index) => item.id
     
     setSearchText(event){
-        console.log(this.state)
-        // let searchText = event.nativeEvent.text
-        // text = searchText.trim().toLowerCase()
-        // filteredSongs = this.state.songsList.filter(s => {
-        //         // s.data.forEach(title => {
-        //         //     return title.toLowerCase().match( text )
-        //         // })
-        //         return s.title.toLowerCase().match(text) || s.author.toLowerCase().match(text)
-        //     })
-
-        //  this.setState({ filteredSongs })
+        let searchText = event.nativeEvent.text
+        let songs = this.state.songsList
+        text = searchText.trim().toLowerCase()
+        let newFilteredSongs = songs.map(genre => {
+            return genre
+        }).map(data => {
+            return {
+                title: data.title,
+                data: data.data.filter(item => {
+                      // console.log(item.title.toLowerCase().match(text))
+                      return item.title.toLowerCase().match(text)
+                      })
+            }
+        })
+        this.setState({ 
+            filteredSongs: newFilteredSongs
+        })
     }
+
     addSongToPlaylist(song){
         let actualPlaylist = this.state.choosenSongs
         if((actualPlaylist.filter(item => item.id !== song.id).length) == actualPlaylist.length){
@@ -112,6 +120,7 @@ export default class MainView extends React.Component {
     
     render() {
         let _customHeight = {}
+        let filteredSongsList = []
         if (this.state.isLoading){
             return (
                 <Container style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
@@ -122,6 +131,11 @@ export default class MainView extends React.Component {
                 </Container>
             )
         } else {
+            if (this.state.filteredSongs.length > 0) {
+                filteredSongsList = this.state.filteredSongs
+            } else {
+                filteredSongsList = []
+            }
             return (
                 <Container>
                     <Header searchBar rounded style={styles.headerBar} androidStatusBarColor={"powderblue"}>
@@ -140,7 +154,7 @@ export default class MainView extends React.Component {
                 <View style={{flex: 1}}>
                     <ScrollView>
                         <SectionList
-                        sections={this.state.songsList}
+                                sections={ filteredSongsList }
                         renderItem={({ item }) =>
                         <ListItem style={styles.listItem}>
                         <Text style={styles.item}>{item.author} - {item.title}</Text>
