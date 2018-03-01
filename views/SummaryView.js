@@ -1,6 +1,6 @@
 import React from 'react'
-import { StyleSheet, View, TouchableHighlight } from 'react-native'
-import { Container, Header, Content, Left, Body, List, ListItem, Text, Title, Button, H1, Card, CardItem, Icon } from 'native-base';
+import { StyleSheet, View, TouchableHighlight, Modal } from 'react-native'
+import { Container, Header, Content, Left, Body, List, ListItem, Spinner, Text, Title, Button, H1, Card, CardItem, Icon } from 'native-base';
 import SortableListView from 'react-native-sortable-listview'
 
 
@@ -10,7 +10,8 @@ export default class SummaryView extends React.Component {
         super(props)
         this.state = {
             choosenSongs: props.navigation.state.params,
-            overallCost: null
+            overallCost: null,
+            modalVisible: false
         }
         songs = this.state.choosenSongs
         order = Object.keys(this.state.choosenSongs)
@@ -38,21 +39,46 @@ export default class SummaryView extends React.Component {
         songs = this.state.choosenSongs
     }
 
+    setModalVisibility(visibility){
+        this.setState({modalVisible: visibility})
+    }
+
     render() {
         
         console.log(songs)
         return (
             <Container>
-                <Header style={styles.headerBar} androidStatusBarColor={"powderblue"}>
+                <Header style={styles.headerBar} androidStatusBarColor={"#49a7cc"}>
                     <Left>
                         <Button transparent onPress={() => this.props.navigation.navigate('MainView')}>
-                            <Icon name='arrow-back' />
+                            <Icon style={{ color: 'black' }} name='arrow-back' />
                         </Button>
                     </Left>
                     <Body>
-                        <Title>Podsumowanie</Title>
+                        <Title style={{color: 'black'}}>Podsumowanie</Title>
                     </Body>
                 </Header>
+                <Modal
+                  animationType="slide"
+                  transparent={false}
+                  visible={this.state.modalVisible}
+                  onRequestClose={() => {
+                    this.setModalVisibility(false)
+                  }}>
+                  <View>
+                    <View style={styles.modal}>
+                    <Text>Sfinalizuj transakcję...</Text>
+                    <Spinner color="#49a7cc"/>
+                    <TouchableHighlight
+                      onPress={() => {
+                          this.setModalVisibility(!this.state.modalVisible)
+                      }}>
+                        <Text style={{ color: "#49a7cc"}}>Anuluj</Text>
+                    </TouchableHighlight>
+                    </View>
+                  </View>
+                </Modal>
+                <Text style={styles.queueInfo}>Jesteś 1 w kolejce</Text>
                 <View style={{flex: 1}}>
                     <SortableListView
                     style={{ flex: 1, marginBottom: 0 }}
@@ -66,13 +92,14 @@ export default class SummaryView extends React.Component {
                     renderRow={ row => <RowComponent data={row} /> }
                     />
                 </View>
+                <View style={styles.placeholder}></View>
                 <View style={styles.bottomList}>
                     <View style={styles.bottomHeaderBar}>
                         <View style={styles.bottomHeaderItem}>
                             <Button transparent><Icon style={styles.footerText} name="ios-cash-outline" /><Text style={styles.footerText}>Suma: {this.state.overallCost} PLN</Text></Button>
                         </View>
                         <View style={styles.bottomHeaderItem}>
-                            <Button transparent><Text style={styles.footerText}>Zapłać </Text><Icon style={styles.footerText} name="arrow-forward" /></Button>
+                            <Button onPress={() => this.setModalVisibility(true)} transparent><Text style={styles.footerText}>Zapłać </Text><Icon style={styles.footerText} name="arrow-forward" /></Button>
                         </View>
                     </View>
                 </View>
@@ -99,7 +126,7 @@ class RowComponent extends React.Component {
                 underlayColor={'#eee'}
                     style={{
                         padding: 20,
-                        // backgroundColor: '#F8F8F8',
+                        // backgroundColor: '#6ff9ff',
                         borderBottomWidth: 1,
                         borderColor: '#eee',
                     }}
@@ -119,8 +146,13 @@ const styles = StyleSheet.create({
     container: {
     },
     headerBar: {
-        backgroundColor: 'powderblue',
-        justifyContent: 'space-between'
+        backgroundColor: '#49a7cc',
+        justifyContent: 'space-between',
+    },
+    queueInfo: {
+        color: 'black',
+        backgroundColor: '#80d8ff',
+        padding: 10
     },
     listItem: {
         justifyContent: 'space-between'
@@ -130,18 +162,26 @@ const styles = StyleSheet.create({
         left: 0,
         right: 0,
         bottom: 0,
-        backgroundColor: '#F5F5F5',
+        backgroundColor: '#49a7cc',
         maxHeight: 50
     },
+    placeholder: {
+        height: 50
+    },
     bottomHeaderBar: {
-        backgroundColor: 'powderblue',
+        backgroundColor: '#49a7cc',
         flexDirection: 'row',
         justifyContent: 'space-between',
     },
     bottomHeaderItem: {
         // padding: 10
     },
-    footerText:{ 
+    footerText: { 
         color: 'black'
+    },
+    modal: {
+        justifyContent: 'center',
+        alignItems: 'center',
+        height: '100%'
     }
 })

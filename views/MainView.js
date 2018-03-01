@@ -67,8 +67,7 @@ export default class MainView extends React.Component {
             return {
                 title: data.title,
                 data: data.data.filter(item => {
-                      // console.log(item.title.toLowerCase().match(text))
-                      return item.title.toLowerCase().match(text)
+                      return (item.title.toLowerCase().match(text) || item.author.toLowerCase().match(text))
                       })
             }
         })
@@ -120,7 +119,6 @@ export default class MainView extends React.Component {
     
     render() {
         let _customHeight = {}
-        let filteredSongsList = []
         if (this.state.isLoading){
             return (
                 <Container style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
@@ -131,14 +129,9 @@ export default class MainView extends React.Component {
                 </Container>
             )
         } else {
-            if (this.state.filteredSongs.length > 0) {
-                filteredSongsList = this.state.filteredSongs
-            } else {
-                filteredSongsList = []
-            }
             return (
-                <Container>
-                    <Header searchBar rounded style={styles.headerBar} androidStatusBarColor={"powderblue"}>
+                <Container style={styles.container}>
+                    <Header searchBar rounded style={styles.headerBar} androidStatusBarColor={"#49a7cc"}>
                     <Item>
                         <Icon name="ios-search" />
                         <Input 
@@ -148,22 +141,22 @@ export default class MainView extends React.Component {
                         />
                     </Item>
                     <Right>
-                        <Button transparent onPress={() => this.props.navigation.navigate('SummaryView', this.state.choosenSongs)}><Icon style={{color: 'white'}} name="arrow-forward" /></Button>
+                        <Button transparent onPress={() => this.props.navigation.navigate('SummaryView', this.state.choosenSongs)}><Icon style={{color: 'black'}} name="arrow-forward" /></Button>
                     </Right>
                 </Header>
                 <View style={{flex: 1}}>
                     <ScrollView>
                         <SectionList
-                                sections={ filteredSongsList }
+                                sections={ this.state.filteredSongs }
                         renderItem={({ item }) =>
                         <ListItem style={styles.listItem}>
                         <Text style={styles.item}>{item.author} - {item.title}</Text>
-                        <Button light onPress={() => this.addSongToPlaylist(item)}>
-                        <Icon name='ios-add' />
+                        <Button rounded style={styles.addButton} onPress={() => this.addSongToPlaylist(item)}>
+                        <Icon style={{ color: 'black' }} name='md-add' />
                         </Button>
                         </ListItem>
                         }
-                        keyExtractor={(item, index) => item.id}
+                        keyExtractor={this._keyExtractor}
                         renderSectionHeader={({section}) => <Text style={styles.sectionHeader}>{section.title.toUpperCase()}</Text>}
                         />
                     </ScrollView>
@@ -171,10 +164,12 @@ export default class MainView extends React.Component {
                         <View style={[styles.bottomList, { height: this.state.customHeight }]}>
                         <View style={styles.bottomHeaderBar}>
                             <View style={styles.bottomHeaderItem}>
-                                    <Text><Icon name="md-musical-notes" />  Playlista</Text>
+                                    <Icon style={styles.bottomHeaderText} name="md-musical-notes" />
                             </View>
                             <View style={styles.bottomHeaderItem}>
-                                    <Text><Icon name="ios-cash-outline" />  Koszt: {this.state.overallCost} PLN</Text>
+                                    <Text style={styles.bottomHeaderText}>
+                                        <Icon style={styles.bottomHeaderText} name="ios-cash-outline" />  {this.state.overallCost} PLN
+                                    </Text>
                             </View>
                         </View>
                         <ScrollView>
@@ -182,12 +177,13 @@ export default class MainView extends React.Component {
                           data={this.state.choosenSongs}
                                 renderItem={({ item }) => 
                                 <ListItem style={styles.listItem}>
-                                    <Text>{item.author} - {item.title}</Text>
-                                    <Button light onPress={() => this.removeSongFromPlaylist(item)}>
-                                    <Icon name="ios-trash"/>
+                                    <Text style={styles.item}>{item.author} - {item.title}</Text>
+                                    <Button rounded style={styles.addButton} onPress={() => this.removeSongFromPlaylist(item)}>
+                                    <Icon style={{ color: 'black' }} name="md-trash"/>
                                     </Button>
                                 </ListItem>
                                 }
+                                keyExtractor={this._keyExtractor}
                             />
                             </ScrollView>
                     </View>
@@ -202,11 +198,11 @@ const styles = StyleSheet.create({
     container: {
     },
     headerBar: {
-        backgroundColor: 'powderblue',
+        backgroundColor: '#49a7cc',
         justifyContent: 'space-between'
     },
     bottomHeaderBar: {
-        backgroundColor: 'powderblue',
+        backgroundColor: '#49a7cc',
         flexDirection: 'row',
         justifyContent: 'space-between',
     },
@@ -215,18 +211,27 @@ const styles = StyleSheet.create({
         paddingLeft: 10,
         paddingRight: 10,
         paddingBottom: 5,
-        fontSize: 16,
+        fontSize: 16,        
         fontWeight: 'bold',
         backgroundColor: 'rgba(247,247,247,1.0)',
     },
-    listItem: {
-        justifyContent: 'space-between'
+    listItem: {      
+        flex: 1,
+        justifyContent: 'space-between',
+        padding: 10,
     },
     item: {
-        padding: 10,
+        fontFamily: 'Roboto',
+        maxWidth: '80%'
+    },
+    addButton: {
+        backgroundColor: '#80d8ff'
     },
     bottomHeaderItem: {
         padding: 10
+    },
+    bottomHeaderText: {
+        color: '#000'        
     },
     bottomList: { 
         position: 'absolute', 
