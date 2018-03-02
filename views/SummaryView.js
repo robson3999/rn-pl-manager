@@ -43,8 +43,9 @@ export default class SummaryView extends React.Component {
     }
 
     render() {
+        // TODO: divide to smaller components => Modal
         return (
-            <Container>
+            <Container style={styles.container}>
                 <Header style={styles.headerBar} androidStatusBarColor={"#49a7cc"}>
                     <Left>
                         <Button transparent onPress={() => this.props.navigation.navigate('MainView', this.state.choosenSongs)}>
@@ -52,7 +53,7 @@ export default class SummaryView extends React.Component {
                         </Button>
                     </Left>
                     <Body>
-                        <Title style={{color: 'black'}}>Podsumowanie</Title>
+                        <Title style={{ color: 'black', fontFamily: 'MuktaMalar' }}>Podsumowanie</Title>
                     </Body>
                 </Header>
                 <Modal
@@ -93,10 +94,10 @@ export default class SummaryView extends React.Component {
                 <View style={styles.bottomList}>
                     <View style={styles.bottomHeaderBar}>
                         <View style={styles.bottomHeaderItem}>
-                            <Button transparent><Icon style={styles.footerText} name="ios-cash-outline" /><Text style={styles.footerText}>Suma: {this.state.overallCost} PLN</Text></Button>
+                            <Button transparent><Text style={styles.footerText}><Icon style={styles.footerText} name="ios-cash-outline" />  Suma: {this.state.overallCost} PLN</Text></Button>
                         </View>
                         <View style={styles.bottomHeaderItem}>
-                            <Button onPress={() => this.setModalVisibility(true)} transparent><Text style={styles.footerText}>Zapłać </Text><Icon style={styles.footerText} name="arrow-forward" /></Button>
+                            <Button onPress={() => this.setModalVisibility(true)} transparent><Text style={styles.footerText}>Zapłać <Icon style={styles.footerText} name="arrow-forward" /></Text></Button>
                         </View>
                     </View>
                 </View>
@@ -130,15 +131,15 @@ class RowComponent extends React.Component {
                         style={{
                             padding: 10,
                             // backgroundColor: '#6ff9ff',
-                            borderBottomWidth: 1,
+                            // borderBottomWidth: 1,
                             borderColor: '#eee',
                         }}
                         {...this.props.sortHandlers}
                     >
                         <Icon name="md-menu" />
                     </TouchableHighlight>
-                    <Text style={{ maxWidth: '75%' }}>  {song.author} - {song.title}</Text>
-                    <Button rounded style={{ backgroundColor: '#80d8ff' }} onPress={() => this.handleDeletingSong(song)}>
+                    <Text style={{ maxWidth: '75%', fontFamily: 'MuktaMalar' }}>  {song.author} - {song.title}</Text>
+                    <Button transparent onPress={() => this.handleDeletingSong(song)}>
                         <Icon style={{ color: 'black' }} name="md-trash" />
                     </Button>
                 </ListItem>
@@ -153,15 +154,17 @@ class RowComponent extends React.Component {
     
 const styles = StyleSheet.create({
     container: {
+        backgroundColor: 'white'
     },
     headerBar: {
-        backgroundColor: '#49a7cc',
+        backgroundColor: 'white',
         justifyContent: 'space-between',
     },
     queueInfo: {
         color: 'black',
-        backgroundColor: '#80d8ff',
-        padding: 10
+        backgroundColor: '#eff8fc',
+        padding: 10,
+        fontFamily: 'MuktaMalar',
     },
     listItem: {
         justifyContent: 'space-between',
@@ -172,22 +175,27 @@ const styles = StyleSheet.create({
         left: 0,
         right: 0,
         bottom: 0,
-        backgroundColor: '#49a7cc',
-        maxHeight: 50
+        backgroundColor: 'white',
+        maxHeight: 70,
+        borderTopColor: '#efefef',
+        borderTopWidth: 1
     },
     placeholder: {
         height: 50
     },
     bottomHeaderBar: {
-        backgroundColor: '#49a7cc',
+        backgroundColor: 'white',
         flexDirection: 'row',
         justifyContent: 'space-between',
     },
     bottomHeaderItem: {
-        // padding: 10
     },
     footerText: { 
-        color: 'black'
+        // height: 70,
+        color: 'black',
+        paddingTop: 10,
+        fontSize: 18,
+        fontFamily: 'MuktaMalar',
     },
     modal: {
         justifyContent: 'center',

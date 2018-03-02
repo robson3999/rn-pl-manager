@@ -180,7 +180,7 @@ export default class MainView extends React.Component {
                             renderItem={({ item }) =>
                             <ListItem style={styles.listItem}>
                             <Text style={styles.item}>{item.author} - {item.title}</Text>
-                            <Button rounded style={styles.addButton} onPress={() => this.addSongToPlaylist(item)}>
+                            <Button  transparent style={styles.addButton} onPress={() => this.addSongToPlaylist(item)}>
                             <Icon style={{ color: 'black' }} name='md-add' />
                             </Button>
                             </ListItem>
@@ -191,23 +191,23 @@ export default class MainView extends React.Component {
                         </ScrollView>
                             <View style={[styles.placeholder ,{height: this.state.customHeight}]}></View>
                             <View style={[styles.bottomList, { height: this.state.customHeight }]}>
-                            <View style={styles.bottomHeaderBar}>
-                                <View style={styles.bottomHeaderItem}>
-                                        <Icon style={styles.bottomHeaderText} name="md-musical-notes" />
+                                <View style={styles.bottomHeaderBar}>
+                                    <View style={styles.bottomHeaderItem}>
+                                            <Icon style={styles.bottomHeaderText} name="md-musical-notes" />
+                                    </View>
+                                    <View style={styles.bottomHeaderItem}>
+                                            <Text style={styles.bottomHeaderText}>
+                                                <Icon style={styles.bottomHeaderText} name="ios-cash-outline" />  {this.state.overallCost} PLN
+                                            </Text>
+                                    </View>
                                 </View>
-                                <View style={styles.bottomHeaderItem}>
-                                        <Text style={styles.bottomHeaderText}>
-                                            <Icon style={styles.bottomHeaderText} name="ios-cash-outline" />  {this.state.overallCost} PLN
-                                        </Text>
-                                </View>
-                            </View>
                             <ScrollView>
                             <FlatList
                             data={this.state.choosenSongs}
                                     renderItem={({ item }) => 
                                     <ListItem style={styles.listItem}>
                                         <Text style={styles.item}>{item.author} - {item.title}</Text>
-                                        <Button rounded style={styles.addButton} onPress={() => this.removeSongFromPlaylist(item)}>
+                                        <Button transparent style={styles.addButton} onPress={() => this.removeSongFromPlaylist(item)}>
                                         <Icon style={{ color: 'black' }} name="md-trash"/>
                                         </Button>
                                     </ListItem>
@@ -226,50 +226,57 @@ export default class MainView extends React.Component {
 
 const styles = StyleSheet.create({
     container: {
+        backgroundColor: 'white'
     },
     headerBar: {
-        backgroundColor: '#49a7cc',
+        backgroundColor: 'white',
         justifyContent: 'space-between'
     },
     bottomHeaderBar: {
-        backgroundColor: '#49a7cc',
+        backgroundColor: 'white',
         flexDirection: 'row',
         justifyContent: 'space-between',
+        borderBottomColor: '#efefef',
+        borderBottomWidth: 1
     },
     sectionHeader: {
         paddingTop: 5,
         paddingLeft: 10,
         paddingRight: 10,
         paddingBottom: 5,
-        fontSize: 16,        
-        fontWeight: 'bold',
-        backgroundColor: 'rgba(247,247,247,1.0)',
+        fontSize: 18,        
+        // fontWeight: 'bold',
+        backgroundColor: '#eaf9ff',
+        fontFamily: 'MuktaMalar',
     },
     listItem: {      
         flex: 1,
         justifyContent: 'space-between',
-        padding: 10,
+        paddingLeft: 15,
+        margin: 5,
+        backgroundColor: '#eff8fc',
+        borderRadius: 20,
     },
     item: {
-        fontFamily: 'Roboto',
-        maxWidth: '80%'
+        fontFamily: 'MuktaMalar',
+        maxWidth: '80%',
+        fontSize: 16
     },
     addButton: {
-        backgroundColor: '#80d8ff'
+        // backgroundColor: '#80d8ff'
     },
     bottomHeaderItem: {
         padding: 10
-    },
-    bottomHeaderText: {
-        color: '#000'        
     },
     bottomList: { 
         position: 'absolute', 
         left: 0, 
         right: 0, 
         bottom: 0,
-        backgroundColor: '#F5F5F5',
-        maxHeight: 200
+        backgroundColor: 'white',
+        maxHeight: 200,
+        borderTopColor: '#efefef',
+        borderTopWidth: 1,
     },
     placeholder: {
         maxHeight: 200        

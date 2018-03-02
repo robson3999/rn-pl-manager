@@ -16,11 +16,9 @@ export default class HomeScreen extends React.Component {
    } 
     render() {
         return (
-            // <Container style={styles.container}>
                 <View center style={styles.content}>
                         <Image source={require('../assets/Jukebox.png')} />
                 </View>
-            // </Container>
         )
     }
 }
