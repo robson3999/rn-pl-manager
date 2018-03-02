@@ -3,7 +3,6 @@ import { Root } from 'native-base'
 import { StackNavigator } from 'react-navigation'
 import HomeScreen from './views/HomeScreen'
 import MainView from './views/MainView'
-import DetailView from './views/DetailView'
 import SummaryView from './views/SummaryView'
 
 const RootStack = StackNavigator(
@@ -13,9 +12,6 @@ const RootStack = StackNavigator(
     },
     MainView: {
       screen: MainView
-    },
-    DetailView: {
-      screen: DetailView
     },
     SummaryView: {
       screen: SummaryView

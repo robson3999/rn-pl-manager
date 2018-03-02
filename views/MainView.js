@@ -20,6 +20,9 @@ import {
         Right
      } from 'native-base';
 
+import DownloadingView from './helpers/DownloadingView'
+import NoInternetView from './helpers/NoInternetView'
+
 let songs
 let errorMessage = null
 
@@ -147,25 +150,13 @@ export default class MainView extends React.Component {
             }
         })
     }
-    
+    // TODO: simplify render function (divide to smaller components)
     render() {
-        let _customHeight = {}
         if (this.state.isLoading){
-            return (
-                <Container style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-                    <View>
-                        <Text>Pobieranie piosenek...</Text>
-                        <Spinner color='powderblue' />
-                    </View>          
-                </Container>
-            )
+            return <DownloadingView />
         } else {
             if(this.state.noInternet){
-                return (
-                    <Container style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-                        <View><Text>Wygląda na to, że nie masz połączenia z internetem :(</Text></View>
-                    </Container>
-                )
+                return <NoInternetView />
             } else {
             return (
                 <Container style={styles.container}>
@@ -181,51 +172,51 @@ export default class MainView extends React.Component {
                     <Right>
                         <Button transparent onPress={() => this.props.navigation.navigate('SummaryView', this.state.choosenSongs)}><Icon style={{color: 'black'}} name="arrow-forward" /></Button>
                     </Right>
-                </Header>
-                <View style={{flex: 1}}>
-                    <ScrollView>
-                        <SectionList
-                                sections={ this.state.filteredSongs }
-                        renderItem={({ item }) =>
-                        <ListItem style={styles.listItem}>
-                        <Text style={styles.item}>{item.author} - {item.title}</Text>
-                        <Button rounded style={styles.addButton} onPress={() => this.addSongToPlaylist(item)}>
-                        <Icon style={{ color: 'black' }} name='md-add' />
-                        </Button>
-                        </ListItem>
-                        }
-                        keyExtractor={this._keyExtractor}
-                        renderSectionHeader={({section}) => <Text style={styles.sectionHeader}>{section.title.toUpperCase()}</Text>}
-                        />
-                    </ScrollView>
-                        <View style={[styles.placeholder ,{height: this.state.customHeight}]}></View>
-                        <View style={[styles.bottomList, { height: this.state.customHeight }]}>
-                        <View style={styles.bottomHeaderBar}>
-                            <View style={styles.bottomHeaderItem}>
-                                    <Icon style={styles.bottomHeaderText} name="md-musical-notes" />
-                            </View>
-                            <View style={styles.bottomHeaderItem}>
-                                    <Text style={styles.bottomHeaderText}>
-                                        <Icon style={styles.bottomHeaderText} name="ios-cash-outline" />  {this.state.overallCost} PLN
-                                    </Text>
-                            </View>
-                        </View>
+                    </Header>
+                    <View style={{flex: 1}}>
                         <ScrollView>
-                        <FlatList
-                          data={this.state.choosenSongs}
-                                renderItem={({ item }) => 
-                                <ListItem style={styles.listItem}>
-                                    <Text style={styles.item}>{item.author} - {item.title}</Text>
-                                    <Button rounded style={styles.addButton} onPress={() => this.removeSongFromPlaylist(item)}>
-                                    <Icon style={{ color: 'black' }} name="md-trash"/>
-                                    </Button>
-                                </ListItem>
-                                }
-                                keyExtractor={this._keyExtractor}
+                            <SectionList
+                                    sections={ this.state.filteredSongs }
+                            renderItem={({ item }) =>
+                            <ListItem style={styles.listItem}>
+                            <Text style={styles.item}>{item.author} - {item.title}</Text>
+                            <Button rounded style={styles.addButton} onPress={() => this.addSongToPlaylist(item)}>
+                            <Icon style={{ color: 'black' }} name='md-add' />
+                            </Button>
+                            </ListItem>
+                            }
+                            keyExtractor={this._keyExtractor}
+                            renderSectionHeader={({section}) => <Text style={styles.sectionHeader}>{section.title.toUpperCase()}</Text>}
                             />
-                            </ScrollView>
+                        </ScrollView>
+                            <View style={[styles.placeholder ,{height: this.state.customHeight}]}></View>
+                            <View style={[styles.bottomList, { height: this.state.customHeight }]}>
+                            <View style={styles.bottomHeaderBar}>
+                                <View style={styles.bottomHeaderItem}>
+                                        <Icon style={styles.bottomHeaderText} name="md-musical-notes" />
+                                </View>
+                                <View style={styles.bottomHeaderItem}>
+                                        <Text style={styles.bottomHeaderText}>
+                                            <Icon style={styles.bottomHeaderText} name="ios-cash-outline" />  {this.state.overallCost} PLN
+                                        </Text>
+                                </View>
+                            </View>
+                            <ScrollView>
+                            <FlatList
+                            data={this.state.choosenSongs}
+                                    renderItem={({ item }) => 
+                                    <ListItem style={styles.listItem}>
+                                        <Text style={styles.item}>{item.author} - {item.title}</Text>
+                                        <Button rounded style={styles.addButton} onPress={() => this.removeSongFromPlaylist(item)}>
+                                        <Icon style={{ color: 'black' }} name="md-trash"/>
+                                        </Button>
+                                    </ListItem>
+                                    }
+                                    keyExtractor={this._keyExtractor}
+                                />
+                                </ScrollView>
+                        </View>
                     </View>
-                </View>
                 </Container>
             );
             }            
