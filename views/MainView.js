@@ -131,8 +131,12 @@ export default class MainView extends React.Component {
                 // type: 'warning'                
             })
         }
-
     }
+
+    tryReconnect(e){
+        this.forceUpdate()
+    }
+
     removeSongFromPlaylist(song){
         let actualPlaylist = this.state.choosenSongs
         // let actualCost = this.state.overallCost
@@ -156,7 +160,7 @@ export default class MainView extends React.Component {
             return <DownloadingView />
         } else {
             if(this.state.noInternet){
-                return <NoInternetView />
+                return <NoInternetView onTryReconnectRequest={() => this.tryReconnect()} />
             } else {
             return (
                 <Container style={styles.container}>
@@ -201,9 +205,9 @@ export default class MainView extends React.Component {
                                             </Text>
                                     </View>
                                 </View>
-                            <ScrollView>
-                            <FlatList
-                            data={this.state.choosenSongs}
+                                <ScrollView>
+                                <FlatList
+                                data={this.state.choosenSongs}
                                     renderItem={({ item }) => 
                                     <ListItem style={styles.listItem}>
                                         <Text style={styles.item}>{item.author} - {item.title}</Text>
@@ -215,7 +219,7 @@ export default class MainView extends React.Component {
                                     keyExtractor={this._keyExtractor}
                                 />
                                 </ScrollView>
-                        </View>
+                            </View>
                     </View>
                 </Container>
             );
