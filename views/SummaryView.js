@@ -1,5 +1,5 @@
 import React from 'react'
-import { StyleSheet, View, TouchableNativeFeedback, TouchableHighlight, Modal } from 'react-native'
+import { StyleSheet, View, TouchableHighlight, Modal } from 'react-native'
 import { Container, Header, Content, Left, Body, List, ListItem, Spinner, Text, Title, Button, H1, Card, CardItem, Icon, Toast } from 'native-base';
 import SortableListView from 'react-native-sortable-listview'
 
@@ -67,13 +67,12 @@ export default class SummaryView extends React.Component {
                     <View style={styles.modal}>
                     <Text>Sfinalizuj transakcję...</Text>
                     <Spinner color="#49a7cc"/>
-                    <TouchableNativeFeedback
+                    <TouchableHighlight
                       onPress={() => {
                           this.setModalVisibility(!this.state.modalVisible)
                       }}
-                      background={TouchableNativeFeedback.SelectableBackground()}>
                         <Text style={{ color: "#49a7cc"}}>Anuluj</Text>
-                    </TouchableNativeFeedback>
+                    </TouchableHighlight>
                     </View>
                   </View>
                 </Modal>
@@ -111,7 +110,7 @@ class RowComponent extends React.Component {
         super(props)
         this.handleDeletingSong = this.handleDeletingSong.bind(this)
     }
-    
+
     handleDeletingSong(e){
         this.props.onRemoveRequest(e)
         Toast.show({
@@ -130,15 +129,13 @@ class RowComponent extends React.Component {
                         underlayColor={'#eee'}
                         style={{
                             padding: 10,
-                            // backgroundColor: '#6ff9ff',
-                            // borderBottomWidth: 1,
                             borderColor: '#eee',
                         }}
                         {...this.props.sortHandlers}
                     >
                         <Icon name="md-menu" />
                     </TouchableHighlight>
-                    <Text style={{ maxWidth: '75%', fontFamily: 'MuktaMalar' }}>  {song.author} - {song.title}</Text>
+                    <Text style={{ width: '75%', fontFamily: 'MuktaMalar' }}>{song.author} - {song.title}</Text>
                     <Button transparent onPress={() => this.handleDeletingSong(song)}>
                         <Icon style={{ color: 'black' }} name="md-trash" />
                     </Button>
@@ -151,7 +148,7 @@ class RowComponent extends React.Component {
         }
         }
     }
-    
+
 const styles = StyleSheet.create({
     container: {
         backgroundColor: 'white'
@@ -168,7 +165,8 @@ const styles = StyleSheet.create({
     },
     listItem: {
         justifyContent: 'space-between',
-        padding: 10
+        padding: 10,
+        marginLeft: 0
     },
     bottomList: {
         position: 'absolute',
@@ -190,7 +188,7 @@ const styles = StyleSheet.create({
     },
     bottomHeaderItem: {
     },
-    footerText: { 
+    footerText: {
         // height: 70,
         color: 'black',
         paddingTop: 10,

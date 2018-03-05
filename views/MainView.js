@@ -1,7 +1,7 @@
 import React from 'react';
 import { StyleSheet, SectionList, TouchableHighlight, View, ScrollView, FlatList, Keyboard } from 'react-native'
-import { 
-        Container, 
+import {
+        Container,
         Header,
         H2,
         H3,
@@ -46,12 +46,7 @@ export default class MainView extends React.Component {
         .then(response => {
             response.ok ? response.json().then(resp => songs = resp) : this.setState({isLoading: false, noInternet: true})
         })
-        // .then(response => {
-        //     console.log(response)
-        //     songs = response
-        // })
         .catch(err => console.log(err))
-        // console.log(passedData)
         if (passedData){
             if (passedData.length > 0){
                 let overallCost = passedData.length
@@ -87,7 +82,7 @@ export default class MainView extends React.Component {
 
 
     _keyExtractor = (item, index) => item.id
-    
+
     setSearchText(event){
         let searchText = event.nativeEvent.text
         let songs = this.state.songsList
@@ -102,7 +97,7 @@ export default class MainView extends React.Component {
                       })
             }
         })
-        this.setState({ 
+        this.setState({
             filteredSongs: newFilteredSongs
         })
     }
@@ -128,7 +123,7 @@ export default class MainView extends React.Component {
                 text: 'Już dodano tą piosenkę',
                 position: 'bottom',
                 buttonText: 'OK',
-                // type: 'warning'                
+                // type: 'warning'
             })
         }
     }
@@ -139,15 +134,11 @@ export default class MainView extends React.Component {
 
     removeSongFromPlaylist(song){
         let actualPlaylist = this.state.choosenSongs
-        // let actualCost = this.state.overallCost
-        // actualCost--
-        // let customHeight = this.state.customHeight
-        // customHeight-=50
         actualPlaylist = actualPlaylist.filter((item) => {
             return item.id !== song.id
         })
         this.setState((prevState) => {
-            return {    
+            return {
                 choosenSongs: actualPlaylist,
                 overallCost: --prevState.overallCost,
                 customHeight: prevState.customHeight-50
@@ -160,14 +151,14 @@ export default class MainView extends React.Component {
             return <DownloadingView />
         } else {
             if(this.state.noInternet){
-                return <NoInternetView onTryReconnectRequest={() => this.tryReconnect()} />
+                return <NoInternetView onTryReconnectRequest={() => this.tryReconnect} />
             } else {
             return (
                 <Container style={styles.container}>
                     <Header searchBar rounded style={styles.headerBar} androidStatusBarColor={"#49a7cc"}>
                     <Item>
                         <Icon name="ios-search" />
-                        <Input 
+                        <Input
                             placeholder="Szukaj"
                             value={this.state.searchText}
                             onChange={this.setSearchText.bind(this)}
@@ -208,7 +199,7 @@ export default class MainView extends React.Component {
                                 <ScrollView>
                                 <FlatList
                                 data={this.state.choosenSongs}
-                                    renderItem={({ item }) => 
+                                    renderItem={({ item }) =>
                                     <ListItem style={styles.listItem}>
                                         <Text style={styles.item}>{item.author} - {item.title}</Text>
                                         <Button transparent style={styles.addButton} onPress={() => this.removeSongFromPlaylist(item)}>
@@ -223,8 +214,8 @@ export default class MainView extends React.Component {
                     </View>
                 </Container>
             );
-            }            
-        }        
+            }
+        }
     }
  }
 
@@ -248,12 +239,12 @@ const styles = StyleSheet.create({
         paddingLeft: 10,
         paddingRight: 10,
         paddingBottom: 5,
-        fontSize: 18,        
+        fontSize: 18,
         // fontWeight: 'bold',
         backgroundColor: '#eaf9ff',
         fontFamily: 'MuktaMalar',
     },
-    listItem: {      
+    listItem: {
         flex: 1,
         justifyContent: 'space-between',
         paddingLeft: 15,
@@ -272,10 +263,10 @@ const styles = StyleSheet.create({
     bottomHeaderItem: {
         padding: 10
     },
-    bottomList: { 
-        position: 'absolute', 
-        left: 0, 
-        right: 0, 
+    bottomList: {
+        position: 'absolute',
+        left: 0,
+        right: 0,
         bottom: 0,
         backgroundColor: 'white',
         maxHeight: 200,
@@ -283,6 +274,6 @@ const styles = StyleSheet.create({
         borderTopWidth: 1,
     },
     placeholder: {
-        maxHeight: 200        
+        maxHeight: 200
     }
 });
