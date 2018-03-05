@@ -242,7 +242,7 @@ const styles = StyleSheet.create({
         fontSize: 18,
         // fontWeight: 'bold',
         backgroundColor: '#eaf9ff',
-        fontFamily: 'MuktaMalar',
+        // fontFamily: 'MuktaMalar',
     },
     listItem: {
         flex: 1,
@@ -253,7 +253,7 @@ const styles = StyleSheet.create({
         borderRadius: 20,
     },
     item: {
-        fontFamily: 'MuktaMalar',
+        // fontFamily: 'MuktaMalar',
         maxWidth: '80%',
         fontSize: 16
     },

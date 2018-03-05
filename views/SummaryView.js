@@ -53,7 +53,7 @@ export default class SummaryView extends React.Component {
                         </Button>
                     </Left>
                     <Body>
-                        <Title style={{ color: 'black', fontFamily: 'MuktaMalar' }}>Podsumowanie</Title>
+                        <Title style={{ color: 'black' }}>Podsumowanie</Title>
                     </Body>
                 </Header>
                 <Modal
@@ -135,7 +135,7 @@ class RowComponent extends React.Component {
                     >
                         <Icon name="md-menu" />
                     </TouchableHighlight>
-                    <Text style={{ width: '75%', fontFamily: 'MuktaMalar' }}>{song.author} - {song.title}</Text>
+                    <Text style={{ width: '75%' }}>{song.author} - {song.title}</Text>
                     <Button transparent onPress={() => this.handleDeletingSong(song)}>
                         <Icon style={{ color: 'black' }} name="md-trash" />
                     </Button>
@@ -161,7 +161,7 @@ const styles = StyleSheet.create({
         color: 'black',
         backgroundColor: '#eff8fc',
         padding: 10,
-        fontFamily: 'MuktaMalar',
+        // fontFamily: 'MuktaMalar',
     },
     listItem: {
         justifyContent: 'space-between',
@@ -193,7 +193,7 @@ const styles = StyleSheet.create({
         color: 'black',
         paddingTop: 10,
         fontSize: 18,
-        fontFamily: 'MuktaMalar',
+        // fontFamily: 'MuktaMalar',
     },
     modal: {
         justifyContent: 'center',
