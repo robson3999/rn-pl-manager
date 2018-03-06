@@ -5,14 +5,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="77d081d8-a334-412b-b4b4-ef4bfb5adf04" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.gitignore" afterPath="$PROJECT_DIR$/.gitignore" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/android/app/build.gradle" afterPath="$PROJECT_DIR$/android/app/build.gradle" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/android/app/src/main/AndroidManifest.xml" afterPath="$PROJECT_DIR$/android/app/src/main/AndroidManifest.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/views/MainView.js" afterPath="$PROJECT_DIR$/views/MainView.js" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/views/helpers/SummaryModal.js" afterPath="" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/views/SummaryView.js" afterPath="$PROJECT_DIR$/views/SummaryView.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/views/helpers/DownloadingView.js" afterPath="$PROJECT_DIR$/views/helpers/DownloadingView.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/views/helpers/NoInternetView.js" afterPath="$PROJECT_DIR$/views/helpers/NoInternetView.js" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />

@@ -2,6 +2,8 @@ import React from 'react'
 import { StyleSheet, View, TouchableHighlight, Modal } from 'react-native'
 import { Container, Header, Content, Left, Body, List, ListItem, Spinner, Text, Title, Button, H1, Card, CardItem, Icon, Toast } from 'native-base';
 import SortableListView from 'react-native-sortable-listview'
+import SummaryModalLoading from './helpers/SummaryModalLoading'
+import SummaryModalComplete from './helpers/SummaryModalComplete'
 
 
 let order, songs
@@ -11,11 +13,11 @@ export default class SummaryView extends React.Component {
         this.state = {
             choosenSongs: props.navigation.state.params,
             overallCost: null,
-            modalVisible: false
+            modalVisible: false,
+            modalComplete: false
         }
         songs = this.state.choosenSongs
         order = Object.keys(this.state.choosenSongs)
-        this.removeSongFromPlaylist = this.removeSongFromPlaylist.bind(this)
     }
     static navigationOptions = {
         header: null
@@ -40,9 +42,18 @@ export default class SummaryView extends React.Component {
 
     setModalVisibility(visibility){
         this.setState({modalVisible: visibility})
+        // fake playlist upload
+        setTimeout(() => {
+            this.setState({modalComplete: true})
+        }, 2000)
+    }
+    navigateToHomeScreen(){
+        this.setState({ modalVisible: false })
+        this.props.navigation.navigate('MainView')
     }
 
     render() {
+        
         // TODO: divide to smaller components => Modal
         return (
             <Container style={styles.container}>
@@ -63,17 +74,13 @@ export default class SummaryView extends React.Component {
                   onRequestClose={() => {
                     this.setModalVisibility(false)
                   }}>
-                  <View>
-                    <View style={styles.modal}>
-                    <Text>Sfinalizuj transakcję...</Text>
-                    <Spinner color="#49a7cc"/>
-                    <TouchableHighlight
-                      onPress={() => {
-                          this.setModalVisibility(!this.state.modalVisible)
-                      }}>
-                        <Text style={{ color: "#49a7cc"}}>Anuluj</Text>
-                    </TouchableHighlight>
-                    </View>
+                <View style={styles.modal}>
+                    { this.state.modalComplete &&
+                        <SummaryModalComplete onNavigateToHomescreen={() => this.navigateToHomeScreen()} />
+                }
+                    { !this.state.modalComplete &&
+                        <SummaryModalLoading />
+                    }
                   </View>
                 </Modal>
                 <View style={{flex: 1}}>
