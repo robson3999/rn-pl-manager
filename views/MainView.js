@@ -201,13 +201,17 @@ export default class MainView extends React.Component {
                             <View style={[styles.placeholder ,{height: this.state.customHeight}]}></View>
                             <View style={[styles.bottomList, { height: this.state.customHeight }]}>
                                 <View style={styles.bottomHeaderBar}>
-                                    <View style={styles.bottomHeaderItem}>
-                                            <Icon style={styles.bottomHeaderText} name="md-musical-notes" />
+                                    <View style={styles.bottomHeaderItemOne}>
+                                        <Icon style={{ marginRight: 10 }} name="md-musical-notes" /> 
+                                        { this.state.choosenSongs.length > 0 &&
+                                            <Text>Twoja playlista:</Text>
+                                        }
                                     </View>
-                                    <View style={styles.bottomHeaderItem}>
-                                            <Text style={styles.bottomHeaderText}>
-                                                <Icon style={styles.bottomHeaderText} name="ios-cash-outline" />  {this.state.overallCost} PLN
-                                            </Text>
+                                    <View style={styles.bottomHeaderItemTwo}>
+                                    <Icon style={{ marginRight: 10 }} name="ios-cash-outline" />  
+                                        <Text>
+                                            {this.state.overallCost} PLN
+                                        </Text>
                                     </View>
                                 </View>
                                 <ScrollView>
@@ -274,8 +278,19 @@ const styles = StyleSheet.create({
     addButton: {
         // backgroundColor: '#80d8ff'
     },
-    bottomHeaderItem: {
-        padding: 10
+    bottomHeaderItemOne: {
+        padding: 10,
+        flex: 1,
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'flex-start'
+    },
+    bottomHeaderItemTwo: {
+        padding: 10,
+        flex: 1,
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'flex-end'
     },
     bottomList: {
         position: 'absolute',

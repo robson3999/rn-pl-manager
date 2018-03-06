@@ -42,11 +42,22 @@ export default class SummaryView extends React.Component {
 
     setModalVisibility(visibility){
         this.setState({modalVisible: visibility})
-        // fake playlist upload
-        setTimeout(() => {
-            this.setState({modalComplete: true})
-        }, 2000)
+        // playlist upload
+        let playList = JSON.stringify(this.state.choosenSongs)
+        fetch('https://my-json-server.typicode.com/robson3999/songs-db/playlists', {
+            method: 'POST',
+            body: playList
+        })
+        .then((resp) => {
+            if(resp.status == 201 && resp.ok){
+                console.log(JSON.parse(playList))
+                this.setState({modalComplete: true})
+            }
+            console.log(resp)
+        })
+        .catch(err => console.log(err))
     }
+
     navigateToHomeScreen(){
         this.setState({ modalVisible: false })
         this.props.navigation.navigate('MainView')
