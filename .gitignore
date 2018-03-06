@@ -21,5 +21,6 @@ android/build
 android/app/build
 android/.*
 android/app/.*
+android/app/my-*
 ios/build
 .idea

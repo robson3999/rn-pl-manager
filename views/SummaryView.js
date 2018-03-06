@@ -70,13 +70,12 @@ export default class SummaryView extends React.Component {
                     <TouchableHighlight
                       onPress={() => {
                           this.setModalVisibility(!this.state.modalVisible)
-                      }}
+                      }}>
                         <Text style={{ color: "#49a7cc"}}>Anuluj</Text>
                     </TouchableHighlight>
                     </View>
                   </View>
                 </Modal>
-                <Text style={styles.queueInfo}>Jesteś 1 w kolejce</Text>
                 <View style={{flex: 1}}>
                     <SortableListView
                     style={{ flex: 1, marginBottom: 0 }}
@@ -185,8 +184,6 @@ const styles = StyleSheet.create({
         backgroundColor: 'white',
         flexDirection: 'row',
         justifyContent: 'space-between',
-    },
-    bottomHeaderItem: {
     },
     footerText: {
         // height: 70,

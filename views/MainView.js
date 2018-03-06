@@ -1,10 +1,8 @@
 import React from 'react';
-import { StyleSheet, SectionList, TouchableHighlight, View, ScrollView, FlatList, Keyboard } from 'react-native'
+import { StyleSheet, SectionList, TouchableHighlight, View, ScrollView, FlatList, NetInfo } from 'react-native'
 import {
         Container,
         Header,
-        H2,
-        H3,
         Body,
         ListItem,
         Title,
@@ -15,7 +13,6 @@ import {
         Content,
         Button,
         Spinner,
-        CheckBox,
         Toast,
         Right
      } from 'native-base';
@@ -38,15 +35,27 @@ export default class MainView extends React.Component {
         }
     }
 
+    async makeApiCall(){
+        await fetch('https://my-json-server.typicode.com/robson3999/songs-db/genres')
+            .then(response => {
+                response.ok ? response.json().then(resp => songs = resp) : this.setState({ isLoading: false, noInternet: true })
+            })
+            .catch(err => {
+                console.log(err)
+                this.setState({ noInternet: true })
+            })
+    }
+
+    async forceUpdateHandler(){
+        await this.makeApiCall()
+        this.setStateToStart()
+        this.checkConnectionInfo()
+    }
+
     async componentDidMount(){
         songs = []
         let passedData = this.props.navigation.state.params
-        // await fetch('https://my-json-server.typicode.com/robson3999/songs-db/ges')
-        await fetch('https://my-json-server.typicode.com/robson3999/songs-db/genres')
-        .then(response => {
-            response.ok ? response.json().then(resp => songs = resp) : this.setState({isLoading: false, noInternet: true})
-        })
-        .catch(err => console.log(err))
+        await this.makeApiCall()
         if (passedData){
             if (passedData.length > 0){
                 let overallCost = passedData.length
@@ -65,7 +74,9 @@ export default class MainView extends React.Component {
         } else {
             this.setStateToStart()
         }
+        // this.checkConnectionInfo()
     }
+
     setStateToStart(){
         this.setState({
             isLoading: false,
@@ -76,6 +87,13 @@ export default class MainView extends React.Component {
             overallCost: 0
         })
     }
+
+    checkConnectionInfo(){
+        NetInfo.isConnected.fetch().then(isOnline => {
+            isOnline ? this.setState({ noInternet: false }) : this.setState({ noInternet: true })
+        })
+    }
+
     static navigationOptions = {
         header: null
     }
@@ -128,10 +146,6 @@ export default class MainView extends React.Component {
         }
     }
 
-    tryReconnect(e){
-        this.forceUpdate()
-    }
-
     removeSongFromPlaylist(song){
         let actualPlaylist = this.state.choosenSongs
         actualPlaylist = actualPlaylist.filter((item) => {
@@ -151,7 +165,7 @@ export default class MainView extends React.Component {
             return <DownloadingView />
         } else {
             if(this.state.noInternet){
-                return <NoInternetView onTryReconnectRequest={() => this.tryReconnect} />
+                return <NoInternetView onTryReconnectRequest={() => this.forceUpdateHandler()} />
             } else {
             return (
                 <Container style={styles.container}>

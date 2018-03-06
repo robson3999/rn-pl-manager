@@ -8,18 +8,16 @@ export default class NoInternetView extends React.Component {
         this.tryReconnect = this.tryReconnect.bind(this)        
     }
 
-    tryReconnect(e){
-        this.props.onTryReconnectRequest(e)
+    tryReconnect(){
+        this.props.onTryReconnectRequest()
     }
 
     render () {
         return (
             <Container style={styles.container}>
-            <View>
-                <Text>Wygląda na to, że nie masz połączenia z internetem :(</Text>
-            </View>
+            <Text style={{ textAlign: 'center'}}>Wygląda na to, że nie masz połączenia z internetem:(</Text>
             <View style={{marginTop: 20}}>
-                <Button rounded info onPress={() => this.tryReconnect()}>
+                    <Button rounded style={{ backgroundColor: '#49a7cc' }} onPress={() => this.tryReconnect()}>
                 <Text>Spróbuj ponownie</Text>
                 </Button>
             </View>
