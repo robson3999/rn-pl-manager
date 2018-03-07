@@ -6,7 +6,6 @@ import SummaryModalLoading from './helpers/SummaryModalLoading'
 import SummaryModalComplete from './helpers/SummaryModalComplete'
 
 
-let order, songs
 export default class SummaryView extends React.Component {
     constructor(props) {
         super(props)
@@ -16,8 +15,6 @@ export default class SummaryView extends React.Component {
             modalVisible: false,
             modalComplete: false
         }
-        songs = this.state.choosenSongs
-        order = Object.keys(this.state.choosenSongs)
     }
     static navigationOptions = {
         header: null
@@ -42,8 +39,9 @@ export default class SummaryView extends React.Component {
 
     setModalVisibility(visibility){
         this.setState({modalVisible: visibility})
-        // playlist upload
-        let playList = JSON.stringify(this.state.choosenSongs)
+        // playlist upload 
+        let playList = JSON.stringify(this.state.choosenSongs.map((song) => song.id))
+        console.log(playList)
         fetch('https://my-json-server.typicode.com/robson3999/songs-db/playlists', {
             method: 'POST',
             body: playList
@@ -61,6 +59,11 @@ export default class SummaryView extends React.Component {
     navigateToHomeScreen(){
         this.setState({ modalVisible: false })
         this.props.navigation.navigate('MainView')
+    }
+
+    reorderChoosenSongs(e){
+        let songs = this.state.choosenSongs
+        return songs.splice(e.to, 0, songs.splice(e.from, 1)[0]);
     }
 
     render() {
@@ -85,22 +88,21 @@ export default class SummaryView extends React.Component {
                   onRequestClose={() => {
                     this.setModalVisibility(false)
                   }}>
-                <View style={styles.modal}>
-                    { this.state.modalComplete &&
-                        <SummaryModalComplete onNavigateToHomescreen={() => this.navigateToHomeScreen()} />
-                }
-                    { !this.state.modalComplete &&
-                        <SummaryModalLoading />
-                    }
+                    <View style={styles.modal}>
+                        { this.state.modalComplete &&
+                            <SummaryModalComplete onNavigateToHomescreen={() => this.navigateToHomeScreen()} />
+                        }
+                        { !this.state.modalComplete &&
+                            <SummaryModalLoading />
+                        }
                   </View>
                 </Modal>
                 <View style={{flex: 1}}>
                     <SortableListView
                     style={{ flex: 1, marginBottom: 0 }}
                     data={this.state.choosenSongs}
-                    order={order}
                     onRowMoved={e => {
-                        order.splice(e.to, 0, order.splice(e.from, 1)[0]);
+                        this.reorderChoosenSongs(e)
                         this.forceUpdate();
                         }}
                     renderRow={ row => <RowComponent data={row} onRemoveRequest={(song) => this.removeSongFromPlaylist(song)} /> }
