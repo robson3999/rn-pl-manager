@@ -179,7 +179,9 @@ export default class MainView extends React.Component {
                         />
                     </Item>
                     <Right>
+                    { this.state.choosenSongs.length > 0 &&
                         <Button transparent onPress={() => this.props.navigation.navigate('SummaryView', this.state.choosenSongs)}><Icon style={{color: 'black'}} name="arrow-forward" /></Button>
+                    }
                     </Right>
                     </Header>
                     <View style={{flex: 1}}>

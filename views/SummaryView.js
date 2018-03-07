@@ -67,7 +67,6 @@ export default class SummaryView extends React.Component {
     }
 
     render() {
-        
         // TODO: divide to smaller components => Modal
         return (
             <Container style={styles.container}>
@@ -115,7 +114,9 @@ export default class SummaryView extends React.Component {
                             <Button transparent><Text style={styles.footerText}><Icon style={styles.footerText} name="ios-cash-outline" />  Suma: {this.state.overallCost} PLN</Text></Button>
                         </View>
                         <View style={styles.bottomHeaderItem}>
-                            <Button onPress={() => this.setModalVisibility(true)} transparent><Text style={styles.footerText}>Zapłać <Icon style={styles.footerText} name="arrow-forward" /></Text></Button>
+                            {this.state.choosenSongs.length > 0 &&                        
+                                <Button onPress={() => this.setModalVisibility(true)} transparent><Text style={styles.footerText}>Zapłać <Icon style={styles.footerText} name="arrow-forward" /></Text></Button>
+                            }
                         </View>
                     </View>
                 </View>
