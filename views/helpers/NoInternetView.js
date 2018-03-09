@@ -2,12 +2,6 @@ import React from 'react'
 import { Container, Text, Button } from 'native-base'
 import { View, StyleSheet } from 'react-native'
 export default class NoInternetView extends React.Component {
-
-    constructor(props){
-        super(props)
-        this.tryReconnect = this.tryReconnect.bind(this)        
-    }
-
     tryReconnect(){
         this.props.onTryReconnectRequest()
     }

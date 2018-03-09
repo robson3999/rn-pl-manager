@@ -3,9 +3,6 @@ import { View } from 'react-native'
 import { Spinner, Text, Button } from 'native-base'
 
 export default class SummaryModalComplete extends React.Component {
-    constructor(props){
-        super(props)
-    }
     navigateToHome(){
         this.props.onNavigateToHomescreen()
     }

@@ -106,7 +106,7 @@ export default class MainView extends React.Component {
         let songs = this.state.songsList
         text = searchText.trim().toLowerCase()
         let newFilteredSongs = songs.map(genre => {
-            return genre
+           return genre
         }).map(data => {
             return {
                 title: data.title,

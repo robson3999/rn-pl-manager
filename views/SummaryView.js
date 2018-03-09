@@ -1,5 +1,5 @@
 import React from 'react'
-import { StyleSheet, View, TouchableHighlight, Modal } from 'react-native'
+import { StyleSheet, View, TouchableHighlight, Modal, Alert } from 'react-native'
 import { Container, Header, Content, Left, Body, List, ListItem, Spinner, Text, Title, Button, H1, Card, CardItem, Icon, Toast } from 'native-base';
 import SortableListView from 'react-native-sortable-listview'
 import SummaryModalLoading from './helpers/SummaryModalLoading'
@@ -10,7 +10,7 @@ export default class SummaryView extends React.Component {
     constructor(props) {
         super(props)
         this.state = {
-            choosenSongs: props.navigation.state.params,
+            choosenSongs: this.props.navigation.state.params,
             overallCost: null,
             modalVisible: false,
             modalComplete: false
@@ -41,13 +41,15 @@ export default class SummaryView extends React.Component {
         this.setState({modalVisible: visibility})
         // playlist upload 
         let playList = JSON.stringify(this.state.choosenSongs.map((song) => song.id))
-        console.log(playList)
+        console.log("Wybrane piosenki:")
+        console.log(this.state.choosenSongs)
         fetch('https://my-json-server.typicode.com/robson3999/songs-db/playlists', {
             method: 'POST',
             body: playList
         })
         .then((resp) => {
             if(resp.status == 201 && resp.ok){
+                console.log("Wyslano:")
                 console.log(JSON.parse(playList))
                 this.setState({modalComplete: true})
             }
