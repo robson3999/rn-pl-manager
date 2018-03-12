@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, SectionList, TouchableHighlight, View, ScrollView, FlatList, NetInfo } from 'react-native'
+import { StyleSheet, SectionList, TouchableHighlight, View, ScrollView, FlatList, NetInfo, Modal } from 'react-native'
 import {
         Container,
         Header,
@@ -14,7 +14,8 @@ import {
         Button,
         Spinner,
         Toast,
-        Right
+        Right,
+        Left
      } from 'native-base';
 
 import DownloadingView from './helpers/DownloadingView'
@@ -22,6 +23,7 @@ import NoInternetView from './helpers/NoInternetView'
 
 let songs
 let errorMessage = null
+var SONGS
 
 export default class MainView extends React.Component {
     constructor(props){
@@ -31,7 +33,8 @@ export default class MainView extends React.Component {
             searchText: null,
             songsList: [],
             filteredSongs: [],
-            showToast: false
+            showToast: false,
+            modalVisible: false
         }
     }
 
@@ -59,7 +62,8 @@ export default class MainView extends React.Component {
         if (passedData){
             if (passedData.length > 0){
                 let overallCost = passedData.length
-                let calculatedHeight = overallCost*50+50
+                // let calculatedHeight = overallCost*50+100
+                let calculatedHeight = 50
                 this.setState({
                     isLoading: false,
                     songsList: songs,
@@ -127,21 +131,19 @@ export default class MainView extends React.Component {
                 return {
                     choosenSongs: [...this.state.choosenSongs, song],
                     overallCost: ++prevState.overallCost,
-                    customHeight: prevState.customHeight+50
+                    // customHeight: prevState.customHeight+100
                 }
             })
             Toast.show({
                 text: `Dodano piosenkę: ${song.title}`,
                 position: 'bottom',
                 buttonText: 'OK',
-                // type: 'success'
             })
         } else {
             Toast.show({
                 text: 'Już dodano tą piosenkę',
                 position: 'bottom',
                 buttonText: 'OK',
-                // type: 'warning'
             })
         }
     }
@@ -155,10 +157,15 @@ export default class MainView extends React.Component {
             return {
                 choosenSongs: actualPlaylist,
                 overallCost: --prevState.overallCost,
-                customHeight: prevState.customHeight-50
+                // customHeight: prevState.customHeight-100
             }
         })
     }
+
+    setModalVisible(modalState){
+        this.setState({modalVisible: modalState})
+    }
+
     // TODO: simplify render function (divide to smaller components)
     render() {
         if (this.state.isLoading){
@@ -180,7 +187,9 @@ export default class MainView extends React.Component {
                     </Item>
                     <Right>
                     { this.state.choosenSongs.length > 0 &&
-                        <Button transparent onPress={() => this.props.navigation.navigate('SummaryView', this.state.choosenSongs)}><Icon style={{color: 'black'}} name="arrow-forward" /></Button>
+                                <Button style={ styles.proceedButton } transparent onPress={() => this.props.navigation.navigate('SummaryView', this.state.choosenSongs)}>
+                                    <Text style={{ paddingTop: 7 }}>Dalej</Text><Icon style={{color: 'black'}} name="arrow-forward" />
+                                </Button>
                     }
                     </Right>
                     </Header>
@@ -200,22 +209,48 @@ export default class MainView extends React.Component {
                             renderSectionHeader={({section}) => <Text style={styles.sectionHeader}>{section.title.toUpperCase()}</Text>}
                             />
                         </ScrollView>
-                            <View style={[styles.placeholder ,{height: this.state.customHeight}]}></View>
-                            <View style={[styles.bottomList, { height: this.state.customHeight }]}>
-                                <View style={styles.bottomHeaderBar}>
-                                    <View style={styles.bottomHeaderItemOne}>
-                                        <Icon style={{ marginRight: 10 }} name="md-musical-notes" /> 
-                                        { this.state.choosenSongs.length > 0 &&
-                                            <Text>Twoja playlista:</Text>
-                                        }
-                                    </View>
-                                    <View style={styles.bottomHeaderItemTwo}>
-                                    <Icon style={{ marginRight: 10 }} name="ios-cash-outline" />  
-                                        <Text>
-                                            {this.state.overallCost} PLN
-                                        </Text>
-                                    </View>
+                        <View style={[styles.placeholder ,{height: this.state.customHeight}]}></View>
+                        <View style={[styles.bottomList, { height: this.state.customHeight }]}>
+                            <View style={styles.bottomHeaderBar}>
+                                <View style={styles.bottomHeaderItemOne}>
+                                { this.state.choosenSongs.length > 0 &&
+                                    <Button transparent dark 
+                                    onPress={() => {
+                                        this.setModalVisible(!this.state.modalVisible)
+                                    }}>
+                                        <Icon style={{ marginRight: -10 }} name="md-musical-notes" /> 
+                                    <Text>Twoja playlista</Text></Button>
+                                    }
                                 </View>
+                                <View style={styles.bottomHeaderItemTwo}>
+                                    <Icon style={{ marginRight: 10 }} name="ios-cash-outline" />  
+                                    <Text>
+                                        {this.state.overallCost} PLN
+                                    </Text>
+                                </View>
+                            </View>
+                        </View>
+                        <Modal
+                            animationType="slide"
+                            transparent={false}
+                            visible={this.state.modalVisible}
+                            onRequestClose={() => {
+                                this.setModalVisible(!this.state.modalVisible)
+                            }}
+                            >
+                            <View style={styles.modal}>
+                                <Header style={styles.headerBar} androidStatusBarColor={"#49a7cc"}>
+                                    <Left>
+                                        <Button transparent onPress={() => this.setModalVisible(!this.state.modalVisible)}>
+                                            <Icon style={{ color: 'black' }} name='arrow-back' />
+                                        </Button>
+                                    </Left>
+                                    <Body>
+                                        <Title>
+                                            <Text>Twoja playlista</Text>
+                                        </Title>
+                                    </Body>
+                                </Header>
                                 <ScrollView>
                                 <FlatList
                                 data={this.state.choosenSongs}
@@ -231,9 +266,41 @@ export default class MainView extends React.Component {
                                 />
                                 </ScrollView>
                             </View>
-                    </View>
-                </Container>
-            );
+                        </Modal>
+                        </View>
+                        </Container>
+                    );
+                        // <View style={[styles.placeholder ,{height: this.state.customHeight}]}></View>
+                        // <View style={[styles.bottomList, { height: this.state.customHeight }]}>
+                        //     <View style={styles.bottomHeaderBar}>
+                        //         <View style={styles.bottomHeaderItemOne}>
+                        //             <Icon style={{ marginRight: 10 }} name="md-musical-notes" /> 
+                        //             { this.state.choosenSongs.length > 0 &&
+                        //                 <Text>Twoja playlista:</Text>
+                        //             }
+                        //         </View>
+                        //         <View style={styles.bottomHeaderItemTwo}>
+                        //         <Icon style={{ marginRight: 10 }} name="ios-cash-outline" />  
+                        //             <Text>
+                        //                 {this.state.overallCost} PLN
+                        //             </Text>
+                        //         </View>
+                        //     </View>
+                        //     <ScrollView>
+                        //     <FlatList
+                        //     data={this.state.choosenSongs}
+                        //         renderItem={({ item }) =>
+                        //         <ListItem style={styles.listItem}>
+                        //             <Text style={styles.item}>{item.author} - {item.title}</Text>
+                        //             <Button transparent style={styles.addButton} onPress={() => this.removeSongFromPlaylist(item)}>
+                        //             <Icon style={{ color: 'black' }} name="md-trash"/>
+                        //             </Button>
+                        //         </ListItem>
+                        //         }
+                        //         keyExtractor={this._keyExtractor}
+                        //     />
+                        //     </ScrollView>
+                        // </View>
             }
         }
     }
@@ -245,7 +312,7 @@ const styles = StyleSheet.create({
     },
     headerBar: {
         backgroundColor: 'white',
-        justifyContent: 'space-between'
+        // justifyContent: 'space-between'
     },
     bottomHeaderBar: {
         backgroundColor: 'white',
@@ -253,6 +320,11 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
         borderBottomColor: '#efefef',
         borderBottomWidth: 1
+    },
+    proceedButton: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center'
     },
     sectionHeader: {
         paddingTop: 5,
@@ -281,11 +353,10 @@ const styles = StyleSheet.create({
         // backgroundColor: '#80d8ff'
     },
     bottomHeaderItemOne: {
-        padding: 10,
         flex: 1,
         flexDirection: 'row',
         alignItems: 'center',
-        justifyContent: 'flex-start'
+        justifyContent: 'flex-start',
     },
     bottomHeaderItemTwo: {
         padding: 10,

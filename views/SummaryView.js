@@ -40,7 +40,8 @@ export default class SummaryView extends React.Component {
     setModalVisibility(visibility){
         this.setState({modalVisible: visibility})
         // playlist upload 
-        let playList = JSON.stringify(this.state.choosenSongs.map((song) => song.id))
+        // song.yid instead song.id (not working with fake backend)
+        let playList = JSON.stringify(this.state.choosenSongs.map((song) => song.yid))
         console.log("Wybrane piosenki:")
         console.log(this.state.choosenSongs)
         fetch('https://my-json-server.typicode.com/robson3999/songs-db/playlists', {
