@@ -160,6 +160,11 @@ export default class MainView extends React.Component {
                 // customHeight: prevState.customHeight-100
             }
         })
+        Toast.show({
+            text: `Usunięto ${song.title}`,
+            position: 'bottom',
+            buttonText: 'OK',
+        })
     }
 
     setModalVisible(modalState){
@@ -201,12 +206,17 @@ export default class MainView extends React.Component {
                             <ListItem style={styles.listItem}>
                             <Text style={styles.item}>{item.author} - {item.title}</Text>
                             <Button  transparent style={styles.addButton} onPress={() => this.addSongToPlaylist(item)}>
-                            <Icon style={{ color: 'black' }} name='md-add' />
+                            <Icon style={{ color: 'black' }} name='ios-add' />
                             </Button>
                             </ListItem>
                             }
                             keyExtractor={this._keyExtractor}
-                            renderSectionHeader={({section}) => <Text style={styles.sectionHeader}>{section.title.toUpperCase()}</Text>}
+                            renderSectionHeader={({section}) => 
+                                <View style={styles.sectionHeader}>
+                                    <Icon name="ios-musical-notes" />
+                                    <Text style={styles.sectionHeaderText}>{section.title[0].toUpperCase() + section.title.slice(1)}</Text>
+                                </View>
+                            }
                             />
                         </ScrollView>
                         <View style={[styles.placeholder ,{height: this.state.customHeight}]}></View>
@@ -218,8 +228,8 @@ export default class MainView extends React.Component {
                                     onPress={() => {
                                         this.setModalVisible(!this.state.modalVisible)
                                     }}>
-                                        <Icon style={{ marginRight: -10 }} name="md-musical-notes" /> 
-                                    <Text>Twoja playlista</Text></Button>
+                                        <Icon style={{ marginRight: -5 }} name="md-musical-notes" /> 
+                                    <Text>Wybrane piosenki</Text></Button>
                                     }
                                 </View>
                                 <View style={styles.bottomHeaderItemTwo}>
@@ -232,7 +242,7 @@ export default class MainView extends React.Component {
                         </View>
                         <Modal
                             animationType="slide"
-                            transparent={false}
+                            transparent={true}
                             visible={this.state.modalVisible}
                             onRequestClose={() => {
                                 this.setModalVisible(!this.state.modalVisible)
@@ -242,7 +252,7 @@ export default class MainView extends React.Component {
                                 <Header style={styles.headerBar} androidStatusBarColor={"#49a7cc"}>
                                     <Left>
                                         <Button transparent onPress={() => this.setModalVisible(!this.state.modalVisible)}>
-                                            <Icon style={{ color: 'black' }} name='arrow-back' />
+                                            <Icon style={{ color: 'black' }} name='md-close' />
                                         </Button>
                                     </Left>
                                     <Body>
@@ -270,37 +280,6 @@ export default class MainView extends React.Component {
                         </View>
                         </Container>
                     );
-                        // <View style={[styles.placeholder ,{height: this.state.customHeight}]}></View>
-                        // <View style={[styles.bottomList, { height: this.state.customHeight }]}>
-                        //     <View style={styles.bottomHeaderBar}>
-                        //         <View style={styles.bottomHeaderItemOne}>
-                        //             <Icon style={{ marginRight: 10 }} name="md-musical-notes" /> 
-                        //             { this.state.choosenSongs.length > 0 &&
-                        //                 <Text>Twoja playlista:</Text>
-                        //             }
-                        //         </View>
-                        //         <View style={styles.bottomHeaderItemTwo}>
-                        //         <Icon style={{ marginRight: 10 }} name="ios-cash-outline" />  
-                        //             <Text>
-                        //                 {this.state.overallCost} PLN
-                        //             </Text>
-                        //         </View>
-                        //     </View>
-                        //     <ScrollView>
-                        //     <FlatList
-                        //     data={this.state.choosenSongs}
-                        //         renderItem={({ item }) =>
-                        //         <ListItem style={styles.listItem}>
-                        //             <Text style={styles.item}>{item.author} - {item.title}</Text>
-                        //             <Button transparent style={styles.addButton} onPress={() => this.removeSongFromPlaylist(item)}>
-                        //             <Icon style={{ color: 'black' }} name="md-trash"/>
-                        //             </Button>
-                        //         </ListItem>
-                        //         }
-                        //         keyExtractor={this._keyExtractor}
-                        //     />
-                        //     </ScrollView>
-                        // </View>
             }
         }
     }
@@ -308,7 +287,7 @@ export default class MainView extends React.Component {
 
 const styles = StyleSheet.create({
     container: {
-        backgroundColor: 'white'
+        // backgroundColor: '#eff8fc'
     },
     headerBar: {
         backgroundColor: 'white',
@@ -327,22 +306,34 @@ const styles = StyleSheet.create({
         alignItems: 'center'
     },
     sectionHeader: {
-        paddingTop: 5,
-        paddingLeft: 10,
-        paddingRight: 10,
-        paddingBottom: 5,
-        fontSize: 18,
-        // fontWeight: 'bold',
-        backgroundColor: '#eaf9ff',
+        flex: 1,
+        flexDirection: 'row',
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    sectionHeaderText: {
+        fontSize: 22,
         fontFamily: 'MuktaMalar',
+        padding: 10,
     },
     listItem: {
         flex: 1,
         justifyContent: 'space-between',
         paddingLeft: 15,
-        margin: 5,
-        backgroundColor: '#eff8fc',
+        marginRight: 10,
+        marginLeft: 10,
+        marginTop: 5,
+        marginBottom: 5,
+        backgroundColor: 'white',
         borderRadius: 20,
+        borderLeftWidth: 7,
+        borderColor: '#49a7cc',
+        borderBottomWidth: 0,
+        shadowColor: '#000',
+        shadowOffset: { width: 2, height: 2 },
+        shadowOpacity: 0.9,
+        shadowRadius: 20,
+        elevation: 2
     },
     item: {
         fontFamily: 'MuktaMalar',
@@ -377,5 +368,9 @@ const styles = StyleSheet.create({
     },
     placeholder: {
         maxHeight: 200
+    },
+    modal: {
+        backgroundColor: '#fff',
+        height: '93%'
     }
 });

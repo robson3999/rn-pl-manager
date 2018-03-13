@@ -134,10 +134,10 @@ class RowComponent extends React.Component {
         this.handleDeletingSong = this.handleDeletingSong.bind(this)
     }
 
-    handleDeletingSong(e){
-        this.props.onRemoveRequest(e)
+    handleDeletingSong(song){
+        this.props.onRemoveRequest(song)
         Toast.show({
-            text: 'Usunięto piosenkę',
+            text: `Usunięto ${song.title}`,
             position: 'bottom',
             buttonText: 'OK',
         })
