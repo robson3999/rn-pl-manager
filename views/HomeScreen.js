@@ -19,7 +19,7 @@ export default class HomeScreen extends React.Component {
             <View style={styles.container}>
                 <View style={styles.tileRow}>
                     <TouchableOpacity onPress={() => this.props.navigation.navigate('Jukebox')} style={[styles.button, { backgroundColor: '#49a7cc'}]}>
-                    <Text style={styles.buttonText}>Playlista</Text>
+                    <Text style={styles.buttonText}>Jukebox</Text>
                     </TouchableOpacity>
                     <TouchableOpacity onPress={() => console.log('Menu pressed')} style={[styles.button, { backgroundColor: '#F57C00' }]}>
                     <Text style={styles.buttonText}>Menu</Text>

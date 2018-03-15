@@ -5,7 +5,8 @@ import HomeScreen from './views/HomeScreen'
 import SongsList from './views/SongsList'
 import SummaryView from './views/SummaryView'
 import JukeboxHome from './views/Jukebox/JukeboxHome'
-import GenresList from './views/Jukebox/GenresList';
+import GenresList from './views/Jukebox/GenresList'
+import DetailedSongsView from './views/Jukebox/DetailedSongsView'
 
 const RootStack = StackNavigator(
   {
@@ -17,6 +18,9 @@ const RootStack = StackNavigator(
     },
     GenresList: {
       screen: GenresList
+    },
+    DetailedSongsView: {
+      screen: DetailedSongsView
     },
     SongsList: {
       screen: SongsList

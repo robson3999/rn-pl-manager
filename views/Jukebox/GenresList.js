@@ -1,8 +1,6 @@
 import React, { Component } from 'react'
 import { View, Text, StyleSheet, TouchableOpacity, ScrollView } from 'react-native'
-import { Container, Content, Spinner } from 'native-base'
-
-let songs
+import { Container, Content, Spinner, Header, Left, Body, Title, Button, Icon } from 'native-base'
 
 export default class GenresList extends Component {
     constructor(props){
@@ -13,17 +11,16 @@ export default class GenresList extends Component {
         }
     }
     static navigationOptions = {
-        title: "Gatunki"
+        header: null
     }
     async fetchGenres(){
-        url = 'https://my-json-server.typicode.com/robson3999/songs-db/genres'
-        // let url = 'http://192.168.1.101:8080/genre/list'
+        // url = 'https://my-json-server.typicode.com/robson3999/songs-db/genres'
+        let url = 'http://192.168.1.112:8080/genre/list'
         await fetch(url)
             .then(response => {
                 if (response.ok)
                  response.json().then(resp => {
                      this.setState({ data: resp })
-                     console.log(this.state.data)
                     })
                 else 
                  this.setState({ isLoading: false })
@@ -34,42 +31,55 @@ export default class GenresList extends Component {
             })
     }
 
+    parseGenresToList(data){
+        let id = 0
+        return data.map(genre => {
+            return {
+                id: ++id,
+                title: genre.title,
+                data: genre.data
+            }
+        })
+    }
+
     async componentDidMount(){
         await this.fetchGenres()
     }
 
     _keyExtractor = (item, index) => item.id
     render() {
-        const genres = [
-            { id: 1, title: "rock" },
-            { id: 2, title: "metal" },
-            { id: 3, title: "pop" },
-            { id: 4, title: "classic" },
-            { id: 5, title: "rap" },
-            { id: 6, title: "folk" },
-        ]
-        const genresList = genres.map(genre => (
-                <TouchableOpacity key={genre.id} style={styles.button} onPress={() => this.props.navigation.navigate('Jukebox')}>
+        const genresList = this.parseGenresToList(this.state.data).map(genre => (
+                <TouchableOpacity key={genre.id} style={styles.button} onPress={() => this.props.navigation.navigate('DetailedSongsView', genre)}>
                     <Text style={styles.buttonText}>{genre.title}</Text>
                 </TouchableOpacity>
         ))
 
         if(this.state.isLoading){
             return (
-                <Container>
-                    <Content>
-                        <Text>Ładuję dane...</Text>
-                        <Spinner />
-                    </Content>
-                </Container>
+                <View style={{justifyContent: 'center', alignItems: 'center', flex: 1}}>
+                    <Text>Ładuję dane...</Text>
+                    <Spinner />
+                </View>
             )
         } else {
             return (
-                <ScrollView>
-                    <View style={styles.container}>
-                        {genresList}
-                    </View>
-                </ScrollView>
+                <View>
+                    <Header style={styles.headerBar} androidStatusBarColor={"#49a7cc"}>
+                        <Left>
+                            <Button transparent onPress={() => this.props.navigation.navigate('Jukebox')}>
+                                <Icon style={{ color: 'black' }} name='arrow-back' />
+                            </Button>
+                        </Left>
+                        <Body>
+                            <Title style={{ color: 'black', textAlign: 'center' }}>Wybierz gatunek</Title>
+                        </Body>
+                    </Header>
+                    <ScrollView>
+                        <View style={styles.container}>
+                            {genresList}
+                        </View>
+                    </ScrollView>
+                </View>
             )
         }
     }
@@ -85,6 +95,10 @@ const styles = StyleSheet.create({
     },
     listStyles: {
         // flex: 1,
+    },
+    headerBar: {
+        backgroundColor: 'white',
+        // justifyContent: 'space-between'
     },
     button: {
         justifyContent: 'center',
