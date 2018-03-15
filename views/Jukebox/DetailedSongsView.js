@@ -141,28 +141,6 @@ const styles = StyleSheet.create({
     headerBar: {
         backgroundColor: 'white'
     },
-    bottomHeaderBar: {
-        backgroundColor: 'white',
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        borderColor: '#BDBDBD',
-        borderTopWidth: 1
-    },
-    proceedButton: {
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        alignItems: 'center'
-    },
-    sectionHeader: {
-        flex: 1,
-        flexDirection: 'row',
-        justifyContent: 'center',
-        alignItems: 'center',
-    },
-    sectionHeaderText: {
-        fontSize: 22,
-        padding: 10,
-    },
     listItem: {
         flex: 1,
         justifyContent: 'space-between',

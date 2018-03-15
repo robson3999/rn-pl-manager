@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
-import { View, Text, StyleSheet, TouchableOpacity, ScrollView } from 'react-native'
+import { View, Text, StyleSheet, TouchableOpacity, ScrollView, NetInfo } from 'react-native'
 import { Container, Content, Spinner, Header, Left, Body, Title, Button, Icon } from 'native-base'
-
+import NoInternetView from '../helpers/NoInternetView'
 export default class GenresList extends Component {
     constructor(props){
         super(props)
@@ -28,9 +28,26 @@ export default class GenresList extends Component {
             })
             .catch(err => {
                 console.log(err)
+                this.setState({ noInternet: true })
             })
     }
 
+    async forceUpdateHandler() {
+        await this.fetchGenres()
+        this.setStateToStart()
+        this.checkConnectionInfo()
+    }
+    setStateToStart() {
+        this.setState({
+            isLoading: true,
+            data: []
+        })
+    }
+    checkConnectionInfo() {
+        NetInfo.isConnected.fetch().then(isOnline => {
+            isOnline ? this.setState({ noInternet: false }) : this.setState({ noInternet: true })
+        })
+    }
     parseGenresToList(data){
         let id = 0
         return data.map(genre => {
@@ -43,6 +60,7 @@ export default class GenresList extends Component {
     }
 
     async componentDidMount(){
+        this.checkConnectionInfo()
         await this.fetchGenres()
     }
 
@@ -62,25 +80,29 @@ export default class GenresList extends Component {
                 </View>
             )
         } else {
-            return (
-                <View>
-                    <Header style={styles.headerBar} androidStatusBarColor={"#49a7cc"}>
-                        <Left>
-                            <Button transparent onPress={() => this.props.navigation.navigate('Jukebox')}>
-                                <Icon style={{ color: 'black' }} name='arrow-back' />
-                            </Button>
-                        </Left>
-                        <Body>
-                            <Title style={{ color: 'black', textAlign: 'center' }}>Wybierz gatunek</Title>
-                        </Body>
-                    </Header>
-                    <ScrollView>
-                        <View style={styles.container}>
-                            {genresList}
-                        </View>
-                    </ScrollView>
-                </View>
-            )
+            if (this.state.noInternet) {
+                return <NoInternetView onTryReconnectRequest={() => this.forceUpdateHandler()} />
+            } else {
+                return (
+                    <View>
+                        <Header style={styles.headerBar} androidStatusBarColor={"#49a7cc"}>
+                            <Left>
+                                <Button transparent onPress={() => this.props.navigation.navigate('Jukebox')}>
+                                    <Icon style={{ color: 'black' }} name='arrow-back' />
+                                </Button>
+                            </Left>
+                            <Body>
+                                <Title style={{ color: 'black', textAlign: 'center' }}>Wybierz gatunek</Title>
+                            </Body>
+                        </Header>
+                        <ScrollView>
+                            <View style={styles.container}>
+                                {genresList}
+                            </View>
+                        </ScrollView>
+                    </View>
+                )
+            }
         }
     }
 }

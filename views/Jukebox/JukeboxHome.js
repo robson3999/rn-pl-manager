@@ -44,7 +44,6 @@ export default class JukeboxHome extends Component {
     _keyExtractor = (item, index) => item.id
 
     componentDidMount() {
-        console.log(testSongs)
     }
     increaseProgress(){
         let newProg = this.state.progress + 0.1
@@ -53,13 +52,11 @@ export default class JukeboxHome extends Component {
         })
     }
     render () {
-        
-
         return (
             <Container>
                 <View style={styles.nowPlayingCard}>
                     <CardItem header>
-                        <H1>Aktualnie gramy</H1>
+                        <H1>Aktualnie odtwarzane</H1>
                     </CardItem>
                     <CardItem>
                         <Left>
