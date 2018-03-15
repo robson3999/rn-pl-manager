@@ -41,27 +41,28 @@ export default class SummaryView extends React.Component {
         this.setState({modalVisible: visibility})
         // playlist upload 
         // song.yid instead song.id (not working with fake backend)
-        let playList = JSON.stringify(this.state.choosenSongs.map((song) => song.yid))
-        console.log("Wybrane piosenki:")
-        console.log(this.state.choosenSongs)
-        fetch('https://my-json-server.typicode.com/robson3999/songs-db/playlists', {
-            method: 'POST',
-            body: playList
+        let playList = this.state.choosenSongs.map((song) => song.id)
+        console.log(playList)
+        let url = 'https://my-json-server.typicode.com/robson3999/songs-db/playlists'
+        // let url = 'http://192.168.1.101:8080/musicfile/add?ids='+ playList.toString()
+        fetch(url, {
+            method: 'GET'
         })
         .then((resp) => {
-            if(resp.status == 201 && resp.ok){
+            // if(resp.status == 200 && resp.ok){
                 console.log("Wyslano:")
-                console.log(JSON.parse(playList))
+                // console.log(JSON.parse(playList))
                 this.setState({modalComplete: true})
-            }
+            // }
             console.log(resp)
         })
         .catch(err => console.log(err))
     }
+    
 
     navigateToHomeScreen(){
         this.setState({ modalVisible: false })
-        this.props.navigation.navigate('MainView')
+        this.props.navigation.navigate('SongsList')
     }
 
     reorderChoosenSongs(e){
@@ -75,12 +76,12 @@ export default class SummaryView extends React.Component {
             <Container style={styles.container}>
                 <Header style={styles.headerBar} androidStatusBarColor={"#49a7cc"}>
                     <Left>
-                        <Button transparent onPress={() => this.props.navigation.navigate('MainView', this.state.choosenSongs)}>
+                        <Button transparent onPress={() => this.props.navigation.navigate('SongsList', this.state.choosenSongs)}>
                             <Icon style={{ color: 'black' }} name='arrow-back' />
                         </Button>
                     </Left>
                     <Body>
-                        <Title style={{ color: 'black', fontFamily: 'MuktaMalar' }}>Podsumowanie</Title>
+                        <Title style={{ color: 'black' }}>Podsumowanie</Title>
                     </Body>
                 </Header>
                 <Modal
@@ -158,7 +159,7 @@ class RowComponent extends React.Component {
                     >
                         <Icon name="md-menu" />
                     </TouchableHighlight>
-                    <Text style={{ width: '75%', fontFamily: 'MuktaMalar' }}>{song.author} - {song.title}</Text>
+                    <Text style={{ width: '75%' }}>{song.author} - {song.title}</Text>
                     <Button transparent onPress={() => this.handleDeletingSong(song)}>
                         <Icon style={{ color: 'black' }} name="md-trash" />
                     </Button>
@@ -179,12 +180,6 @@ const styles = StyleSheet.create({
     headerBar: {
         backgroundColor: 'white',
         justifyContent: 'space-between',
-    },
-    queueInfo: {
-        color: 'black',
-        backgroundColor: '#eff8fc',
-        padding: 10,
-        fontFamily: 'MuktaMalar',
     },
     listItem: {
         justifyContent: 'space-between',
@@ -210,11 +205,9 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
     },
     footerText: {
-        // height: 70,
         color: 'black',
-        paddingTop: 10,
-        fontSize: 18,
-        fontFamily: 'MuktaMalar',
+        padding: 10,
+        fontSize: 16
     },
     modal: {
         justifyContent: 'center',

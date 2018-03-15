@@ -2,16 +2,20 @@ import React from 'react';
 import { Root } from 'native-base'
 import { StackNavigator } from 'react-navigation'
 import HomeScreen from './views/HomeScreen'
-import MainView from './views/MainView'
+import SongsList from './views/SongsList'
 import SummaryView from './views/SummaryView'
+import JukeboxHome from './views/Jukebox/JukeboxHome'
 
 const RootStack = StackNavigator(
   {
     Home: {
       screen: HomeScreen
     },
-    MainView: {
-      screen: MainView
+    Jukebox: {
+      screen: JukeboxHome
+    },
+    SongsList: {
+      screen: SongsList
     },
     SummaryView: {
       screen: SummaryView
