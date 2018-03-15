@@ -96,7 +96,7 @@ export default class JukeboxHome extends Component {
                     </Content>
                     <View style={styles.footer}>
                         <Button bordered dark onPress={
-                        () => this.props.navigation.navigate('SongsList')
+                        () => this.props.navigation.navigate('GenresList')
                         }>
                             <Text>
                                 Zamów piosenkę

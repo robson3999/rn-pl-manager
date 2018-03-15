@@ -5,17 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="77d081d8-a334-412b-b4b4-ef4bfb5adf04" name="Default" comment="">
-      <change type="DELETED" beforePath="$PROJECT_DIR$/assets/MuktaMalar.ttf" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/assets/Roboto.ttf" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/assets/jukebox-svgrepo-com.svg" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/views/MainView.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/views/PaymentView.js" afterPath="" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/App.js" afterPath="$PROJECT_DIR$/App.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/package-lock.json" afterPath="$PROJECT_DIR$/package-lock.json" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/package.json" afterPath="$PROJECT_DIR$/package.json" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/views/HomeScreen.js" afterPath="$PROJECT_DIR$/views/HomeScreen.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/views/SummaryView.js" afterPath="$PROJECT_DIR$/views/SummaryView.js" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -331,7 +321,7 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="1974" y="-8" width="1874" height="1216" extended-state="6" />
+    <frame x="1974" y="-8" width="1874" height="1216" extended-state="7" />
     <layout>
       <window_info id="Android Profiler" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
