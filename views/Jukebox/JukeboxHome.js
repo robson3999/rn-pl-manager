@@ -1,8 +1,9 @@
 import  React, { Component } from 'react'
-import { View, FlatList, StyleSheet, ScrollView } from 'react-native'
+import { View, FlatList, StyleSheet, ScrollView, Image, ImageBackground, TouchableOpacity } from 'react-native'
 import {
     Container,
     Header,
+    Title,
     Content,
     Card,
     CardItem,
@@ -15,6 +16,7 @@ import {
     Icon,
     Button
 } from 'native-base'
+
 import * as Progress from 'react-native-progress'
 
 const testSongs = [
@@ -45,6 +47,11 @@ export default class JukeboxHome extends Component {
 
     componentDidMount() {
     }
+
+    printSongsCount(){
+        
+    }
+
     increaseProgress(){
         let newProg = this.state.progress + 0.1
         this.setState({
@@ -53,59 +60,101 @@ export default class JukeboxHome extends Component {
     }
     render () {
         return (
-            <Container>
+            <ImageBackground
+                source={require('../../assets/bg.png')}
+                style={{ width: '100%', height: '100%' }}
+            >
+                <Header style={styles.headerBackground} androidStatusBarColor={"#000"}>
+                    <Left>
+                        <Button transparent onPress={() => this.props.navigation.navigate('Home') }>
+                        <Icon name="md-arrow-round-back" style={{color: "#fff"}} />
+                        </Button>
+                    </Left>
+                    <Body>
+                        <Title>Aktualnie gramy</Title>
+                    </Body>
+                </Header>
+                <Container>
                 <View style={styles.nowPlayingCard}>
-                    <CardItem header>
-                        <H1>Aktualnie odtwarzane</H1>
-                    </CardItem>
-                    <CardItem>
+                    <CardItem style={styles.transparentBackground}>
                         <Left>
                             <View style={styles.songPlayingIconBox}>
-                                <Icon name="ios-musical-notes-outline" style={{ fontSize: 54 }} />
+                                <Icon name="ios-musical-notes" style={{ color:'#fff', fontSize: 54 }} />
                             </View>
                             <Body>
-                                <H3>Tytul</H3>
-                                <Text>Wykonawca</Text>
+                                <Text style={[{ fontSize: 32 }, styles.whiteText]}>In the end</Text>
+                                <Text style={styles.whiteText}>Linkin Park</Text>
                             </Body>
                         </Left>
                     </CardItem>
-                    <Progress.Bar progress={this.state.progress}
-                        indeterminate={this.state.indeterminate} width={null} color="black" />
-                    <CardItem footer>
+                    <View style={{ flexDirection: 'row', width: '100%', justifyContent: 'center' }}>
+                        <Text style={[styles.whiteText, { margin: 10, marginTop: -10, fontWeight: 'bold' }]}>XX:XX</Text>
+                        <View style={{ width: '65%' }}>
+                            <Progress.Bar 
+                              progress={this.state.progress}
+                              indeterminate={this.state.indeterminate}
+                              width={null}
+                              height={8}
+                              color="#EE3587"
+                              borderRadius={0}
+                              borderWidth={0}
+                              unfilledColor="#000"
+                              />
+                        </View>
+                        <Text style={[styles.whiteText, { margin: 10, marginTop: -10, fontWeight: 'bold' }]}>XX:XX</Text>                        
+                    </View>
+                    <CardItem footer style={styles.transparentBackground}>
                         <View>
-                            <H3>Następne w kolejce:</H3>
+                            <Text style={[{ fontSize: 18, fontWeight: 'bold' }, styles.whiteText]}>Następne w kolejce:</Text>
                         </View>
                     </CardItem>
                 </View>
-            <Content>
-                    <View style={styles.nextSongsList}>
-                        
-                        <ScrollView>
-                        <FlatList
-                          data={testSongs}
-                          keyExtractor={this._keyExtractor}
-                            renderItem={(item) =>
-                                <ListItem><Text>{item.item.author} - {item.item.title}</Text></ListItem>
-                                }
-                        />
-                        </ScrollView>                        
-                    </View>
+                <Content>
+                        <View style={styles.nextSongsList}>
+                            <ScrollView>
+                            <FlatList
+                                data={testSongs}
+                                keyExtractor={this._keyExtractor}
+                                renderItem={(item) =>
+                                    <ListItem style={styles.listItem}>
+                                        <View style={{ flex: 1 }}>
+                                            <Text style={{ color: '#FAE2EE', fontSize: 20, fontWeight: 'bold' }}>{item.item.title}</Text>
+                                        </View>
+                                        <View style={{ flexDirection: 'row', justifyContent: 'space-between', width: '100%' }}>
+                                            <Text style={{ color: '#FAE2EE' }}>{item.item.author}</Text>
+                                            <Text style={{ color: '#FAE2EE' }}>XX:XX</Text>
+                                        </View>
+                                        <View style={styles.bottomBlurredBorder}></View>
+                                    </ListItem>
+                                    }
+                            />
+                            </ScrollView>                        
+                        </View>
                     </Content>
+                    <View style={styles.placeholder}></View>
                     <View style={styles.footer}>
-                        <Button bordered dark onPress={
-                        () => this.props.navigation.navigate('GenresList')
-                        }>
-                            <Text>
+                        <TouchableOpacity
+                          style={styles.orderSongButton}
+                          onPress={
+                            () => this.props.navigation.navigate('GenresList')
+                            }>
+                            <Icon name="md-play" style={{ color: '#fff', fontSize: 42, marginRight: 10 }} />
+                            <Text style={{ fontSize: 30, fontWeight: 'bold', color: '#fff' }}>
                                 Zamów piosenkę
                             </Text>
-                        </Button>
+                        </TouchableOpacity>
                     </View>
-            </Container>
+                </Container>
+            </ImageBackground>
         )
     }
 }
 
 const styles = StyleSheet.create({
+    headerBackground: {
+        backgroundColor: 'rgba(0, 0, 0, 0.35)',
+        elevation: 5
+    },
     songPlayingIconBox: {
         height: 80,
         width: 80,
@@ -115,22 +164,53 @@ const styles = StyleSheet.create({
     },
     nowPlayingCard: {
         padding: 10,
-        backgroundColor: 'white',
-        borderBottomWidth: 1
+        backgroundColor: 'transparent',
+        elevation: 10
     },
     nextSongsList: {
-        padding: 10,
-        backgroundColor: 'white'
+        backgroundColor: 'rgba(0, 0, 0, 0.35)',
+    },
+    listItem: {
+        flexDirection: 'column', 
+        flex: 1, 
+        alignItems: 'flex-start',
+        borderBottomWidth: 0
+    },
+    bottomBlurredBorder: {
+        backgroundColor: "#B53694",
+        height: 2,
+        opacity: 0.5,
+        elevation: 2,
+        width: '100%'
+    },
+    orderSongButton: {
+        backgroundColor: '#B53694',
+        flexDirection: 'row',
+        borderRadius: 15,
+        paddingTop: 10,
+        paddingBottom: 10,
+        paddingRight: 40,
+        paddingLeft: 40,
     },
     footer: {
         position: 'absolute',
         left: 0,
         right: 0,
         bottom: 0,
-        backgroundColor: 'white',
-        maxHeight: 200,
+        backgroundColor: 'rgba(0, 0, 0, 0.35)',
+        height: 100,
         padding: 10,
         justifyContent: 'center',
-        flexDirection: 'row'
+        alignItems: 'center',
+        width: '100%'
+    },
+    placeholder: {
+        height: 100
+    },
+    transparentBackground: {
+        backgroundColor: 'transparent'
+    },
+    whiteText: {
+        color: '#fff'
     }
  })

@@ -1,6 +1,7 @@
 import React from 'react';
 import { Root } from 'native-base'
 import { StackNavigator } from 'react-navigation'
+import { StyleSheet } from 'react-native'
 import HomeScreen from './views/HomeScreen'
 import SongsList from './views/SongsList'
 import SummaryView from './views/SummaryView'
