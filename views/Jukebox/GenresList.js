@@ -15,7 +15,7 @@ export default class GenresList extends Component {
     }
     async fetchGenres(){
         // url = 'https://my-json-server.typicode.com/robson3999/songs-db/genres'
-        let url = 'http://192.168.1.112:8080/genre/list'
+        let url = 'http://192.168.1.101:8080/genre/list'
         await fetch(url)
             .then(response => {
                 if (response.ok)

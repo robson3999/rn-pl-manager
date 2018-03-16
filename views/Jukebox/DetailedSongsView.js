@@ -35,7 +35,7 @@ export default class DetailedSongsView extends Component {
     
     setModalVisible(visible, item){
         this.setState({modalVisible: visible})
-        let url = 'http://192.168.1.112:8080/musicfile/add?ids='+ item.id
+        let url = 'http://192.168.1.101:8080/musicfile/add?ids='+ item.id
         fetch(url, {
             method: 'GET'
         })
