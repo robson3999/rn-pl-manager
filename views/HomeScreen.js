@@ -1,6 +1,6 @@
 import React from 'react'
-import { StyleSheet, Image, View, TouchableOpacity } from 'react-native'
-import { Container, Content, Text, Button } from 'native-base';
+import { StyleSheet, Image, View, TouchableOpacity, ImageBackground, TouchableHighlight, ScrollView } from 'react-native'
+import { Container, Content, Text, Button, Left, Icon, Body, Title, Header } from 'native-base';
 
 export default class HomeScreen extends React.Component {
     constructor(props){
@@ -16,76 +16,74 @@ export default class HomeScreen extends React.Component {
    } 
     render() {
         return (
-            <View style={styles.container}>
-            <View style={styles.upperButtons}>
-                <View style={styles.tileRow}>
-                    <TouchableOpacity onPress={() => this.props.navigation.navigate('Jukebox')} style={[styles.button, { backgroundColor: '#49a7cc'}]}>
-                    <Text style={styles.buttonText}>Jukebox</Text>
-                    </TouchableOpacity>
-                </View>
-                <View>
-                    <TouchableOpacity onPress={() => console.log('Menu pressed')} style={[styles.button, { backgroundColor: '#F57C00', marginLeft: 0 }]}>
-                        <Text style={styles.buttonText}>Menu</Text>
-                    </TouchableOpacity>
-                        <TouchableOpacity onPress={() => console.log('Event pressed')} style={[styles.button, { backgroundColor: '#F57C00', marginLeft: 0  }]}><Text style={styles.buttonText}>Eventy</Text></TouchableOpacity>
-                </View>
-            </View>
-                <View style={styles.tileRow}>
-                    <TouchableOpacity onPress={() => console.log('Promocje pressed')} style={[styles.downButton, { backgroundColor: '#49a7cc' }]}><Text style={styles.buttonText}>Promocje</Text></TouchableOpacity>
-                </View>
-            </View>
+            <ImageBackground
+                source={require('../assets/bg.png')}
+                style={{ width: '100%', height: '100%' }}
+            >
+                <Header style={styles.headerBackground} androidStatusBarColor={"#000"}>
+                        <Title>Menu</Title>
+                </Header>
+                <ScrollView>
+                    <View style={{justifyContent: 'center', alignItems: 'center' }}>
+                        <TouchableOpacity onPress={()=> console.log('aaa')}>
+                                <Image
+                                    source={require('../assets/top_menu/jukebox_tile.png')}
+                                   resizeMode="contain"
+                                style={{ width: 350, height: 350 }}
+                                    >
+                                </Image>
+                            </TouchableOpacity>
+                    </View>
+                    <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
+                        <TouchableOpacity>
+                            <Image source={require('../assets/top_menu/drinks_tile.png')}
+                                resizeMode="contain"
+                            >
+                            </Image>
+                        </TouchableOpacity>
+                        <TouchableOpacity>
+                            <Image source={require('../assets/top_menu/drinks_tile.png')}
+                                resizeMode="contain"
+                            >
+                            </Image>
+                        </TouchableOpacity>
+                    </View>
+                </ScrollView>
+            </ImageBackground>
         )
-        // <View center style={styles.content}>
-        //         <Image source={require('../assets/Jukebox.png')} />
-        // </View>
+            // < View style = { styles.tileRow } >
+            //     <TouchableOpacity onPress={() => console.log('Menu pressed')} style={[styles.button, { backgroundColor: '#F57C00' }]}>
+            //         <Text style={styles.buttonText}>Menu</Text>
+            //     </TouchableOpacity>
+            //     <TouchableOpacity onPress={() => console.log('Event pressed')} style={[styles.button, { backgroundColor: '#F57C00' }]}><Text style={styles.buttonText}>Eventy</Text></TouchableOpacity>
+            //             </View >
+            // <View style={styles.tileRow}>
+            //     <TouchableOpacity onPress={() => console.log('Promocje pressed')} style={[styles.downButton, { backgroundColor: '#49a7cc' }]}><Text style={styles.buttonText}>Promocje</Text></TouchableOpacity>
+            // </View>
     }
 }
 
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        marginTop: '40%',
+    headerBackground: {
+        backgroundColor: 'rgba(0, 0, 0, 0.45)',
         justifyContent: 'center',
         alignItems: 'center',
+        elevation: 5
+    },
+    container: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center'
     },
     tileRow: {
-        flexDirection: 'row',
-        // width: '50%',
-        flex: 1,
-        height: '100%',
-        margin: 10
-        // flexWrap: 'wrap'
-    },
-    upperButtons: {
-        flexDirection: 'row',
-        alignItems: 'center',
+        margin: 10,
         flex: 1
     },
     button: {
-        justifyContent: 'center',
-        alignItems: 'center',
-        height: '100%',
-        margin: 10,
         flex: 1,
-        borderRadius: 8,
-        shadowColor: '#000',
-        shadowOffset: { width: 2, height: 2 },
-        shadowOpacity: 0.8,
-        shadowRadius: 8,
-        elevation: 5
-    },
-    downButton: {
-        justifyContent: 'center',
-        alignItems: 'center',
-        height: '20%',
         margin: 10,
-        flex: 1,
         borderRadius: 8,
-        shadowColor: '#000',
-        shadowOffset: { width: 2, height: 2 },
-        shadowOpacity: 0.8,
-        shadowRadius: 8,
-        elevation: 5
+        backgroundColor: 'black'
     },
     buttonText: {
         fontSize: 21,
