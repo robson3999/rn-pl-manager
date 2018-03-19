@@ -5,21 +5,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="77d081d8-a334-412b-b4b4-ef4bfb5adf04" name="Default" comment="">
-      <change type="DELETED" beforePath="$PROJECT_DIR$/assets/bg.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/assets/top_menu/events_icon.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/assets/top_menu/food_icon.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/assets/top_menu/jukebox_icon.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/assets/top_menu/offers_icon.png" afterPath="" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/assets/top_menu/drinks_tile.png" afterPath="$PROJECT_DIR$/assets/top_menu/drinks_tile.png" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/assets/top_menu/events_tile.png" afterPath="$PROJECT_DIR$/assets/top_menu/events_tile.png" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/assets/top_menu/jukebox_tile.png" afterPath="$PROJECT_DIR$/assets/top_menu/jukebox_tile.png" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/assets/top_menu/offers_tile.png" afterPath="$PROJECT_DIR$/assets/top_menu/offers_tile.png" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/android/app/src/main/res/values/strings.xml" afterPath="$PROJECT_DIR$/android/app/src/main/res/values/strings.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/views/HomeScreen.js" afterPath="$PROJECT_DIR$/views/HomeScreen.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/views/Jukebox/DetailedSongsView.js" afterPath="$PROJECT_DIR$/views/Jukebox/DetailedSongsView.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/views/Jukebox/GenresList.js" afterPath="$PROJECT_DIR$/views/Jukebox/GenresList.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/views/Jukebox/JukeboxHome.js" afterPath="$PROJECT_DIR$/views/Jukebox/JukeboxHome.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/views/SummaryView.js" afterPath="$PROJECT_DIR$/views/SummaryView.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/views/helpers/SummaryModalComplete.js" afterPath="$PROJECT_DIR$/views/helpers/SummaryModalComplete.js" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -248,7 +237,7 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="1974" y="-8" width="1874" height="1216" extended-state="6" />
+    <frame x="1974" y="-8" width="1874" height="1216" extended-state="7" />
     <layout>
       <window_info id="Android Profiler" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
@@ -256,10 +245,10 @@
       <window_info id="Palette&#9;" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Image Layers" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Analysis" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.5355494" sideWeight="0.19625138" order="7" side_tool="true" content_ui="tabs" />
+      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.6048015" sideWeight="0.19625138" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Terminal" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.5355494" sideWeight="0.8037486" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Terminal" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.6048015" sideWeight="0.8037486" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Logcat" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Captures" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Tool" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />

@@ -42,19 +42,15 @@ export default class SummaryView extends React.Component {
         // playlist upload 
         // song.yid instead song.id (not working with fake backend)
         let playList = this.state.choosenSongs.map((song) => song.id)
-        console.log(playList)
         let url = 'https://my-json-server.typicode.com/robson3999/songs-db/playlists'
         // let url = 'http://192.168.1.101:8080/musicfile/add?ids='+ playList.toString()
         fetch(url, {
             method: 'GET'
         })
         .then((resp) => {
-            // if(resp.status == 200 && resp.ok){
-                console.log("Wyslano:")
-                // console.log(JSON.parse(playList))
+            if(resp.status == 200 && resp.ok){
                 this.setState({modalComplete: true})
-            // }
-            console.log(resp)
+            }
         })
         .catch(err => console.log(err))
     }

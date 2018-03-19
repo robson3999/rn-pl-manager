@@ -40,12 +40,10 @@ export default class DetailedSongsView extends Component {
             method: 'GET'
         })
             .then((resp) => {
-                // if(resp.status == 200 && resp.ok){
-                console.log("Wyslano:")
-                // console.log(JSON.parse(playList))
+                if(resp.status == 200 && resp.ok){
                 this.setState({ modalComplete: true })
-                // }
-                console.log(resp)
+                }
+
             })
             .catch(err => console.log(err))
     }
@@ -54,7 +52,6 @@ export default class DetailedSongsView extends Component {
     }
 
     componentDidMount(){
-        console.log(this.props.navigation.state.params)
         this.setState({ filteredSongs: this.state.songsList })
     }
 
@@ -89,7 +86,6 @@ export default class DetailedSongsView extends Component {
     render () {
         return (
             <ImageBackground
-                renderToHardwareTextureAndroid={true}
                 source={require('../../assets/bg_improved.png')}
                 style={{ width: '100%', height: '100%' }}
             >
@@ -109,7 +105,7 @@ export default class DetailedSongsView extends Component {
                             data={this.state.filteredSongs}
                             renderItem={({ item }) =>
                                 <TouchableOpacity onPress={() => this.setModalVisible(true, item)} style={styles.listItem}>
-                                    <View renderToHardwareTextureAndroid={true} style={{ justifyContent: 'space-between', width: '100%', flexDirection: 'row' }}>
+                                    <View style={{ justifyContent: 'space-between', width: '100%', flexDirection: 'row' }}>
                                         <Text style={{ color: '#FAE2EE', fontSize: 20, fontWeight: 'bold' }}>{item.title}</Text>
                                         <Text style={{ color: '#FAE2EE', marginRight: 10, fontWeight: 'bold' }}>PLN 0,99</Text>
                                     </View>
@@ -169,8 +165,8 @@ const styles = StyleSheet.create({
         fontSize: 16
     },
     modal: {
-        padding: 60,
         height: '100%',
+        width: '100%',
         backgroundColor: 'rgba(255, 255, 255, 0.8)',
         justifyContent: 'center',
         alignItems: 'center'

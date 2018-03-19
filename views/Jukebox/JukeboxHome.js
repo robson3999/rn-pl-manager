@@ -49,7 +49,7 @@ export default class JukeboxHome extends Component {
     }
 
     parseMilisecondsToTime(time){
-        return new Date(time).getMinutes().toString() + ":" + new Date(time).getSeconds().toString()
+        return new Date(time).getMinutes().toString() + ":" + (new Date(time).getSeconds() < 10 ? '0' : '').toString() + new Date(time).getSeconds()
     }
     parseActualSongTime(songTime){
         let actualTime = this.parseMilisecondsToTime(songTime)
@@ -78,7 +78,7 @@ export default class JukeboxHome extends Component {
             })
             .catch(err => {
                 console.log(err)
-                // this.setState({ noInternet: true })
+                this.setState({ noInternet: true })
             })
         await fetch(currentUrl)
           .then(response => {

@@ -70,17 +70,6 @@ export default class GenresList extends Component {
 
     _keyExtractor = (item, index) => item.id
     render() {
-        // const genresList = this.parseGenresToList(this.state.data).map(genre => (
-        //         <TouchableOpacity key={genre.id} onPress={() => this.props.navigation.navigate('DetailedSongsView', genre)}>
-        //         {}    
-        //         <Image
-        //                 source= DYNAMICALLY ALOCATED SOURCE DOES NOT WORK :CCC
-        //                 style={styles.button}
-        //                 resizeMode="contain"
-        //             />
-        //         </TouchableOpacity>
-        // ))
-
         if(this.state.isLoading){
             return (
                 <View style={{justifyContent: 'center', alignItems: 'center', flex: 1}}>
@@ -94,7 +83,6 @@ export default class GenresList extends Component {
             } else {
                 return (
                     <ImageBackground
-                        renderToHardwareTextureAndroid={true}
                         source={require('../../assets/bg_improved.png')}
                         style={{ width: '100%', height: '100%' }}
                     >
@@ -110,7 +98,7 @@ export default class GenresList extends Component {
                         </Body>
                     </Header>
                         <ScrollView>
-                            <View style={styles.container} renderToHardwareTextureAndroid={true}>
+                            <View style={styles.container}>
                                     <TouchableOpacity onPress={() => this.props.navigation.navigate('DetailedSongsView', this.state.data[0])}>
                                         <Image
                                             source={require('../../assets/genres/classic.png')}
