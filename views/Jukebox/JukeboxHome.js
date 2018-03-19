@@ -130,7 +130,7 @@ export default class JukeboxHome extends Component {
         else
             return (
                 <ImageBackground
-                    source={require('../../assets/bg.png')}
+                    source={require('../../assets/bg_improved.png')}
                     style={{ width: '100%', height: '100%' }}
                 >
                     <Header style={styles.headerBackground} androidStatusBarColor={"#000"}>

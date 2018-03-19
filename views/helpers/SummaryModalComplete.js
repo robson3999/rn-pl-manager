@@ -8,9 +8,9 @@ export default class SummaryModalComplete extends React.Component {
     }
     render() {
         return (
-            <View >
-                <Text>Twoja piosenka zostały przesłana.</Text>
-                <Button rounded style={{ backgroundColor: "#49a7cc", alignSelf: 'center', marginTop: 20 }} onPress={() => this.navigateToHome()}>
+            <View style={{ width: '100%' }}>
+                <Text>Twoja piosenka została przesłana.</Text>
+                <Button rounded style={{ backgroundColor: "#B53694", alignSelf: 'center', marginTop: 20, padding: 40 }} onPress={() => this.navigateToHome()}>
                     <Text>Powrót</Text>
                 </Button>
             </View>

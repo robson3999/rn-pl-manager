@@ -1,7 +1,8 @@
 import React, { Component } from 'react'
-import { View, Text, StyleSheet, TouchableOpacity, ScrollView, NetInfo } from 'react-native'
+import { View, Text, StyleSheet, TouchableOpacity, ScrollView, NetInfo, ImageBackground, Image } from 'react-native'
 import { Container, Content, Spinner, Header, Left, Body, Title, Button, Icon } from 'native-base'
 import NoInternetView from '../helpers/NoInternetView'
+import { images } from '../helpers/GenreImages'
 export default class GenresList extends Component {
     constructor(props){
         super(props)
@@ -54,9 +55,12 @@ export default class GenresList extends Component {
             return {
                 id: ++id,
                 title: genre.title,
-                data: genre.data
+                data: genre.data,
             }
         })
+    }
+    appendImageToGenre(genreId){
+
     }
 
     async componentDidMount(){
@@ -66,11 +70,16 @@ export default class GenresList extends Component {
 
     _keyExtractor = (item, index) => item.id
     render() {
-        const genresList = this.parseGenresToList(this.state.data).map(genre => (
-                <TouchableOpacity key={genre.id} style={styles.button} onPress={() => this.props.navigation.navigate('DetailedSongsView', genre)}>
-                    <Text style={styles.buttonText}>{genre.title}</Text>
-                </TouchableOpacity>
-        ))
+        // const genresList = this.parseGenresToList(this.state.data).map(genre => (
+        //         <TouchableOpacity key={genre.id} onPress={() => this.props.navigation.navigate('DetailedSongsView', genre)}>
+        //         {}    
+        //         <Image
+        //                 source= DYNAMICALLY ALOCATED SOURCE DOES NOT WORK :CCC
+        //                 style={styles.button}
+        //                 resizeMode="contain"
+        //             />
+        //         </TouchableOpacity>
+        // ))
 
         if(this.state.isLoading){
             return (
@@ -84,23 +93,69 @@ export default class GenresList extends Component {
                 return <NoInternetView onTryReconnectRequest={() => this.forceUpdateHandler()} />
             } else {
                 return (
-                    <View>
-                        <Header style={styles.headerBar} androidStatusBarColor={"#49a7cc"}>
-                            <Left>
-                                <Button transparent onPress={() => this.props.navigation.navigate('Jukebox')}>
-                                    <Icon style={{ color: 'black' }} name='arrow-back' />
-                                </Button>
-                            </Left>
-                            <Body>
-                                <Title style={{ color: 'black', textAlign: 'center' }}>Wybierz gatunek</Title>
-                            </Body>
-                        </Header>
+                    <ImageBackground
+                        renderToHardwareTextureAndroid={true}
+                        source={require('../../assets/bg_improved.png')}
+                        style={{ width: '100%', height: '100%' }}
+                    >
+                    
+                    <Header style={styles.headerBackground} androidStatusBarColor={"#000"}>
+                        <Left>
+                            <Button transparent onPress={() => this.props.navigation.navigate('Jukebox')}>
+                                <Icon name='arrow-back' />
+                            </Button>
+                        </Left>
+                        <Body>
+                            <Title style={{ textAlign: 'center' }}>Wybierz kategorię</Title>
+                        </Body>
+                    </Header>
                         <ScrollView>
-                            <View style={styles.container}>
-                                {genresList}
+                            <View style={styles.container} renderToHardwareTextureAndroid={true}>
+                                    <TouchableOpacity onPress={() => this.props.navigation.navigate('DetailedSongsView', this.state.data[0])}>
+                                        <Image
+                                            source={require('../../assets/genres/classic.png')}
+                                            style={styles.button}
+                                            resizeMode="contain"
+                                        />
+                                    </TouchableOpacity>
+                                    <TouchableOpacity onPress={() => this.props.navigation.navigate('DetailedSongsView', this.state.data[1])}>
+                                        <Image
+                                            source={require('../../assets/genres/club.png')}
+                                            style={styles.button}
+                                            resizeMode="contain"
+                                        />
+                                    </TouchableOpacity>
+                                    <TouchableOpacity onPress={() => this.props.navigation.navigate('DetailedSongsView', this.state.data[2])}>
+                                        <Image
+                                            source={require('../../assets/genres/rock.png')}
+                                            style={styles.button}
+                                            resizeMode="contain"
+                                        />
+                                    </TouchableOpacity>
+                                    <TouchableOpacity onPress={() => this.props.navigation.navigate('DetailedSongsView', this.state.data[3])}>
+                                        <Image
+                                            source={require('../../assets/genres/jazz.png')}
+                                            style={styles.button}
+                                            resizeMode="contain"
+                                        />
+                                    </TouchableOpacity>
+                                    <TouchableOpacity onPress={() => this.props.navigation.navigate('DetailedSongsView', this.state.data[4])}>
+                                        <Image
+                                            source={require('../../assets/genres/metal.png')}
+                                            style={styles.button}
+                                            resizeMode="contain"
+                                        />
+                                    </TouchableOpacity>
+                                    <TouchableOpacity onPress={() => this.props.navigation.navigate('DetailedSongsView', this.state.data[4])}>
+                                        <Image
+                                            source={require('../../assets/genres/pop.png')}
+                                            style={styles.button}
+                                            resizeMode="contain"
+                                        />
+                                    </TouchableOpacity>
                             </View>
                         </ScrollView>
-                    </View>
+                    </ImageBackground>
                 )
             }
         }
@@ -109,33 +164,28 @@ export default class GenresList extends Component {
 
 const styles = StyleSheet.create({
     container: {
-        flex: 1,
+        // flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
         flexDirection: 'row',
-        flexWrap: 'wrap'
+        flexWrap: 'wrap',
+    },
+    headerBackground: {
+        backgroundColor: 'rgba(0, 0, 0, 0.45)',
+        justifyContent: 'center',
+        alignItems: 'center',
+        elevation: 5
     },
     listStyles: {
         // flex: 1,
     },
     headerBar: {
         backgroundColor: 'white',
-        // justifyContent: 'space-between'
     },
     button: {
-        justifyContent: 'center',
-        alignItems: 'center',
-        height: 200,
-        width: '40%',
+        height: 160,
+        maxWidth: 160,
         margin: 10,
-        // flex: 1,
-        borderRadius: 8,
-        shadowColor: '#000',
-        shadowOffset: { width: 2, height: 2 },
-        shadowOpacity: 0.8,
-        shadowRadius: 8,
-        elevation: 5,
-        backgroundColor: 'teal'
     },
     buttonText: {
         fontSize: 21,

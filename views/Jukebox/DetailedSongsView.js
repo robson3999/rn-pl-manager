@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { StyleSheet, View, ScrollView, FlatList, NetInfo, Modal, TouchableOpacity } from 'react-native'
+import { StyleSheet, View, ScrollView, FlatList, NetInfo, Modal, TouchableOpacity, ImageBackground } from 'react-native'
 import {
     Container,
     Header,
@@ -88,87 +88,90 @@ export default class DetailedSongsView extends Component {
     }
     render () {
         return (
-            <View>
-                <Header searchBar rounded style={styles.headerBar} androidStatusBarColor={"#49a7cc"}>
-                    <Item>
-                        <Icon name="ios-search" />
-                        <Input
-                            placeholder="Szukaj"
-                            ref="searchFieldRef"
-                            value={this.state.searchText}
-                            onChange={this.setSearchText.bind(this)}
+            <ImageBackground
+                renderToHardwareTextureAndroid={true}
+                source={require('../../assets/bg_improved.png')}
+                style={{ width: '100%', height: '100%' }}
+            >
+                    <Header searchBar rounded style={styles.headerBar} androidStatusBarColor={"#000"}>
+                        <Item>
+                            <Icon name="ios-search" />
+                            <Input
+                                placeholder="Szukaj"
+                                ref="searchFieldRef"
+                                value={this.state.searchText}
+                                onChange={this.setSearchText.bind(this)}
+                            />
+                        </Item>
+                    </Header>
+                    
+                        <FlatList
+                            data={this.state.filteredSongs}
+                            renderItem={({ item }) =>
+                                <TouchableOpacity onPress={() => this.setModalVisible(true, item)} style={styles.listItem}>
+                                    <View renderToHardwareTextureAndroid={true} style={{ justifyContent: 'space-between', width: '100%', flexDirection: 'row' }}>
+                                        <Text style={{ color: '#FAE2EE', fontSize: 20, fontWeight: 'bold' }}>{item.title}</Text>
+                                        <Text style={{ color: '#FAE2EE', marginRight: 10, fontWeight: 'bold' }}>PLN 0,99</Text>
+                                    </View>
+                                    <View renderToHardwareTextureAndroid={true}>
+                                        <Text style={{ color: '#FAE2EE' }}>{item.author}</Text>
+                                    </View>
+                                </TouchableOpacity>
+                            }
+                            keyExtractor={this._keyExtractor}
                         />
-                    </Item>
-                    <Right></Right>
-                </Header>
-            <View>
-                <ScrollView>
-                    <FlatList
-                        data={this.state.filteredSongs}
-                        renderItem={({ item }) =>
-                            <TouchableOpacity onPress={() => this.setModalVisible(true, item)} style={styles.listItem}>
-                                <View>
-                                    <Text style={styles.item}>{item.author} - {item.title}</Text>
-                                </View>
-                            </TouchableOpacity>
-                        }
-                        keyExtractor={this._keyExtractor}
-                    />
-                </ScrollView>
-            </View>
-                <Modal
-                    animationType="slide"
-                    transparent={false}
-                    visible={this.state.modalVisible}
-                    onRequestClose={() => {
-                        this.setModalVisible(false)
-                    }}>
-                    <View style={styles.modal}>
-                        {this.state.modalComplete &&
-                            <SummaryModalComplete onNavigateToHomescreen={() => this.navigateToHomeScreen()} />
-                        }
-                        {!this.state.modalComplete &&
-                            <SummaryModalLoading />
-                        }
-                    </View>
-                </Modal>
-            </View>            
+                    
+                    <Modal
+                        animationType="slide"
+                        transparent={true}
+                        visible={this.state.modalVisible}
+                        onRequestClose={() => {
+                            this.setModalVisible(false)
+                        }}>
+                        <View style={styles.modal}>
+                            {this.state.modalComplete &&
+                                <SummaryModalComplete onNavigateToHomescreen={() => this.navigateToHomeScreen()} />
+                            }
+                            {!this.state.modalComplete &&
+                                <SummaryModalLoading />
+                            }
+                        </View>
+                    </Modal>
+            </ImageBackground>
         )
     }
 }
 
 const styles = StyleSheet.create({
     headerBar: {
-        backgroundColor: 'white'
+        backgroundColor: 'rgba(0, 0, 0, 0.45)',
     },
     listItem: {
         flex: 1,
         justifyContent: 'space-between',
         paddingLeft: 15,
-        paddingTop: 20,
-        paddingBottom: 20,
+        paddingTop: 10,
+        paddingBottom: 10,
         marginRight: 10,
         marginLeft: 10,
         marginTop: 5,
         marginBottom: 5,
-        backgroundColor: 'white',
-        borderRadius: 20,
-        borderLeftWidth: 7,
-        borderColor: '#49a7cc',
-        borderBottomWidth: 0,
-        shadowColor: '#000',
-        shadowOffset: { width: 2, height: 2 },
-        shadowOpacity: 0.9,
-        shadowRadius: 20,
-        elevation: 2
+        backgroundColor: '#B53694',
+        borderRadius: 15,
+        elevation: 2,
+        flexDirection: 'column',
+        flex: 1,
+        alignItems: 'flex-start',
+        borderBottomWidth: 0
     },
     item: {
         maxWidth: '80%',
         fontSize: 16
     },
     modal: {
-        marginTop: '40%',
-        backgroundColor: '#fff',
+        padding: 60,
+        height: '100%',
+        backgroundColor: 'rgba(255, 255, 255, 0.8)',
         justifyContent: 'center',
         alignItems: 'center'
     }

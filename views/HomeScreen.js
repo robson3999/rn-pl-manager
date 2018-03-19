@@ -9,57 +9,57 @@ export default class HomeScreen extends React.Component {
     static navigationOptions = {
         header: null
     }
-   componentDidMount(){
-    //    setTimeout(()=>{
-    //        this.props.navigation.navigate('SongsList')
-    //    }, 300)
-   } 
     render() {
         return (
             <ImageBackground
-                source={require('../assets/bg.png')}
+                renderToHardwareTextureAndroid={true}
+                source={require('../assets/bg_improved.png')}
                 style={{ width: '100%', height: '100%' }}
             >
                 <Header style={styles.headerBackground} androidStatusBarColor={"#000"}>
                         <Title>Menu</Title>
                 </Header>
                 <ScrollView>
-                    <View style={{justifyContent: 'center', alignItems: 'center' }}>
-                        <TouchableOpacity onPress={()=> console.log('aaa')}>
+                    <View style={{ justifyContent: 'center', alignItems: 'center' }} renderToHardwareTextureAndroid={true}>
+                        <View style={{ marginTop: 20 }}>
+                        <TouchableOpacity onPress={()=> this.props.navigation.navigate('Jukebox')}>
                                 <Image
                                     source={require('../assets/top_menu/jukebox_tile.png')}
-                                   resizeMode="contain"
-                                style={{ width: 350, height: 350 }}
+                                    resizeMode="contain"
+                                    style={{ maxWidth: 350, maxHeight: 350 }}
                                     >
                                 </Image>
-                            </TouchableOpacity>
+                        </TouchableOpacity>
                     </View>
-                    <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
+                    <View style={{ flexDirection: 'row', justifyContent: 'center', maxHeight: 180 }}>
                         <TouchableOpacity>
                             <Image source={require('../assets/top_menu/drinks_tile.png')}
                                 resizeMode="contain"
+                                style={{ maxWidth: 150, maxHeight: 150, margin: 20 }}
                             >
                             </Image>
                         </TouchableOpacity>
                         <TouchableOpacity>
-                            <Image source={require('../assets/top_menu/drinks_tile.png')}
+                            <Image source={require('../assets/top_menu/events_tile.png')}
                                 resizeMode="contain"
+                                style={{ maxWidth: 150, maxHeight: 150, margin: 20 }}
                             >
                             </Image>
                         </TouchableOpacity>
                     </View>
+                    <View style={{ justifyContent: 'flex-start', flexDirection: 'row', maxHeight: 180}}>
+                        <TouchableOpacity>
+                            <Image source={require('../assets/top_menu/offers_tile.png')}
+                              resizeMode="contain"
+                              style={{ maxWidth: 150, maxHeight: 150, margin: 20 }}
+                            >
+                            </Image>
+                        </TouchableOpacity>
+                    </View>
+                    </View>                    
                 </ScrollView>
             </ImageBackground>
         )
-            // < View style = { styles.tileRow } >
-            //     <TouchableOpacity onPress={() => console.log('Menu pressed')} style={[styles.button, { backgroundColor: '#F57C00' }]}>
-            //         <Text style={styles.buttonText}>Menu</Text>
-            //     </TouchableOpacity>
-            //     <TouchableOpacity onPress={() => console.log('Event pressed')} style={[styles.button, { backgroundColor: '#F57C00' }]}><Text style={styles.buttonText}>Eventy</Text></TouchableOpacity>
-            //             </View >
-            // <View style={styles.tileRow}>
-            //     <TouchableOpacity onPress={() => console.log('Promocje pressed')} style={[styles.downButton, { backgroundColor: '#49a7cc' }]}><Text style={styles.buttonText}>Promocje</Text></TouchableOpacity>
-            // </View>
     }
 }
 
