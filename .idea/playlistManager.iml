@@ -5,11 +5,12 @@
       <configuration>
         <option name="GEN_FOLDER_RELATIVE_PATH_APT" value="/../../playlistManager/gen" />
         <option name="GEN_FOLDER_RELATIVE_PATH_AIDL" value="/../../playlistManager/gen" />
-        <option name="MANIFEST_FILE_RELATIVE_PATH" value="/../../playlistManager/AndroidManifest.xml" />
-        <option name="RES_FOLDER_RELATIVE_PATH" value="/../../playlistManager/res" />
-        <option name="ASSETS_FOLDER_RELATIVE_PATH" value="/../../playlistManager/assets" />
-        <option name="LIBS_FOLDER_RELATIVE_PATH" value="/../../playlistManager/libs" />
+        <option name="MANIFEST_FILE_RELATIVE_PATH" value="/../android/app/src/main/AndroidManifest.xml" />
+        <option name="RES_FOLDER_RELATIVE_PATH" value="/../android/app/src/main/res" />
+        <option name="ASSETS_FOLDER_RELATIVE_PATH" value="/../../playlistManager/android/app/src/main/assets" />
+        <option name="LIBS_FOLDER_RELATIVE_PATH" value="/../android" />
         <option name="PROGUARD_LOGS_FOLDER_RELATIVE_PATH" value="/../../playlistManager/proguard_logs" />
+        <option name="ENABLE_SOURCES_AUTOGENERATION" value="false" />
       </configuration>
     </facet>
   </component>

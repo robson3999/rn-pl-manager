@@ -63,8 +63,8 @@ export default class JukeboxHome extends Component {
     _keyExtractor = (item, index) => item.id
 
     async fetchActualSongsAPI() {
-        let listUrl = 'http://192.168.1.101:8080/musicfile/list'
-        let currentUrl = 'http://192.168.1.101:8080/musicfile/current'
+        let listUrl = 'http://192.168.1.19:8080/musicfile/list'
+        let currentUrl = 'http://192.168.1.19:8080/musicfile/current'
 
         await fetch(listUrl)
             .then(response => {
@@ -72,6 +72,7 @@ export default class JukeboxHome extends Component {
                     response.json().then(resp => {
                         this.setState({ actualSongs: resp.slice(1) })
                     })
+                    .catch(err => console.log(err))
                 else
                     this.setState({ isLoading: false })
                 this.setState({ isLoading: false })
@@ -82,16 +83,26 @@ export default class JukeboxHome extends Component {
             })
         await fetch(currentUrl)
           .then(response => {
+          console.log(response)
               if(response.ok)
                 response.json().then(resp => {
+                    if(resp.current == -1 && resp.total == -1 ){
+                    actuallyPlaying.musicFile.title
+                    this.setState({ actuallyPlaying: { musicFile: {"title": '', "author": ''} } })
+                    }
                     this.setState({ actuallyPlaying: resp, totalSongTimeInMs: resp.total, actualSongTimeInMs: resp.current })
                     this.parseTotalSongTime(resp.total)
                     this.parseActualSongTime(resp.current)
                 })
+                .catch(err => {
+                    this.setState({ actuallyPlaying: { musicFile: {"title": '', "author": ''} } })
+                })
               else {
-                  this.setState({ actuallyPlaying: {} })              
-                  console.log('Wystapil blad podczas pobierania aktualnej piosenki')
+                  this.setState({ actuallyPlaying: { musicFile: {"title": '', "author": ''} } })
                 }
+          })
+          .catch(err => {
+            this.setState({ actuallyPlaying: { musicFile: {"title": '', "author": ''} } })
           })
     }
 
@@ -109,8 +120,12 @@ export default class JukeboxHome extends Component {
     }
 
     async componentDidMount() {
-        await this.fetchActualSongsAPI()
-        this.interval = setInterval(() => this.computeActualSongTime(), 1000)
+        try {
+            await this.fetchActualSongsAPI()
+            this.interval = setInterval(() => this.computeActualSongTime(), 1000)
+        } catch (err){
+            console.log(err)
+        }
     }
 
     computeProgress(){
@@ -190,14 +205,13 @@ export default class JukeboxHome extends Component {
                                 <FlatList
                                     data={this.state.actualSongs}
                                     keyExtractor={this._keyExtractor}
-                                    renderItem={(item) =>
+                                    renderItem={(item, index) =>
                                         <ListItem style={styles.listItem}>
                                             <View style={{ flex: 1 }}>
-                                                <Text style={{ color: '#FAE2EE', fontSize: 20, fontWeight: 'bold' }}>{item.item.musicFile.title}</Text>
+                                                <Text style={{ color: '#FAE2EE', fontSize: 20, fontWeight: 'bold' }}>{item.index+1}. {item.item.musicFile.title}</Text>
                                             </View>
                                             <View style={{ flexDirection: 'row', justifyContent: 'space-between', width: '100%' }}>
                                                 <Text style={{ color: '#FAE2EE' }}>{item.item.musicFile.author}</Text>
-                                                <Text style={{ color: '#FAE2EE' }}>XX:XX</Text>
                                             </View>
                                             <View style={styles.bottomBlurredBorder}></View>
                                         </ListItem>

@@ -24,8 +24,8 @@ export default class DetailedSongsView extends Component {
     constructor(props){
         super(props)
         this.state = {
-            genreTitle: this.props.navigation.state.params.title,
-            songsList: this.props.navigation.state.params.data,
+            genreTitle: this.props.navigation.state.params[0].title,
+            songsList: this.props.navigation.state.params[0].data,
             modalVisible: false,
             modalComplete: false,
             searchText: null,
@@ -35,17 +35,20 @@ export default class DetailedSongsView extends Component {
     
     setModalVisible(visible, item){
         this.setState({modalVisible: visible})
-        let url = 'http://192.168.1.101:8080/musicfile/add?ids='+ item.id
-        fetch(url, {
-            method: 'GET'
-        })
+        try{
+            let url = 'http://192.168.1.19:8080/musicfile/add?ids='+ item.id
+            fetch(url, {
+                method: 'GET'
+            })
             .then((resp) => {
                 if(resp.status == 200 && resp.ok){
                 this.setState({ modalComplete: true })
                 }
-
             })
             .catch(err => console.log(err))
+        } catch(err){
+            console.log(err)
+        }
     }
     parseGenreTitle(genre){
         return genre[0].toUpperCase() + genre.slice(1)
@@ -57,7 +60,6 @@ export default class DetailedSongsView extends Component {
 
     navigateToHomeScreen(){
         this.setState({ modalVisible: false })
-        this.props.navigation.navigate('Jukebox')
     }
 
     setSearchText(event) {
@@ -90,6 +92,12 @@ export default class DetailedSongsView extends Component {
                 style={{ width: '100%', height: '100%' }}
             >
                     <Header searchBar rounded style={styles.headerBar} androidStatusBarColor={"#000"}>
+                    <Left style={{ justifyContent: 'space-between' }}>
+                        <Button transparent onPress={() => this.props.navigation.navigate('GenresList')}>
+                            <Icon name='arrow-back' />
+                            <Title style={{ color: '#fff', marginLeft: '20%' }}>{ this.state.genreTitle.toUpperCase() }</Title>
+                        </Button>
+                    </Left>
                         <Item>
                             <Icon name="ios-search" />
                             <Input
@@ -103,11 +111,11 @@ export default class DetailedSongsView extends Component {
                     
                         <FlatList
                             data={this.state.filteredSongs}
-                            renderItem={({ item }) =>
+                            renderItem={({ item, index }) =>
                                 <TouchableOpacity onPress={() => this.setModalVisible(true, item)} style={styles.listItem}>
                                     <View style={{ justifyContent: 'space-between', width: '100%', flexDirection: 'row' }}>
-                                        <Text style={{ color: '#FAE2EE', fontSize: 20, fontWeight: 'bold' }}>{item.title}</Text>
-                                        <Text style={{ color: '#FAE2EE', marginRight: 10, fontWeight: 'bold' }}>PLN 0,99</Text>
+                                        <Text style={{ color: '#FAE2EE', fontSize: 20, fontWeight: 'bold' }}>{index+1}. {item.title}</Text>
+                                        <Text style={{ color: '#FAE2EE', marginRight: 10, fontWeight: 'bold', fontSize: 20 }}>PLN 0,99</Text>
                                     </View>
                                     <View renderToHardwareTextureAndroid={true}>
                                         <Text style={{ color: '#FAE2EE' }}>{item.author}</Text>

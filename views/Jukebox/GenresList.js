@@ -16,7 +16,7 @@ export default class GenresList extends Component {
     }
     async fetchGenres(){
         // url = 'https://my-json-server.typicode.com/robson3999/songs-db/genres'
-        let url = 'http://192.168.1.101:8080/genre/list'
+        let url = 'http://192.168.1.19:8080/genre/list'
         await fetch(url)
             .then(response => {
                 if (response.ok)
@@ -63,6 +63,12 @@ export default class GenresList extends Component {
 
     }
 
+    selectGenreData(arg){
+        return this.state.data.filter(item => {
+            return item.id == arg
+        })
+    }
+
     async componentDidMount(){
         this.checkConnectionInfo()
         await this.fetchGenres()
@@ -99,42 +105,42 @@ export default class GenresList extends Component {
                     </Header>
                         <ScrollView>
                             <View style={styles.container}>
-                                    <TouchableOpacity onPress={() => this.props.navigation.navigate('DetailedSongsView', this.state.data[0])}>
+                                <TouchableOpacity onPress={() => this.props.navigation.navigate('DetailedSongsView', this.selectGenreData(1))}>
                                         <Image
                                             source={require('../../assets/genres/classic.png')}
                                             style={styles.button}
                                             resizeMode="contain"
                                         />
                                     </TouchableOpacity>
-                                    <TouchableOpacity onPress={() => this.props.navigation.navigate('DetailedSongsView', this.state.data[1])}>
+                                <TouchableOpacity onPress={() => this.props.navigation.navigate('DetailedSongsView', this.selectGenreData(2))}>
                                         <Image
                                             source={require('../../assets/genres/club.png')}
                                             style={styles.button}
                                             resizeMode="contain"
                                         />
                                     </TouchableOpacity>
-                                    <TouchableOpacity onPress={() => this.props.navigation.navigate('DetailedSongsView', this.state.data[2])}>
+                                <TouchableOpacity onPress={() => this.props.navigation.navigate('DetailedSongsView', this.selectGenreData(3))}>
                                         <Image
                                             source={require('../../assets/genres/rock.png')}
                                             style={styles.button}
                                             resizeMode="contain"
                                         />
                                     </TouchableOpacity>
-                                    <TouchableOpacity onPress={() => this.props.navigation.navigate('DetailedSongsView', this.state.data[3])}>
+                                <TouchableOpacity onPress={() => this.props.navigation.navigate('DetailedSongsView', this.selectGenreData(4))}>
                                         <Image
                                             source={require('../../assets/genres/jazz.png')}
                                             style={styles.button}
                                             resizeMode="contain"
                                         />
                                     </TouchableOpacity>
-                                    <TouchableOpacity onPress={() => this.props.navigation.navigate('DetailedSongsView', this.state.data[4])}>
+                                <TouchableOpacity onPress={() => this.props.navigation.navigate('DetailedSongsView', this.selectGenreData(5))}>
                                         <Image
                                             source={require('../../assets/genres/metal.png')}
                                             style={styles.button}
                                             resizeMode="contain"
                                         />
                                     </TouchableOpacity>
-                                    <TouchableOpacity onPress={() => this.props.navigation.navigate('DetailedSongsView', this.state.data[4])}>
+                                <TouchableOpacity onPress={() => this.props.navigation.navigate('DetailedSongsView', this.selectGenreData(6))}>
                                         <Image
                                             source={require('../../assets/genres/pop.png')}
                                             style={styles.button}

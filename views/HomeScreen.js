@@ -32,29 +32,23 @@ export default class HomeScreen extends React.Component {
                         </TouchableOpacity>
                     </View>
                     <View style={{ flexDirection: 'row', justifyContent: 'center', maxHeight: 180 }}>
-                        <TouchableOpacity>
                             <Image source={require('../assets/top_menu/drinks_tile.png')}
                                 resizeMode="contain"
                                 style={{ maxWidth: 150, maxHeight: 150, margin: 20 }}
                             >
                             </Image>
-                        </TouchableOpacity>
-                        <TouchableOpacity>
                             <Image source={require('../assets/top_menu/events_tile.png')}
                                 resizeMode="contain"
                                 style={{ maxWidth: 150, maxHeight: 150, margin: 20 }}
                             >
                             </Image>
-                        </TouchableOpacity>
                     </View>
                     <View style={{ justifyContent: 'flex-start', flexDirection: 'row', maxHeight: 180}}>
-                        <TouchableOpacity>
                             <Image source={require('../assets/top_menu/offers_tile.png')}
                               resizeMode="contain"
                               style={{ maxWidth: 150, maxHeight: 150, margin: 20 }}
                             >
                             </Image>
-                        </TouchableOpacity>
                     </View>
                     </View>                    
                 </ScrollView>

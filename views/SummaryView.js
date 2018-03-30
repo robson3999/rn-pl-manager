@@ -58,9 +58,9 @@ export default class SummaryView extends React.Component {
 
     navigateToHomeScreen(){
         this.setState({ modalVisible: false })
-        this.props.navigation.navigate('SongsList')
     }
 
+    // not used anymore
     reorderChoosenSongs(e){
         let songs = this.state.choosenSongs
         return songs.splice(e.to, 0, songs.splice(e.from, 1)[0]);
