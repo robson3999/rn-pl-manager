@@ -63,8 +63,11 @@ export default class JukeboxHome extends Component {
     _keyExtractor = (item, index) => item.id
 
     async fetchActualSongsAPI() {
-        let listUrl = 'http://192.168.1.19:8080/musicfile/list'
-        let currentUrl = 'http://192.168.1.19:8080/musicfile/current'
+        // let listUrl = 'http://192.168.1.19:8080/musicfile/list'
+        // let currentUrl = 'http://192.168.1.19:8080/musicfile/current'
+
+        let listUrl = 'http://192.168.1.4:8080/musicfile/list'
+        let currentUrl = 'http://192.168.1.4:8080/musicfile/current'
 
         await fetch(listUrl)
             .then(response => {
@@ -83,7 +86,6 @@ export default class JukeboxHome extends Component {
             })
         await fetch(currentUrl)
           .then(response => {
-          console.log(response)
               if(response.ok)
                 response.json().then(resp => {
                     if(resp.current == -1 && resp.total == -1 ){

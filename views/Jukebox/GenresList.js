@@ -8,23 +8,21 @@ export default class GenresList extends Component {
         super(props)
         this.state = {
             isLoading: true,
-            data: []
         }
     }
     static navigationOptions = {
         header: null
     }
     async fetchGenres(){
-        // url = 'https://my-json-server.typicode.com/robson3999/songs-db/genres'
-        let url = 'http://192.168.1.19:8080/genre/list'
+        // let url = 'http://192.168.1.19:8080/genre/list'
+        let url = 'http://192.168.1.4:8080/genre/list'
         await fetch(url)
             .then(response => {
                 if (response.ok)
                  response.json().then(resp => {
                      this.setState({ data: resp })
                     })
-                else 
-                 this.setState({ isLoading: false })
+                else this.setState({ isLoading: false })
                 this.setState({ isLoading: false })
             })
             .catch(err => {
@@ -59,19 +57,29 @@ export default class GenresList extends Component {
             }
         })
     }
-    appendImageToGenre(genreId){
-
-    }
 
     selectGenreData(arg){
-        return this.state.data.filter(item => {
-            return item.id == arg
+        let stateData = this.state.data
+        return stateData.filter(genre => {
+            return genre.id == arg
         })
+    }
+
+    updateGenresDataIfSongsWereChosen(data){
+        const { params } = this.props.navigation.state
+        let chosenGenre = data.filter(genre => {
+            return genre.id === params.id
+        })          
+        chosenGenre[0].data = params.data
     }
 
     async componentDidMount(){
         this.checkConnectionInfo()
-        await this.fetchGenres()
+        if(!this.state.data) {
+            await this.fetchGenres()
+        }
+        if(this.props.navigation.state.params)
+            this.updateGenresDataIfSongsWereChosen(this.state.data)
     }
 
     _keyExtractor = (item, index) => item.id
@@ -111,42 +119,42 @@ export default class GenresList extends Component {
                                             style={styles.button}
                                             resizeMode="contain"
                                         />
-                                    </TouchableOpacity>
+                                </TouchableOpacity>
                                 <TouchableOpacity onPress={() => this.props.navigation.navigate('DetailedSongsView', this.selectGenreData(2))}>
                                         <Image
                                             source={require('../../assets/genres/club.png')}
                                             style={styles.button}
                                             resizeMode="contain"
                                         />
-                                    </TouchableOpacity>
+                                </TouchableOpacity>
                                 <TouchableOpacity onPress={() => this.props.navigation.navigate('DetailedSongsView', this.selectGenreData(3))}>
                                         <Image
                                             source={require('../../assets/genres/rock.png')}
                                             style={styles.button}
                                             resizeMode="contain"
                                         />
-                                    </TouchableOpacity>
+                                </TouchableOpacity>
                                 <TouchableOpacity onPress={() => this.props.navigation.navigate('DetailedSongsView', this.selectGenreData(4))}>
                                         <Image
                                             source={require('../../assets/genres/jazz.png')}
                                             style={styles.button}
                                             resizeMode="contain"
                                         />
-                                    </TouchableOpacity>
+                                </TouchableOpacity>
                                 <TouchableOpacity onPress={() => this.props.navigation.navigate('DetailedSongsView', this.selectGenreData(5))}>
                                         <Image
                                             source={require('../../assets/genres/metal.png')}
                                             style={styles.button}
                                             resizeMode="contain"
                                         />
-                                    </TouchableOpacity>
+                                </TouchableOpacity>
                                 <TouchableOpacity onPress={() => this.props.navigation.navigate('DetailedSongsView', this.selectGenreData(6))}>
                                         <Image
                                             source={require('../../assets/genres/pop.png')}
                                             style={styles.button}
                                             resizeMode="contain"
                                         />
-                                    </TouchableOpacity>
+                                </TouchableOpacity>
                             </View>
                         </ScrollView>
                     </ImageBackground>
