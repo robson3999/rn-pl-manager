@@ -58,7 +58,6 @@ export default class DetailedSongsView extends Component {
     }
 
     componentDidMount(){
-        console.log(this.props.navigation.state)
         this.setState({ filteredSongs: this.state.songsList })
     }
 
@@ -97,10 +96,10 @@ export default class DetailedSongsView extends Component {
                 style={{ width: '100%', height: '100%' }}
             >
                 <Header searchBar rounded style={styles.headerBar} androidStatusBarColor={"#000"}>
-                    <Left style={{ justifyContent: 'space-between' }}>
+                    <Left style={{ justifyContent: 'space-around' }}>
                         <Button transparent onPress={() => this.props.navigation.goBack(null, this.state.params)}>
                             <Icon name='arrow-back' />
-                            <Title style={{ color: '#fff', marginLeft: '20%' }}>{ this.state.genreTitle.toUpperCase() }</Title>
+                            <Title style={{ color: '#fff', width: '90%' }}>{this.state.genreTitle.slice(0, 1).toUpperCase() + this.state.genreTitle.slice(1) }</Title>
                         </Button>
                     </Left>
                     <Item>

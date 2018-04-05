@@ -74,6 +74,8 @@ export default class GenresList extends Component {
     }
 
     async componentDidMount(){
+        console.log(this.props.navigation)
+        
         this.checkConnectionInfo()
         if(!this.state.data) {
             await this.fetchGenres()
@@ -100,10 +102,9 @@ export default class GenresList extends Component {
                         source={require('../../assets/bg_improved.png')}
                         style={{ width: '100%', height: '100%' }}
                     >
-                    
                     <Header style={styles.headerBackground} androidStatusBarColor={"#000"}>
                         <Left>
-                            <Button transparent onPress={() => this.props.navigation.navigate('Jukebox')}>
+                            <Button transparent onPress={() => this.props.navigation.navigate('Jukebox', 'jukebox')}>
                                 <Icon name='arrow-back' />
                             </Button>
                         </Left>

@@ -108,6 +108,9 @@ export default class JukeboxHome extends Component {
           })
     }
 
+    navigateToJukebox(){ this.props.navigation.navigate('GenresList') }
+    backToJukebox(){ this.props.navigation.goBack() }
+
     computeActualSongTime(){
         if(this.state.actualSongTimeInMs <= this.state.totalSongTimeInMs){
             let time = this.state.actualSongTimeInMs + 1000
@@ -122,6 +125,7 @@ export default class JukeboxHome extends Component {
     }
 
     async componentDidMount() {
+        console.log(this.props.navigation)        
         try {
             await this.fetchActualSongsAPI()
             this.interval = setInterval(() => this.computeActualSongTime(), 1000)
@@ -224,20 +228,55 @@ export default class JukeboxHome extends Component {
                         </Content>
                         <View style={styles.placeholder}></View>
                         <View style={styles.footer}>
-                            <TouchableOpacity
-                            style={styles.orderSongButton}
-                            onPress={
-                                () => this.props.navigation.navigate('GenresList')
-                                }>
-                                <Icon name="md-play" style={{ color: '#fff', fontSize: 42, marginRight: 10 }} />
-                                <Text style={{ fontSize: 30, fontWeight: 'bold', color: '#fff' }}>
-                                    Zamów piosenkę
-                                </Text>
-                            </TouchableOpacity>
+                            <ProceedButton onNavigateRequest={() => this.navigateToJukebox()} onBackRequest={() => this.backToJukebox()} props={this.props.navigation.state.params} />
                         </View>
                     </Container>
                 </ImageBackground>
             )
+    }
+}
+
+class ProceedButton extends Component {
+    constructor(props){
+        super(props)
+        this.state = this.props
+    }
+
+    goBackRequest(){
+        this.props.onBackRequest()
+    }
+    goNavigateRequest(){
+        this.props.onNavigateRequest()
+    }
+
+    render(){
+        if(this.state.props == 'jukebox'){
+            return (
+                <TouchableOpacity
+                    style={styles.orderSongButton}
+                    onPress={
+                        () => this.goBackRequest()
+                        }>
+                        <Icon name="md-play" style={{ color: '#fff', fontSize: 42, marginRight: 10 }} />
+                        <Text style={{ fontSize: 30, fontWeight: 'bold', color: '#fff' }}>
+                            Zamów piosenkę
+                        </Text>
+                </TouchableOpacity>
+            )
+        } else {
+            return (
+                <TouchableOpacity
+                    style={styles.orderSongButton}
+                    onPress={
+                        () => this.goNavigateRequest()
+                    }>
+                    <Icon name="md-play" style={{ color: '#fff', fontSize: 42, marginRight: 10 }} />
+                    <Text style={{ fontSize: 30, fontWeight: 'bold', color: '#fff' }}>
+                        Zamów piosenkę
+                                </Text>
+                </TouchableOpacity>
+            )
+        }
     }
 }
 
