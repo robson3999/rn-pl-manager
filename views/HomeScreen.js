@@ -1,6 +1,8 @@
 import React from 'react'
-import { StyleSheet, Image, View, TouchableOpacity, ImageBackground, TouchableHighlight, ScrollView } from 'react-native'
+import { StyleSheet, Image, View, TouchableOpacity, ImageBackground, TouchableHighlight, ScrollView, Dimensions } from 'react-native'
 import { Container, Content, Text, Button, Left, Icon, Body, Title, Header } from 'native-base';
+
+const { height, width } = Dimensions.get('window');
 
 export default class HomeScreen extends React.Component {
     constructor(props){
@@ -26,27 +28,27 @@ export default class HomeScreen extends React.Component {
                                 <Image
                                     source={require('../assets/top_menu/jukebox_tile.png')}
                                     resizeMode="contain"
-                                    style={{ maxWidth: 350, maxHeight: 350 }}
+                                    style={{ maxWidth: 0.78*width, maxHeight: 0.78*width }}
                                     >
                                 </Image>
                         </TouchableOpacity>
                     </View>
-                    <View style={{ flexDirection: 'row', justifyContent: 'center', maxHeight: 180 }}>
+                    <View style={{ flexDirection: 'row', justifyContent: 'center', maxHeight: 0.4*width }}>
                             <Image source={require('../assets/top_menu/drinks_tile.png')}
                                 resizeMode="contain"
-                                style={{ maxWidth: 150, maxHeight: 150, margin: 20 }}
+                                style={{ maxWidth: 0.35*width, maxHeight: 0.35*width, margin: 20 }}
                             >
                             </Image>
                             <Image source={require('../assets/top_menu/events_tile.png')}
                                 resizeMode="contain"
-                                style={{ maxWidth: 150, maxHeight: 150, margin: 20 }}
+                                style={{ maxWidth: 0.35*width, maxHeight: 0.35*width, margin: 20 }}
                             >
                             </Image>
                     </View>
-                    <View style={{ justifyContent: 'flex-start', flexDirection: 'row', maxHeight: 180}}>
+                    <View style={{ justifyContent: 'flex-start', flexDirection: 'row', maxHeight: 0.4*width}}>
                             <Image source={require('../assets/top_menu/offers_tile.png')}
                               resizeMode="contain"
-                              style={{ maxWidth: 150, maxHeight: 150, margin: 20 }}
+                              style={{ maxWidth: 0.35*width, maxHeight: 0.35*width, margin: 20 }}
                             >
                             </Image>
                     </View>

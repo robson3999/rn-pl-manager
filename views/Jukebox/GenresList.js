@@ -1,8 +1,11 @@
 import React, { Component } from 'react'
-import { View, Text, StyleSheet, TouchableOpacity, ScrollView, NetInfo, ImageBackground, Image } from 'react-native'
+import { View, Text, StyleSheet, TouchableOpacity, ScrollView, NetInfo, ImageBackground, Image, Dimensions } from 'react-native'
 import { Container, Content, Spinner, Header, Left, Body, Title, Button, Icon } from 'native-base'
 import NoInternetView from '../helpers/NoInternetView'
 import { images } from '../helpers/GenreImages'
+
+const { height, width } = Dimensions.get('window');
+
 export default class GenresList extends Component {
     constructor(props){
         super(props)
@@ -174,8 +177,8 @@ const styles = StyleSheet.create({
         backgroundColor: 'white',
     },
     button: {
-        height: 160,
-        maxWidth: 160,
+        height: 0.25*height,
+        maxWidth: 0.4*width,
         margin: 10,
     },
     buttonText: {
