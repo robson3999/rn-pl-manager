@@ -1,5 +1,21 @@
 <resources>
 
+
+    <style name="P24MobileLibTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+
+        <item name="actionBarStyle">@style/P24MobileLibActionBarStyle</item>
+    </style>
+
+    <style name="P24MobileLibActionBarStyle" parent="Widget.AppCompat.Light.ActionBar.Solid.Inverse">
+        <item name="background">@color/actionBarBackground</item>
+        <item name="titleTextStyle">@style/P24MobileLibTitleTextStyle</item>
+    </style>
+
+
+    <style name="P24MobileLibTitleTextStyle" parent="@style/TextAppearance.AppCompat.Widget.ActionBar.Title">
+        <item name="android:textColor">@color/actionBarTextColor</item>
+    </style>
+
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <!-- Customize your theme here. -->

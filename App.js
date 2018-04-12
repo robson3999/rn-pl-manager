@@ -3,8 +3,6 @@ import { Root } from 'native-base'
 import { StackNavigator } from 'react-navigation'
 import { StyleSheet } from 'react-native'
 import HomeScreen from './views/HomeScreen'
-import SongsList from './views/SongsList'
-import SummaryView from './views/SummaryView'
 import JukeboxHome from './views/Jukebox/JukeboxHome'
 import GenresList from './views/Jukebox/GenresList'
 import DetailedSongsView from './views/Jukebox/DetailedSongsView'
@@ -22,12 +20,6 @@ const RootStack = StackNavigator(
     },
     DetailedSongsView: {
       screen: DetailedSongsView
-    },
-    SongsList: {
-      screen: SongsList
-    },
-    SummaryView: {
-      screen: SummaryView
     }
   },
   {

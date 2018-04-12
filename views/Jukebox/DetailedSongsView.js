@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { StyleSheet, View, ScrollView, FlatList, NetInfo, Modal, TouchableOpacity, ImageBackground } from 'react-native'
+import { StyleSheet, View, ScrollView, FlatList, NetInfo, Modal, TouchableOpacity, ImageBackground, NativeModules } from 'react-native'
 import {
     Container,
     Header,
@@ -20,6 +20,8 @@ import {
 import SummaryModalComplete from '../helpers/SummaryModalComplete'
 import SummaryModalLoading from '../helpers/SummaryModalLoading'
 
+let P24LibModule = NativeModules.P24LibModule
+
 export default class DetailedSongsView extends Component {
     constructor(props){
         super(props)
@@ -34,11 +36,11 @@ export default class DetailedSongsView extends Component {
         }
     }
     
-    setModalVisible(visible, item){
-        this.setState({modalVisible: visible})
+    sendChosenSong(visible, item){
+        this.setState({ modalVisible: visible });
+        this.setState({modalVisible: !visible});
         try{
-            // let url = 'http://192.168.1.19:8080/musicfile/add?ids='+ item.id
-            let url = 'http://192.168.1.4:8080/musicfile/add?ids=' + item.id
+            let url = 'http://192.168.1.77:8080/musicfile/add?ids=' + item.id
             fetch(url, {
                 method: 'GET'
             })
@@ -80,8 +82,23 @@ export default class DetailedSongsView extends Component {
         }
     }
 
-    handleElementTap(item){
-        this.setModalVisible(true, item)
+    async handleElementTap(item){
+        await this.doTrnDirect()
+        if (this.state.transactionCompleted){
+            this.sendChosenSong(true, item);
+            Toast.show({
+                text: 'Kupiono piosenkę :)',
+                position: 'bottom',
+                buttonText: 'OK',
+            })
+        } else {
+            Toast.show({
+                text: 'Nie udało się kupić piosenki :(',
+                position: 'bottom',
+                buttonText: 'OK',
+                duration: 3000
+            })
+        }
     }
 
     _keyExtractor = (item, index) => item.id
@@ -89,6 +106,60 @@ export default class DetailedSongsView extends Component {
     static navigationOptions = {
         header: null
     }
+
+    // przelewy24 functions
+    getUUID() {
+        return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
+            let r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
+            return v.toString(16);
+        });
+    }
+    async doTrnDirect(){
+        let settingsParams = {
+            saveBankCredentials: true,
+            readSmsPasswords: true,
+            enableBanksRwd: true,
+            banksRwdConfigUrl: "https://bh.przelewy24.pl/p24lib/getdata2.php"
+        }
+        let testTransactionParams = {
+            merchantId: 64195,
+            crc: 'd27e4cb580e9bbfe',
+            sessionId: this.getUUID(),
+            amount: 99,
+            currency: "PLN",
+            description: "test payment description",
+            email: "test@test.pl",
+            country: "PL",
+            client: "John Smith",
+            address: "Test street",
+            zip: "60-600",
+            city: "Poznań",
+            phone: "1246423234",
+            language: "pl"
+        }
+        let trnDirectParams = {
+            transactionParams: testTransactionParams,
+            isSandbox: true,
+            settingsParams: settingsParams
+        }
+        var {
+            isSuccess,
+            isCanceled,
+            errorCode
+        } = await P24LibModule.startTrnDirect(trnDirectParams)
+
+        if (isSuccess) {
+            console.log("Transfer success");
+            this.setState({ transactionCompleted: true})
+        } else if (isCanceled) {
+            console.log("Transfer canceled");
+            this.setState({ transactionCompleted: false })            
+        } else {
+            console.log("Transfer error. Code: " + errorCode);
+            this.setState({ transactionCompleted: false })            
+        }
+    }
+
     render () {
         return (
             <ImageBackground
@@ -126,19 +197,19 @@ export default class DetailedSongsView extends Component {
                     transparent={true}
                     visible={this.state.modalVisible}
                     onRequestClose={() => {
-                        this.setModalVisible(false)
+                        this.setState({ modalComplete: true })
                     }}>
                     <View style={styles.modal}>
-                        {this.state.modalComplete &&
-                            <SummaryModalComplete onNavigateToHomescreen={() => this.navigateToHomeScreen()} />
-                        }
-                        {!this.state.modalComplete &&
-                            <SummaryModalLoading />
-                        }
                     </View>
-                </Modal>
-            </ImageBackground>
-        )
+                    </Modal>
+                    </ImageBackground>
+                )
+                // {this.state.modalComplete &&
+                //     <SummaryModalComplete onNavigateToHomescreen={() => this.navigateToHomeScreen()} />
+                // }
+                // {!this.state.modalComplete &&
+                //     <SummaryModalLoading />
+                // }
     }
 }
 

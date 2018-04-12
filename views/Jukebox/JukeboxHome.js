@@ -1,5 +1,5 @@
 import  React, { Component } from 'react'
-import { View, FlatList, StyleSheet, ScrollView, Image, ImageBackground, TouchableOpacity } from 'react-native'
+import { View, FlatList, StyleSheet, ScrollView, Image, ImageBackground, TouchableOpacity, NativeModules } from 'react-native'
 import {
     Container,
     Header,
@@ -19,6 +19,8 @@ import {
 
 import * as Progress from 'react-native-progress'
 import DownloadingView from '../helpers/DownloadingView'
+
+const P24LibModule = NativeModules.P24LibModule;
 
 const testSongs = [
     { "id": 1, "title": "Tytul piosenki1", "author": "Author1" },
@@ -63,11 +65,8 @@ export default class JukeboxHome extends Component {
     _keyExtractor = (item, index) => item.id
 
     async fetchActualSongsAPI() {
-        // let listUrl = 'http://192.168.1.19:8080/musicfile/list'
-        // let currentUrl = 'http://192.168.1.19:8080/musicfile/current'
-
-        let listUrl = 'http://192.168.1.4:8080/musicfile/list'
-        let currentUrl = 'http://192.168.1.4:8080/musicfile/current'
+        let listUrl = 'http://192.168.1.77:8080/musicfile/list'
+        let currentUrl = 'http://192.168.1.77:8080/musicfile/current'
 
         await fetch(listUrl)
             .then(response => {
@@ -125,7 +124,6 @@ export default class JukeboxHome extends Component {
     }
 
     async componentDidMount() {
-        console.log(this.props.navigation)        
         try {
             await this.fetchActualSongsAPI()
             this.interval = setInterval(() => this.computeActualSongTime(), 1000)

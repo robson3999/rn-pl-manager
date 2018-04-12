@@ -14,8 +14,7 @@ export default class GenresList extends Component {
         header: null
     }
     async fetchGenres(){
-        // let url = 'http://192.168.1.19:8080/genre/list'
-        let url = 'http://192.168.1.4:8080/genre/list'
+        let url = 'http://192.168.1.77:8080/genre/list'
         await fetch(url)
             .then(response => {
                 if (response.ok)
@@ -47,17 +46,6 @@ export default class GenresList extends Component {
             isOnline ? this.setState({ noInternet: false }) : this.setState({ noInternet: true })
         })
     }
-    parseGenresToList(data){
-        let id = 0
-        return data.map(genre => {
-            return {
-                id: ++id,
-                title: genre.title,
-                data: genre.data,
-            }
-        })
-    }
-
     selectGenreData(arg){
         let stateData = this.state.data
         return stateData.filter(genre => {
@@ -74,8 +62,6 @@ export default class GenresList extends Component {
     }
 
     async componentDidMount(){
-        console.log(this.props.navigation)
-        
         this.checkConnectionInfo()
         if(!this.state.data) {
             await this.fetchGenres()
@@ -114,6 +100,7 @@ export default class GenresList extends Component {
                     </Header>
                         <ScrollView>
                             <View style={styles.container}>
+                            <View style={{ flex: 1, flexDirection: 'row' }}>
                                 <TouchableOpacity onPress={() => this.props.navigation.navigate('DetailedSongsView', this.selectGenreData(1))}>
                                         <Image
                                             source={require('../../assets/genres/classic.png')}
@@ -128,6 +115,8 @@ export default class GenresList extends Component {
                                             resizeMode="contain"
                                         />
                                 </TouchableOpacity>
+                            </View>
+                            <View style={{ flex: 1, flexDirection: 'row' }}>
                                 <TouchableOpacity onPress={() => this.props.navigation.navigate('DetailedSongsView', this.selectGenreData(3))}>
                                         <Image
                                             source={require('../../assets/genres/rock.png')}
@@ -142,6 +131,8 @@ export default class GenresList extends Component {
                                             resizeMode="contain"
                                         />
                                 </TouchableOpacity>
+                            </View>
+                            <View style={{ flex: 1, flexDirection: 'row' }}>
                                 <TouchableOpacity onPress={() => this.props.navigation.navigate('DetailedSongsView', this.selectGenreData(5))}>
                                         <Image
                                             source={require('../../assets/genres/metal.png')}
@@ -157,6 +148,7 @@ export default class GenresList extends Component {
                                         />
                                 </TouchableOpacity>
                             </View>
+                            </View>
                         </ScrollView>
                     </ImageBackground>
                 )
@@ -167,20 +159,16 @@ export default class GenresList extends Component {
 
 const styles = StyleSheet.create({
     container: {
-        // flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
-        flexDirection: 'row',
-        flexWrap: 'wrap',
+        // flexDirection: 'row',
+        // flexWrap: 'wrap',
     },
     headerBackground: {
         backgroundColor: 'rgba(0, 0, 0, 0.45)',
         justifyContent: 'center',
         alignItems: 'center',
         elevation: 5
-    },
-    listStyles: {
-        // flex: 1,
     },
     headerBar: {
         backgroundColor: 'white',
