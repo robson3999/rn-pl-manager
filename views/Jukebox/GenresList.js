@@ -60,7 +60,7 @@ export default class GenresList extends Component {
         const { params } = this.props.navigation.state
         let chosenGenre = data.filter(genre => {
             return genre.id === params.id
-        })          
+        })
         chosenGenre[0].data = params.data
     }
 
@@ -163,9 +163,7 @@ export default class GenresList extends Component {
 const styles = StyleSheet.create({
     container: {
         justifyContent: 'center',
-        alignItems: 'center',
-        // flexDirection: 'row',
-        // flexWrap: 'wrap',
+        alignItems: 'center'
     },
     headerBackground: {
         backgroundColor: 'rgba(0, 0, 0, 0.45)',
@@ -173,16 +171,9 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         elevation: 5
     },
-    headerBar: {
-        backgroundColor: 'white',
-    },
     button: {
         height: 0.25*height,
         maxWidth: 0.4*width,
         margin: 10,
-    },
-    buttonText: {
-        fontSize: 21,
-        color: 'white'
     }
 })

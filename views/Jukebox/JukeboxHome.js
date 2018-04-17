@@ -1,5 +1,5 @@
 import  React, { Component } from 'react'
-import { View, FlatList, StyleSheet, ScrollView, Image, ImageBackground, TouchableOpacity, NativeModules } from 'react-native'
+import { View, FlatList, StyleSheet, ScrollView, Image, ImageBackground, TouchableOpacity } from 'react-native'
 import {
     Container,
     Header,
@@ -10,8 +10,6 @@ import {
     Body,
     Left,
     Text,
-    H1,
-    H3,
     ListItem,
     Icon,
     Button
@@ -20,20 +18,7 @@ import {
 import * as Progress from 'react-native-progress'
 import DownloadingView from '../helpers/DownloadingView'
 
-const P24LibModule = NativeModules.P24LibModule;
-
-const testSongs = [
-    { "id": 1, "title": "Tytul piosenki1", "author": "Author1" },
-    { "id": 2, "title": "Tytul piosenki2", "author": "Author2" },
-    { "id": 3, "title": "Tytul piosenki3", "author": "Author3" },
-    { "id": 4, "title": "Tytul piosenki4", "author": "Author4" },
-    { "id": 5, "title": "Tytul piosenki1", "author": "Author1" },
-    { "id": 6, "title": "Tytul piosenki2", "author": "Author2" },
-    { "id": 7, "title": "Tytul piosenki3", "author": "Author3" },
-    { "id": 8, "title": "Tytul piosenki4", "author": "Author4" }
-]
 export default class JukeboxHome extends Component {
-
     constructor(props){
         super(props)
         this.state = {
@@ -42,7 +27,6 @@ export default class JukeboxHome extends Component {
             isLoading: true,
             actualSongTime: '0:00',
             totalSongTime: '0:00',
-            // indeterminate: true,
         }
     }
 
@@ -72,7 +56,11 @@ export default class JukeboxHome extends Component {
             .then(response => {
                 if (response.ok)
                     response.json().then(resp => {
-                        this.setState({ actualSongs: resp.slice(1) })
+                        let songs = resp.filter(item => {
+                            // return 'video' named files -> workaround 'till api's not ready
+                            return item.musicFile.title[0].toLowerCase() !== 'v'
+                        })
+                        this.setState({ actualSongs: songs.slice(1) })
                     })
                     .catch(err => console.log(err))
                 else
@@ -81,7 +69,7 @@ export default class JukeboxHome extends Component {
             })
             .catch(err => {
                 console.log(err)
-                this.setState({ noInternet: true })
+                // this.setState({ noInternet: true })
             })
         await fetch(currentUrl)
           .then(response => {
@@ -94,6 +82,16 @@ export default class JukeboxHome extends Component {
                     this.setState({ actuallyPlaying: resp, totalSongTimeInMs: resp.total, actualSongTimeInMs: resp.current })
                     this.parseTotalSongTime(resp.total)
                     this.parseActualSongTime(resp.current)
+                    if (this.state.actuallyPlaying.musicFile.title[0].toLowerCase() == 'v') {
+                        this.setState({
+                            actuallyPlaying: {
+                                musicFile: {
+                                    title: 'Aktualnie odtwarza film',
+                                    author: ''
+                                }
+                            }
+                        })
+                    }
                 })
                 .catch(err => {
                     this.setState({ actuallyPlaying: { musicFile: {"title": '', "author": ''} } })
@@ -103,7 +101,8 @@ export default class JukeboxHome extends Component {
                 }
           })
           .catch(err => {
-            this.setState({ actuallyPlaying: { musicFile: {"title": '', "author": ''} } })
+              console.log(err)
+            // this.setState({ actuallyPlaying: { musicFile: {"title": '', "author": ''} } })
           })
     }
 
@@ -154,7 +153,7 @@ export default class JukeboxHome extends Component {
                 >
                     <Header style={styles.headerBackground} androidStatusBarColor={"#000"}>
                         <Left>
-                            <Button transparent onPress={() => this.props.navigation.navigate('Home') }>
+                            <Button transparent style={{ paddingRight: 60 }} onPress={() => this.props.navigation.popToTop() }>
                             <Icon name="md-arrow-round-back" style={{color: "#fff"}} />
                             </Button>
                         </Left>

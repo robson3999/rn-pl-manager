@@ -4,6 +4,8 @@ import {
     Container,
     Header,
     Body,
+    Card,
+    CardItem,
     ListItem,
     Title,
     Item,
@@ -14,7 +16,8 @@ import {
     Spinner,
     Left,
     Right,
-    Toast
+    Toast,
+    Thumbnail    
 } from 'native-base'
 
 import SummaryModalComplete from '../helpers/SummaryModalComplete'
@@ -22,74 +25,95 @@ import SummaryModalLoading from '../helpers/SummaryModalLoading'
 
 let P24LibModule = NativeModules.P24LibModule
 
-export default class DetailedSongsView extends Component {
-    constructor(props){
+export default class DetailedMoviesView extends Component {
+    constructor(props) {
         super(props)
         this.state = {
-            params: this.props.navigation.state.params[0],
-            genreTitle: this.props.navigation.state.params[0].title,
-            songsList: this.props.navigation.state.params[0].data,
+            // params: this.props.navigation.state.params[0],
+            // genreTitle: this.props.navigation.state.params[0].title,
+            // songsList: this.props.navigation.state.params[0].data,
             modalVisible: false,
             modalComplete: false,
             searchText: null,
             filteredSongs: []
         }
     }
-    
-    sendChosenSong(visible, item){
+
+    async fetchMovies() {
+        let url = 'http://192.168.1.77:8080/genre/list'
+        await fetch(url)
+            .then(response => {
+                if (response.ok)
+                    response.json().then(resp => {
+                        let movies = resp.filter(genre => {
+                            return genre.id == 7
+                        })
+                        this.setState({ data: movies[0].data })
+                    })
+                else this.setState({ isLoading: false })
+                this.setState({ isLoading: false })
+            })
+            .catch(err => {
+                console.log(err)
+                this.setState({ noInternet: true })
+            })
+    }
+
+    async componentWillMount(){
+        await this.fetchMovies()
+        this.setState({ filteredSongs: this.state.data })
+        
+    }
+
+    sendChosenSong(visible, item) {
         this.setState({ modalVisible: visible });
-        this.setState({modalVisible: !visible});
-        try{
+        this.setState({ modalVisible: !visible });
+
+        try {
             let url = 'http://192.168.1.77:8080/musicfile/add?ids=' + item.id
             fetch(url, {
                 method: 'GET'
             })
-            .then((resp) => {
-                if(resp.status == 200 && resp.ok){
-                    item.isSent = true
-                    this.setState({ modalComplete: true })
-                }
-            })
-            .catch(err => console.log(err))
-        } catch(err){
+                .then((resp) => {
+                    if (resp.status == 200 && resp.ok) {
+                        item.isSent = true
+                        this.setState({ modalComplete: true })
+                    }
+                })
+                .catch(err => console.log(err))
+        } catch (err) {
             console.log(err)
         }
-    }
-    parseGenreTitle(genre){
-        return genre[0].toUpperCase() + genre.slice(1)
-    }
-
-    componentDidMount(){
-        this.setState({ filteredSongs: this.state.songsList })
     }
 
     setSearchText(event) {
         let searchText = event.nativeEvent.text
-        let songs = this.state.songsList
+        // let songs = this.state.songsList
+        let songs = this.state.data
         text = searchText.trim().toLowerCase()
         // prevent fucking up my app with '?' sign searching
-        try{
+        try {
             let newFilteredSongs = songs.filter(data => {
-                return (data.title.toLowerCase().match(text) || data.author.toLowerCase().match(text))
+                return (data.title.toLowerCase().match(text))
             })
             this.setState({ filteredSongs: newFilteredSongs })
-        } catch(err) {
+        } catch (err) {
             console.log(err)
         }
     }
 
-    async handleElementTap(item){
+    async handleElementTap(item) {
         await this.doTrnDirect()
-        if (this.state.transactionCompleted){
+        if (this.state.transactionCompleted) {
             this.sendChosenSong(true, item);
             Toast.show({
-                text: 'Kupiono piosenkę :)',
+                text: 'Kupiono wybrany film',
                 position: 'bottom',
                 buttonText: 'OK',
             })
         } else {
             Toast.show({
-                text: 'Nie udało się kupić piosenki :(',
+                text: 'Nie udało się kupić wybranego filmu',
                 position: 'bottom',
                 buttonText: 'OK',
                 duration: 3000
@@ -110,7 +134,7 @@ export default class DetailedSongsView extends Component {
             return v.toString(16);
         });
     }
-    async doTrnDirect(){
+    async doTrnDirect() {
         let settingsParams = {
             saveBankCredentials: true,
             readSmsPasswords: true,
@@ -121,9 +145,9 @@ export default class DetailedSongsView extends Component {
             merchantId: 64195,
             crc: 'd27e4cb580e9bbfe',
             sessionId: this.getUUID(),
-            amount: 99,
+            amount: 999,
             currency: "PLN",
-            description: "Płatność za piosenkę w aplikacji Jukebox",
+            description: "Płatność za film w aplikacji Jukebox",
             email: "test@test.pl",
             country: "PL",
             client: "John Smith",
@@ -145,16 +169,16 @@ export default class DetailedSongsView extends Component {
         } = await P24LibModule.startTrnDirect(trnDirectParams)
 
         if (isSuccess) {
-            this.setState({ transactionCompleted: true})
+            this.setState({ transactionCompleted: true })
         } else if (isCanceled) {
-            this.setState({ transactionCompleted: false })            
+            this.setState({ transactionCompleted: false })
         } else {
             console.log("Transfer error. Code: " + errorCode);
-            this.setState({ transactionCompleted: false })            
+            this.setState({ transactionCompleted: false })
         }
     }
 
-    render () {
+    render() {
         return (
             <ImageBackground
                 source={require('../../assets/bg_improved.png')}
@@ -162,9 +186,9 @@ export default class DetailedSongsView extends Component {
             >
                 <Header searchBar rounded style={styles.headerBar} androidStatusBarColor={"#000"}>
                     <Left style={{ justifyContent: 'space-around' }}>
-                        <Button transparent onPress={() => this.props.navigation.goBack(null, this.state.params)}>
+                        <Button transparent onPress={() => this.props.navigation.navigate('MoviesHome')}>
                             <Icon name='arrow-back' />
-                            <Title style={{ color: '#fff', width: '90%' }}>{this.state.genreTitle.slice(0, 1).toUpperCase() + this.state.genreTitle.slice(1) }</Title>
+                            <Title style={{ color: '#fff', width: '90%' }}>Filmy</Title>
                         </Button>
                     </Left>
                     <Item>
@@ -180,11 +204,10 @@ export default class DetailedSongsView extends Component {
                 <FlatList
                     ref="songsFlatList"
                     data={this.state.filteredSongs}
-                    extraData={this.state}
-                    renderItem={({ item, index }) =>
-                        <CustomListItem props={item} onTapEmmited={()=> this.handleElementTap(item)} />
-                    }
                     keyExtractor={this._keyExtractor}
+                    renderItem={({ item, index }) =>
+                        <CustomListItem key={item.id} props={item} onTapEmmited={() => this.handleElementTap(item)} />
+                    }
                 />
                 <Modal
                     animationType="slide"
@@ -202,48 +225,37 @@ export default class DetailedSongsView extends Component {
 }
 
 class CustomListItem extends React.Component {
-    constructor(props){
+    constructor(props) {
         super(props)
         this.state = {
             item: this.props
         }
     }
-    onChosenClicked(){
+    onChosenClicked() {
         Toast.show({
-            text: 'Ta piosenka została już dodana',
+            text: 'Ten film został już dodany',
             position: 'bottom',
             buttonText: 'OK',
         })
     }
-    onTapEmmited(){
+    onTapEmmited() {
         this.props.onTapEmmited()
     }
     render() {
-        if(this.state.item.props.isSent){
             return (
-                <TouchableOpacity onPress={() => this.onChosenClicked()} style={[styles.listItem, { backgroundColor: "#fff" }]}>
-                    <View style={{ justifyContent: 'space-between', width: '100%', flexDirection: 'row' }}>
-                        <Text style={{ color: '#898989', fontSize: 20, fontWeight: 'bold' }}>{this.state.item.props.title}</Text>
-                        <Text style={{ color: '#898989', marginRight: 10, fontWeight: 'bold', fontSize: 20 }}>PLN 0,99</Text>
-                    </View>
-                    <View renderToHardwareTextureAndroid={true}>
-                            <Text style={{ color: '#898989' }}>{this.state.item.props.author}</Text>
-                    </View>
-                </TouchableOpacity>
+                <Card key={this.state.item.props.id} style={[styles.listItem]}>
+                    <CardItem button onPress={() => this.onTapEmmited(true, this.props)} style={{ backgroundColor: '#B53694', justifyContent: 'space-between', width: '100%', flexDirection: 'row' }}>
+                    <Left>
+                        <Thumbnail large square source={{ uri: 'https://ia.media-imdb.com/images/M/MV5BM2MyNjYxNmUtYTAwNi00MTYxLWJmNWYtYzZlODY3ZTk3OTFlXkEyXkFqcGdeQXVyNzkwMjQ5NzM@._V1_SY1000_CR0,0,704,1000_AL_.jpg' }}></Thumbnail>
+                        <Body>
+                            <Text style={{ color: '#FAE2EE', fontSize: 20, fontWeight: 'bold' }}>{this.state.item.props.title}</Text>
+                            <Text style={{ width: '80%', color: '#FAE2EE' }}>Phasellus pellentesque massa nisi, ut venenatis nulla rhoncus sed...</Text>
+                        </Body>
+                    </Left>
+                        <Text style={{ color: '#FAE2EE', fontWeight: 'bold', fontSize: 18 }}>PLN 9,99</Text>
+                    </CardItem>
+                </Card>
             )
-        } else {
-            return (
-                <TouchableOpacity onPress={() => this.onTapEmmited(true, this.props)} style={[styles.listItem, { backgroundColor: "#B53694" }]}>
-                    <View style={{ justifyContent: 'space-between', width: '100%', flexDirection: 'row' }}>
-                        <Text style={{ color: '#FAE2EE', fontSize: 20, fontWeight: 'bold' }}>{this.state.item.props.title}</Text>
-                        <Text style={{ color: '#FAE2EE', marginRight: 10, fontWeight: 'bold', fontSize: 20 }}>PLN 0,99</Text>
-                    </View>
-                    <View renderToHardwareTextureAndroid={true}>
-                        <Text style={{ color: '#FAE2EE' }}>{this.state.item.props.author}</Text>
-                    </View>
-                </TouchableOpacity>
-            )
-        }
     }
 }
 
@@ -262,11 +274,14 @@ const styles = StyleSheet.create({
         marginTop: 5,
         marginBottom: 5,
         borderRadius: 15,
-        elevation: 2,
         flexDirection: 'column',
         flex: 1,
         alignItems: 'flex-start',
-        borderBottomWidth: 0
+        borderBottomWidth: 0,
+        borderTopWidth: 0,
+        borderRightWidth: 0,
+        borderLeftWidth: 0,
+        backgroundColor: '#B53694'
     },
     item: {
         maxWidth: '80%',
