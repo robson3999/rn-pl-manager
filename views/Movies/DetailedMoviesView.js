@@ -1,29 +1,12 @@
-import React, { Component } from 'react'
-import { StyleSheet, View, ScrollView, FlatList, NetInfo, Modal, TouchableOpacity, ImageBackground, NativeModules } from 'react-native'
-import {
-    Container,
-    Header,
-    Body,
-    Card,
-    CardItem,
-    ListItem,
-    Title,
-    Item,
-    Icon,
-    Text,
-    Input,
-    Button,
-    Spinner,
-    Left,
-    Right,
-    Thumbnail    
-} from 'native-base'
-
-import SummaryModalComplete from '../helpers/SummaryModalComplete'
-import SummaryModalLoading from '../helpers/SummaryModalLoading'
+import React, { Component } from 'react';
+import { View, FlatList, Modal, ImageBackground } from 'react-native';
+import { Header, ListItem, Title, Item, Icon, Text, Input, Button, Left } from 'native-base';
+import SummaryModalComplete from '../helpers/SummaryModalComplete';
+import SummaryModalLoading from '../helpers/SummaryModalLoading';
 import CustomListItem from './components/CustomListItemMovie';
+import { detailedViewStyles } from '../helpers/styles';
 import { getUUID, doTrnDirect } from '../helpers/PaymentMethods';
-import { showFailedBoughtMovie, showSuccessBoughtMovie } from '../helpers/Toasts'
+import { showFailedBoughtMovie, showSuccessBoughtMovie } from '../helpers/Toasts';
 import { BASE_URL } from '../helpers/Variables';
 export default class DetailedMoviesView extends Component {
     constructor(props) {
@@ -123,7 +106,7 @@ export default class DetailedMoviesView extends Component {
                 source={require('../../assets/bg_improved.png')}
                 style={{ width: '100%', height: '100%' }}
             >
-                <Header searchBar rounded style={styles.headerBar} androidStatusBarColor={"#000"}>
+                <Header searchBar rounded style={detailedViewStyles.headerBar} androidStatusBarColor={"#000"}>
                     <Left style={{ justifyContent: 'space-around' }}>
                         <Button transparent onPress={() => this.props.navigation.navigate('MoviesHome')}>
                             <Icon name='arrow-back' />
@@ -155,27 +138,10 @@ export default class DetailedMoviesView extends Component {
                     onRequestClose={() => {
                         this.setState({ modalComplete: true })
                     }}>
-                    <View style={styles.modal}>
+                    <View style={detailedViewStyles.modal}>
                     </View>
                 </Modal>
             </ImageBackground>
         )
     }
 }
-
-const styles = StyleSheet.create({
-    headerBar: {
-        backgroundColor: 'rgba(0, 0, 0, 0.45)',
-    },
-    item: {
-        maxWidth: '80%',
-        fontSize: 16
-    },
-    modal: {
-        height: '100%',
-        width: '100%',
-        backgroundColor: 'rgba(255, 255, 255, 0.8)',
-        justifyContent: 'center',
-        alignItems: 'center'
-    }
-});

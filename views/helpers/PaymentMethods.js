@@ -1,21 +1,21 @@
 import { NativeModules } from 'react-native';
 
 let P24LibModule = NativeModules.P24LibModule;
-function getUUID() {
-    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
+const getUUID = () => {
+    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, (c) => {
         let r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
         return v.toString(16);
     });
 };
 
-async function doTrnDirect(){
-    let settingsParams = {
+const doTrnDirect = async () => {
+    const settingsParams = {
         saveBankCredentials: true,
         readSmsPasswords: true,
         enableBanksRwd: true,
         banksRwdConfigUrl: "https://bh.przelewy24.pl/p24lib/getdata2.php"
     }
-    let testTransactionParams = {
+    const testTransactionParams = {
         merchantId: 64195,
         crc: 'd27e4cb580e9bbfe',
         sessionId: getUUID(),
@@ -31,7 +31,7 @@ async function doTrnDirect(){
         phone: "1246423234",
         language: "pl"
     }
-    let trnDirectParams = {
+    const trnDirectParams = {
         transactionParams: testTransactionParams,
         isSandbox: true,
         settingsParams: settingsParams

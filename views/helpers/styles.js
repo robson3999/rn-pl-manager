@@ -1,6 +1,6 @@
 import { StyleSheet, Dimensions } from 'react-native'
 const { height, width } = Dimensions.get('window');
-
+const textColor = '#FAE2EE'
 
 export const activityHomeStyles = StyleSheet.create({
     headerBackground: {
@@ -27,6 +27,20 @@ export const activityHomeStyles = StyleSheet.create({
         flex: 1,
         alignItems: 'flex-start',
         borderBottomWidth: 0
+    },
+    listItemTitle: { 
+        color: textColor, 
+        fontSize: 20, 
+        fontWeight: 'bold' 
+    },
+    listItemAuthorContainer: { 
+        flexDirection: 'row', 
+        justifyContent: 'space-between', 
+        width: '100%' 
+    },
+    listItemAuthor: { 
+        color: textColor, 
+        fontSize: 16 
     },
     bottomBlurredBorder: {
         backgroundColor: "#B53694",
@@ -91,3 +105,62 @@ export const homeScreenStyles = StyleSheet.create({
         maxHeight: 0.4 * width
     }
 })
+
+export const jukeboxCustomItemStyles = StyleSheet.create({
+    listItem: {
+        flex: 1,
+        justifyContent: 'space-between',
+        paddingLeft: 15,
+        paddingTop: 10,
+        paddingBottom: 10,
+        marginRight: 10,
+        marginLeft: 10,
+        marginTop: 5,
+        marginBottom: 5,
+        borderRadius: 15,
+        elevation: 2,
+        flexDirection: 'column',
+        flex: 1,
+        alignItems: 'flex-start',
+        borderBottomWidth: 0
+    },
+    cardAligment: {
+        justifyContent: 'space-between',
+        width: '100%',
+        flexDirection: 'row'
+    },
+    itemTitle: {
+        color: textColor,
+        fontSize: 20,
+        fontWeight: 'bold'
+    },
+    itemPrice: {
+        color: textColor,
+        marginRight: 10,
+        fontWeight: 'bold',
+        fontSize: 20
+    },
+    itemAuthor: {
+        color: textColor, 
+        fontSize: 16 
+    }
+});
+
+export const detailedViewStyles = StyleSheet.create({
+    headerBar: {
+        backgroundColor: 'rgba(0, 0, 0, 0.45)',
+    },
+    item: {
+        maxWidth: '80%',
+        fontSize: 16
+    },
+    modal: {
+        height: '100%',
+        width: '100%',
+        backgroundColor: 'rgba(255, 255, 255, 0.8)',
+        justifyContent: 'center',
+        alignItems: 'center'
+    }
+});
+
+

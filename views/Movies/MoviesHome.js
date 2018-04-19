@@ -1,23 +1,10 @@
 import React, { Component } from 'react'
-import { View, FlatList, StyleSheet, ScrollView, Image, ImageBackground, TouchableOpacity, NativeModules } from 'react-native'
-import {
-    Container,
-    Header,
-    Title,
-    Content,
-    Card,
-    CardItem,
-    Body,
-    Left,
-    Text,
-    ListItem,
-    Icon,
-    Button
-} from 'native-base'
-
+import { View, FlatList, ScrollView, Image, ImageBackground } from 'react-native'
+import { Container, Header, Title, Content, Card, CardItem, Body, Left, Text, ListItem, Icon, Button } from 'native-base'
 import * as Progress from 'react-native-progress';
 import DownloadingView from '../helpers/DownloadingView';
 import { BASE_URL } from '../helpers/Variables';
+import ActuallyPlayingListItem from '../helpers/ActuallyPlayingListItem'
 import ProceedButton from './components/ProceedButton';
 import { parseMilisecondsToTime, parseActualSongTime, parseTotalSongTime, computeProgress } from '../helpers/Variables';
 import { activityHomeStyles } from '../helpers/styles';
@@ -42,8 +29,8 @@ export default class MoviesHome extends Component {
     _keyExtractor = (item, index) => item.id
 
     async fetchActualMoviesAPI() {
-        let listUrl = `${BASE_URL}/musicfile/list`
-        let currentUrl = `${BASE_URL}/musicfile/current`
+        const listUrl = `${BASE_URL}/musicfile/list`
+        const currentUrl = `${BASE_URL}/musicfile/current`
         await fetch(listUrl)
             .then(response => {
                 if(response.ok){
@@ -68,16 +55,16 @@ export default class MoviesHome extends Component {
                 if (response.ok)
                     response.json().then(resp => {
                         if (resp.current == -1 && resp.total == -1) {
-                            actuallyPlaying.musicFile.title
                             this.setState({ actuallyPlaying: { musicFile: { "title": '', "author": '' } } })
+                        } else {
+                            this.setState({ 
+                                actuallyPlaying: resp,
+                                totalSongTimeInMs: resp.total, 
+                                actualSongTimeInMs: resp.current,
+                                totalSongTime: parseTotalSongTime(resp.total),
+                                actualSongTime: parseActualSongTime(resp.current)
+                            })
                         }
-                        this.setState({ 
-                            actuallyPlaying: resp,
-                            totalSongTimeInMs: resp.total, 
-                            actualSongTimeInMs: resp.current,
-                            totalSongTime: parseTotalSongTime(resp.total),
-                            actualSongTime: parseActualSongTime(resp.current)
-                        })
                         if (this.state.actuallyPlaying.musicFile.title[0].toLowerCase() !== 'v') {
                             this.setState({
                                 actuallyPlaying: {
@@ -112,8 +99,11 @@ export default class MoviesHome extends Component {
         if (this.state.actualSongTimeInMs <= this.state.totalSongTimeInMs) {
             let time = this.state.actualSongTimeInMs + 1000
             let newTime = parseMilisecondsToTime(time)
-            this.setState({ progress: computeProgress(this.state.totalSongTimeInMs, this.state.actualSongTimeInMs) })
-            this.setState({ actualSongTime: newTime, actualSongTimeInMs: time })
+            this.setState({ 
+                progress: computeProgress(this.state.totalSongTimeInMs, this.state.actualSongTimeInMs),
+                actualSongTime: newTime,
+                actualSongTimeInMs: time
+            })
         } else {
             clearInterval(this.interval)
             this.fetchActualMoviesAPI()
@@ -200,15 +190,7 @@ export default class MoviesHome extends Component {
                                         data={this.state.actualSongs}
                                         keyExtractor={this._keyExtractor}
                                         renderItem={(item, index) =>
-                                            <ListItem style={activityHomeStyles.listItem}>
-                                                <View style={{ flex: 1 }}>
-                                                    <Text style={{ color: '#FAE2EE', fontSize: 20, fontWeight: 'bold' }}>{item.item.musicFile.title}</Text>
-                                                </View>
-                                                <View style={{ flexDirection: 'row', justifyContent: 'space-between', width: '100%' }}>
-                                                    <Text style={{ color: '#FAE2EE' }}>{item.item.musicFile.author}</Text>
-                                                </View>
-                                                <View style={activityHomeStyles.bottomBlurredBorder}></View>
-                                            </ListItem>
+                                            <ActuallyPlayingListItem props={item} />
                                         }
                                     />
                                 </ScrollView>

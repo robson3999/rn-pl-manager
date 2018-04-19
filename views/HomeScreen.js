@@ -1,6 +1,6 @@
 import React from 'react'
-import { StyleSheet, Image, View, TouchableOpacity, ImageBackground, ScrollView, Dimensions } from 'react-native'
-import { Container, Content, Text, Button, Title, Header } from 'native-base';
+import { Image, View, TouchableOpacity, ImageBackground, ScrollView } from 'react-native'
+import { Content, Text, Title, Header } from 'native-base';
 import { homeScreenStyles } from './helpers/styles'
 
 export default class HomeScreen extends React.Component {

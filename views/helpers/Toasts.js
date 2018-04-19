@@ -1,6 +1,6 @@
 import { Toast } from 'native-base';
 
-function showSuccessBoughtMovie() {
+const showSuccessBoughtMovie = () => {
     Toast.show({
         text: 'Kupiono wybrany film',
         position: 'bottom',
@@ -8,7 +8,7 @@ function showSuccessBoughtMovie() {
     })
 };
 
-function showFailedBoughtMovie() {
+const showFailedBoughtMovie = () => {
     Toast.show({
         text: 'Nie udało się kupić wybranego filmu',
         position: 'bottom',
@@ -17,7 +17,7 @@ function showFailedBoughtMovie() {
     })
 };
 
-function showSuccessBoughtSong(){
+const showSuccessBoughtSong = () =>{
     Toast.show({
         text: 'Kupiono wybraną piosenkę',
         position: 'bottom',
@@ -25,7 +25,7 @@ function showSuccessBoughtSong(){
     })
 };
 
-function showFailedBoughtSong() {
+const showFailedBoughtSong = () => {
     Toast.show({
         text: 'Nie udało się kupić piosenki',
         position: 'bottom',
@@ -34,7 +34,7 @@ function showFailedBoughtSong() {
     })
 }
 
-function showAlreadyAddedSong(){
+const showAlreadyAddedSong = () =>{
     Toast.show({
         text: 'Ta piosenka została już dodana',
         position: 'bottom',
