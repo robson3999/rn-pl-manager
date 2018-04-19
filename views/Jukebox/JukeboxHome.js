@@ -70,9 +70,13 @@ export default class JukeboxHome extends Component {
                     actuallyPlaying.musicFile.title
                     this.setState({ actuallyPlaying: { musicFile: {"title": '', "author": ''} } })
                     }
-                    this.setState({ actuallyPlaying: resp, totalSongTimeInMs: resp.total, actualSongTimeInMs: resp.current })
-                    this.setState({ totalSongTime: parseTotalSongTime(resp.total) })
-                    this.setState({ actualSongTime: parseActualSongTime(resp.current) })
+                    this.setState({ 
+                        actuallyPlaying: resp, 
+                        totalSongTimeInMs: resp.total, 
+                        actualSongTimeInMs: resp.current,
+                        totalSongTime: parseTotalSongTime(resp.total),
+                        actualSongTime: parseActualSongTime(resp.current)
+                    })
                     if (this.state.actuallyPlaying.musicFile.title[0].toLowerCase() == 'v') {
                         this.setState({
                             actuallyPlaying: {
