@@ -17,6 +17,7 @@ import {
 
 import * as Progress from 'react-native-progress'
 import DownloadingView from '../helpers/DownloadingView'
+import { BASE_URL } from '../helpers/Variables';
 
 export default class JukeboxHome extends Component {
     constructor(props){
@@ -49,8 +50,8 @@ export default class JukeboxHome extends Component {
     _keyExtractor = (item, index) => item.id
 
     async fetchActualSongsAPI() {
-        let listUrl = 'http://192.168.1.77:8080/musicfile/list'
-        let currentUrl = 'http://192.168.1.77:8080/musicfile/current'
+        let listUrl = `${BASE_URL}/musicfile/list`
+        let currentUrl = `${BASE_URL}/musicfile/current`
 
         await fetch(listUrl)
             .then(response => {
@@ -60,7 +61,7 @@ export default class JukeboxHome extends Component {
                             // return 'video' named files -> workaround 'till api's not ready
                             return item.musicFile.title[0].toLowerCase() !== 'v'
                         })
-                        this.setState({ actualSongs: songs.slice(1) })
+                        this.setState({ actualSongs: songs })
                     })
                     .catch(err => console.log(err))
                 else
@@ -91,10 +92,13 @@ export default class JukeboxHome extends Component {
                                 }
                             }
                         })
+                    } else {
+                        this.setState({ actualSongs: this.state.actualSongs.slice(1) })                        
                     }
                 })
                 .catch(err => {
                     this.setState({ actuallyPlaying: { musicFile: {"title": '', "author": ''} } })
+                    // console.error(err)
                 })
               else {
                   this.setState({ actuallyPlaying: { musicFile: {"title": '', "author": ''} } })
@@ -153,7 +157,7 @@ export default class JukeboxHome extends Component {
                 >
                     <Header style={styles.headerBackground} androidStatusBarColor={"#000"}>
                         <Left>
-                            <Button transparent style={{ paddingRight: 60 }} onPress={() => this.props.navigation.popToTop() }>
+                            <Button transparent style={{ paddingRight: 80 }} onPress={() => this.props.navigation.popToTop() }>
                             <Icon name="md-arrow-round-back" style={{color: "#fff"}} />
                             </Button>
                         </Left>

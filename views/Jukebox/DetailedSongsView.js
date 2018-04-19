@@ -1,5 +1,5 @@
-import React, { Component } from 'react'
-import { StyleSheet, View, ScrollView, FlatList, NetInfo, Modal, TouchableOpacity, ImageBackground, NativeModules } from 'react-native'
+import React, { Component } from 'react';
+import { StyleSheet, View, ScrollView, FlatList, NetInfo, Modal, TouchableOpacity, ImageBackground, NativeModules } from 'react-native';
 import {
     Container,
     Header,
@@ -13,14 +13,15 @@ import {
     Button,
     Spinner,
     Left,
-    Right,
-    Toast
-} from 'native-base'
+    Right
+} from 'native-base';
 
-import SummaryModalComplete from '../helpers/SummaryModalComplete'
-import SummaryModalLoading from '../helpers/SummaryModalLoading'
-
-let P24LibModule = NativeModules.P24LibModule
+import SummaryModalComplete from '../helpers/SummaryModalComplete';
+import SummaryModalLoading from '../helpers/SummaryModalLoading';
+import CustomListItem from './CustomListItemSong';
+import { getUUID, doTrnDirect } from '../helpers/PaymentMethods';
+import { showSuccessBoughtSong, showFailedBoughtSong } from '../helpers/Toasts';
+import { BASE_URL } from '../helpers/Variables';
 
 export default class DetailedSongsView extends Component {
     constructor(props){
@@ -40,14 +41,15 @@ export default class DetailedSongsView extends Component {
         this.setState({ modalVisible: visible });
         this.setState({modalVisible: !visible});
         try{
-            let url = 'http://192.168.1.77:8080/musicfile/add?ids=' + item.id
+            let url = `${BASE_URL}/musicfile/add?ids=${item.id}`;
             fetch(url, {
                 method: 'GET'
             })
             .then((resp) => {
                 if(resp.status == 200 && resp.ok){
                     item.isSent = true
-                    this.setState({ modalComplete: true })
+                    this.setState({ modalComplete: true });
+                    this.props.navigation.navigate('Jukebox', 'jukebox');                    
                 }
             })
             .catch(err => console.log(err))
@@ -79,21 +81,12 @@ export default class DetailedSongsView extends Component {
     }
 
     async handleElementTap(item){
-        await this.doTrnDirect()
-        if (this.state.transactionCompleted){
+        let isSuccess = await doTrnDirect()
+        if (isSuccess){
             this.sendChosenSong(true, item);
-            Toast.show({
-                text: 'Kupiono piosenkę :)',
-                position: 'bottom',
-                buttonText: 'OK',
-            })
+            showSuccessBoughtSong();
         } else {
-            Toast.show({
-                text: 'Nie udało się kupić piosenki :(',
-                position: 'bottom',
-                buttonText: 'OK',
-                duration: 3000
-            })
+            showFailedBoughtSong();
         }
     }
 
@@ -101,57 +94,6 @@ export default class DetailedSongsView extends Component {
 
     static navigationOptions = {
         header: null
-    }
-
-    // przelewy24 functions
-    getUUID() {
-        return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
-            let r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
-            return v.toString(16);
-        });
-    }
-    async doTrnDirect(){
-        let settingsParams = {
-            saveBankCredentials: true,
-            readSmsPasswords: true,
-            enableBanksRwd: true,
-            banksRwdConfigUrl: "https://bh.przelewy24.pl/p24lib/getdata2.php"
-        }
-        let testTransactionParams = {
-            merchantId: 64195,
-            crc: 'd27e4cb580e9bbfe',
-            sessionId: this.getUUID(),
-            amount: 99,
-            currency: "PLN",
-            description: "Płatność za piosenkę w aplikacji Jukebox",
-            email: "test@test.pl",
-            country: "PL",
-            client: "John Smith",
-            address: "Test street",
-            zip: "60-600",
-            city: "Poznań",
-            phone: "1246423234",
-            language: "pl"
-        }
-        let trnDirectParams = {
-            transactionParams: testTransactionParams,
-            isSandbox: true,
-            settingsParams: settingsParams
-        }
-        let {
-            isSuccess,
-            isCanceled,
-            errorCode
-        } = await P24LibModule.startTrnDirect(trnDirectParams)
-
-        if (isSuccess) {
-            this.setState({ transactionCompleted: true})
-        } else if (isCanceled) {
-            this.setState({ transactionCompleted: false })            
-        } else {
-            console.log("Transfer error. Code: " + errorCode);
-            this.setState({ transactionCompleted: false })            
-        }
     }
 
     render () {
@@ -201,72 +143,10 @@ export default class DetailedSongsView extends Component {
     }
 }
 
-class CustomListItem extends React.Component {
-    constructor(props){
-        super(props)
-        this.state = {
-            item: this.props
-        }
-    }
-    onChosenClicked(){
-        Toast.show({
-            text: 'Ta piosenka została już dodana',
-            position: 'bottom',
-            buttonText: 'OK',
-        })
-    }
-    onTapEmmited(){
-        this.props.onTapEmmited()
-    }
-    render() {
-        if(this.state.item.props.isSent){
-            return (
-                <TouchableOpacity onPress={() => this.onChosenClicked()} style={[styles.listItem, { backgroundColor: "#fff" }]}>
-                    <View style={{ justifyContent: 'space-between', width: '100%', flexDirection: 'row' }}>
-                        <Text style={{ color: '#898989', fontSize: 20, fontWeight: 'bold' }}>{this.state.item.props.title}</Text>
-                        <Text style={{ color: '#898989', marginRight: 10, fontWeight: 'bold', fontSize: 20 }}>PLN 0,99</Text>
-                    </View>
-                    <View renderToHardwareTextureAndroid={true}>
-                            <Text style={{ color: '#898989' }}>{this.state.item.props.author}</Text>
-                    </View>
-                </TouchableOpacity>
-            )
-        } else {
-            return (
-                <TouchableOpacity onPress={() => this.onTapEmmited(true, this.props)} style={[styles.listItem, { backgroundColor: "#B53694" }]}>
-                    <View style={{ justifyContent: 'space-between', width: '100%', flexDirection: 'row' }}>
-                        <Text style={{ color: '#FAE2EE', fontSize: 20, fontWeight: 'bold' }}>{this.state.item.props.title}</Text>
-                        <Text style={{ color: '#FAE2EE', marginRight: 10, fontWeight: 'bold', fontSize: 20 }}>PLN 0,99</Text>
-                    </View>
-                    <View renderToHardwareTextureAndroid={true}>
-                        <Text style={{ color: '#FAE2EE' }}>{this.state.item.props.author}</Text>
-                    </View>
-                </TouchableOpacity>
-            )
-        }
-    }
-}
 
 const styles = StyleSheet.create({
     headerBar: {
         backgroundColor: 'rgba(0, 0, 0, 0.45)',
-    },
-    listItem: {
-        flex: 1,
-        justifyContent: 'space-between',
-        paddingLeft: 15,
-        paddingTop: 10,
-        paddingBottom: 10,
-        marginRight: 10,
-        marginLeft: 10,
-        marginTop: 5,
-        marginBottom: 5,
-        borderRadius: 15,
-        elevation: 2,
-        flexDirection: 'column',
-        flex: 1,
-        alignItems: 'flex-start',
-        borderBottomWidth: 0
     },
     item: {
         maxWidth: '80%',

@@ -17,6 +17,7 @@ import {
 
 import * as Progress from 'react-native-progress'
 import DownloadingView from '../helpers/DownloadingView'
+import { BASE_URL } from '../helpers/Variables';
 
 export default class MoviesHome extends Component {
 
@@ -50,8 +51,8 @@ export default class MoviesHome extends Component {
     _keyExtractor = (item, index) => item.id
 
     async fetchActualMoviesAPI() {
-        let listUrl = 'http://192.168.1.77:8080/musicfile/list'
-        let currentUrl = 'http://192.168.1.77:8080/musicfile/current'
+        let listUrl = `${BASE_URL}/musicfile/list`
+        let currentUrl = `${BASE_URL}/musicfile/current`
         await fetch(listUrl)
             .then(response => {
                 if (response.ok)
@@ -82,6 +83,18 @@ export default class MoviesHome extends Component {
                         this.setState({ actuallyPlaying: resp, totalSongTimeInMs: resp.total, actualSongTimeInMs: resp.current })
                         this.parseTotalSongTime(resp.total)
                         this.parseActualSongTime(resp.current)
+                        if (this.state.actuallyPlaying.musicFile.title[0].toLowerCase() !== 'v') {
+                            this.setState({
+                                actuallyPlaying: {
+                                    musicFile: {
+                                        title: 'Aktualnie odtwarza piosenkę',
+                                        author: ''
+                                    }
+                                }
+                            })
+                        } else {
+                            this.setState({ actualSongs: this.state.actualSongs.slice(1) })
+                        }
                     })
                         .catch(err => {
                             this.setState({ actuallyPlaying: { musicFile: { "title": '', "author": '' } } })
@@ -94,18 +107,7 @@ export default class MoviesHome extends Component {
                 console.log(err)
                 // this.setState({ actuallyPlaying: { musicFile: {"title": '', "author": ''} } })
             })
-        if(this.state.actuallyPlaying.musicFile.title[0].toLowerCase() == 'v'){
-            this.setState({ actualSongs: this.state.actualSongs.slice(1) })
-        } else {
-            this.setState({
-                actuallyPlaying: {
-                    musicFile: {
-                        title: 'Aktualnie odtwarza piosenkę',
-                        author: ''
-                    }
-                }
-            })
-        }
+        
     }
 
     navigateToMoviesList() { this.props.navigation.replace('DetailedMoviesView') }
@@ -155,7 +157,7 @@ export default class MoviesHome extends Component {
                 >
                     <Header style={styles.headerBackground} androidStatusBarColor={"#000"}>
                         <Left>
-                            <Button transparent style={{ paddingRight: 60 }} onPress={() => this.props.navigation.popToTop()}>
+                            <Button transparent style={{ paddingRight: 80 }} onPress={() => this.props.navigation.popToTop()}>
                                 <Icon name="md-arrow-round-back" style={{ color: "#fff" }} />
                             </Button>
                         </Left>

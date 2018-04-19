@@ -25,3 +25,6 @@ android/app/my-*
 ios/build
 .idea/
 .svn
+android/playlistManager.iml
+android/app/app.iml
+android/p24Lib/p24Lib.iml

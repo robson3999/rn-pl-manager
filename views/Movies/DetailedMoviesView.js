@@ -16,15 +16,15 @@ import {
     Spinner,
     Left,
     Right,
-    Toast,
     Thumbnail    
 } from 'native-base'
 
 import SummaryModalComplete from '../helpers/SummaryModalComplete'
 import SummaryModalLoading from '../helpers/SummaryModalLoading'
-
-let P24LibModule = NativeModules.P24LibModule
-
+import CustomListItem from './CustomListItemMovie';
+import { getUUID, doTrnDirect } from '../helpers/PaymentMethods';
+import { showFailedBoughtMovie, showSuccessBoughtMovie } from '../helpers/Toasts'
+import { BASE_URL } from '../helpers/Variables';
 export default class DetailedMoviesView extends Component {
     constructor(props) {
         super(props)
@@ -40,12 +40,13 @@ export default class DetailedMoviesView extends Component {
     }
 
     async fetchMovies() {
-        let url = 'http://192.168.1.77:8080/genre/list'
+        let url = `${BASE_URL}/genre/list`
         await fetch(url)
             .then(response => {
                 if (response.ok)
                     response.json().then(resp => {
                         let movies = resp.filter(genre => {
+                            // genre.id = 7 => films in db
                             return genre.id == 7
                         })
                         this.setState({ data: movies[0].data })
@@ -66,21 +67,19 @@ export default class DetailedMoviesView extends Component {
     }
 
     sendChosenSong(visible, item) {
-        this.setState({ modalVisible: visible });
-        this.setState({ modalVisible: !visible });
-
         try {
-            let url = 'http://192.168.1.77:8080/musicfile/add?ids=' + item.id
+            let url = `${BASE_URL}/musicfile/add?ids=${item.id}`;
             fetch(url, {
                 method: 'GET'
             })
-                .then((resp) => {
-                    if (resp.status == 200 && resp.ok) {
-                        item.isSent = true
-                        this.setState({ modalComplete: true })
-                    }
-                })
-                .catch(err => console.log(err))
+            .then((resp) => {
+                if (resp.status == 200 && resp.ok) {
+                    item.isSent = true
+                    this.setState({ modalComplete: true });
+                    this.props.navigation.navigate('MoviesHome');
+                }
+            })
+            .catch(err => console.log(err));
         } catch (err) {
             console.log(err)
         }
@@ -103,21 +102,12 @@ export default class DetailedMoviesView extends Component {
     }
 
     async handleElementTap(item) {
-        await this.doTrnDirect()
-        if (this.state.transactionCompleted) {
+        let isSuccess = await doTrnDirect()
+        if (isSuccess) {
             this.sendChosenSong(true, item);
-            Toast.show({
-                text: 'Kupiono wybrany film',
-                position: 'bottom',
-                buttonText: 'OK',
-            })
+            showSuccessBoughtMovie()
         } else {
-            Toast.show({
-                text: 'Nie udało się kupić wybranego filmu',
-                position: 'bottom',
-                buttonText: 'OK',
-                duration: 3000
-            })
+            showFailedBoughtMovie()
         }
     }
 
@@ -125,57 +115,6 @@ export default class DetailedMoviesView extends Component {
 
     static navigationOptions = {
         header: null
-    }
-
-    // przelewy24 functions
-    getUUID() {
-        return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
-            let r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
-            return v.toString(16);
-        });
-    }
-    async doTrnDirect() {
-        let settingsParams = {
-            saveBankCredentials: true,
-            readSmsPasswords: true,
-            enableBanksRwd: true,
-            banksRwdConfigUrl: "https://bh.przelewy24.pl/p24lib/getdata2.php"
-        }
-        let testTransactionParams = {
-            merchantId: 64195,
-            crc: 'd27e4cb580e9bbfe',
-            sessionId: this.getUUID(),
-            amount: 999,
-            currency: "PLN",
-            description: "Płatność za film w aplikacji Jukebox",
-            email: "test@test.pl",
-            country: "PL",
-            client: "John Smith",
-            address: "Test street",
-            zip: "60-600",
-            city: "Poznań",
-            phone: "1246423234",
-            language: "pl"
-        }
-        let trnDirectParams = {
-            transactionParams: testTransactionParams,
-            isSandbox: true,
-            settingsParams: settingsParams
-        }
-        let {
-            isSuccess,
-            isCanceled,
-            errorCode
-        } = await P24LibModule.startTrnDirect(trnDirectParams)
-
-        if (isSuccess) {
-            this.setState({ transactionCompleted: true })
-        } else if (isCanceled) {
-            this.setState({ transactionCompleted: false })
-        } else {
-            console.log("Transfer error. Code: " + errorCode);
-            this.setState({ transactionCompleted: false })
-        }
     }
 
     render() {
@@ -224,64 +163,9 @@ export default class DetailedMoviesView extends Component {
     }
 }
 
-class CustomListItem extends React.Component {
-    constructor(props) {
-        super(props)
-        this.state = {
-            item: this.props
-        }
-    }
-    onChosenClicked() {
-        Toast.show({
-            text: 'Ten film został już dodany',
-            position: 'bottom',
-            buttonText: 'OK',
-        })
-    }
-    onTapEmmited() {
-        this.props.onTapEmmited()
-    }
-    render() {
-            return (
-                <Card key={this.state.item.props.id} style={[styles.listItem]}>
-                    <CardItem button onPress={() => this.onTapEmmited(true, this.props)} style={{ backgroundColor: '#B53694', justifyContent: 'space-between', width: '100%', flexDirection: 'row' }}>
-                    <Left>
-                        <Thumbnail large square source={{ uri: 'https://ia.media-imdb.com/images/M/MV5BM2MyNjYxNmUtYTAwNi00MTYxLWJmNWYtYzZlODY3ZTk3OTFlXkEyXkFqcGdeQXVyNzkwMjQ5NzM@._V1_SY1000_CR0,0,704,1000_AL_.jpg' }}></Thumbnail>
-                        <Body>
-                            <Text style={{ color: '#FAE2EE', fontSize: 20, fontWeight: 'bold' }}>{this.state.item.props.title}</Text>
-                            <Text style={{ width: '80%', color: '#FAE2EE' }}>Phasellus pellentesque massa nisi, ut venenatis nulla rhoncus sed...</Text>
-                        </Body>
-                    </Left>
-                        <Text style={{ color: '#FAE2EE', fontWeight: 'bold', fontSize: 18 }}>PLN 9,99</Text>
-                    </CardItem>
-                </Card>
-            )
-    }
-}
-
 const styles = StyleSheet.create({
     headerBar: {
         backgroundColor: 'rgba(0, 0, 0, 0.45)',
-    },
-    listItem: {
-        flex: 1,
-        justifyContent: 'space-between',
-        paddingLeft: 15,
-        paddingTop: 10,
-        paddingBottom: 10,
-        marginRight: 10,
-        marginLeft: 10,
-        marginTop: 5,
-        marginBottom: 5,
-        borderRadius: 15,
-        flexDirection: 'column',
-        flex: 1,
-        alignItems: 'flex-start',
-        borderBottomWidth: 0,
-        borderTopWidth: 0,
-        borderRightWidth: 0,
-        borderLeftWidth: 0,
-        backgroundColor: '#B53694'
     },
     item: {
         maxWidth: '80%',
