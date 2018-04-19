@@ -1,6 +1,6 @@
 import React from 'react';
 import { TouchableOpacity, View, StyleSheet, Text } from 'react-native';
-import { showAlreadyAddedSong } from '../helpers/Toasts'
+import { showAlreadyAddedSong } from '../../helpers/Toasts'
 
 const textColor = '#FAE2EE'
 

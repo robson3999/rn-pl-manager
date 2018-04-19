@@ -1,7 +1,7 @@
 import React from 'react';
 import { StyleSheet } from 'react-native';
 import { Card, CardItem, Left, Thumbnail, Body, Text } from 'native-base';
-import { showMovieAlreadyAdded } from '../helpers/Toasts';
+import { showMovieAlreadyAdded } from '../../helpers/Toasts';
 
 export default class CustomListItem extends React.Component {
     constructor(props) {

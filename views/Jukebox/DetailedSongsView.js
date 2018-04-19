@@ -18,7 +18,7 @@ import {
 
 import SummaryModalComplete from '../helpers/SummaryModalComplete';
 import SummaryModalLoading from '../helpers/SummaryModalLoading';
-import CustomListItem from './CustomListItemSong';
+import CustomListItem from './components/CustomListItemSong';
 import { getUUID, doTrnDirect } from '../helpers/PaymentMethods';
 import { showSuccessBoughtSong, showFailedBoughtSong } from '../helpers/Toasts';
 import { BASE_URL } from '../helpers/Variables';
