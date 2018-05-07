@@ -42,4 +42,4 @@ const showAlreadyAddedSong = () =>{
     })
 }
 
-export { showFailedBoughtMovie, showSuccessBoughtMovie, showFailedBoughtSong, showSuccessBoughtSong };
+export { showFailedBoughtMovie, showSuccessBoughtMovie, showFailedBoughtSong, showSuccessBoughtSong, showAlreadyAddedSong };

@@ -35,7 +35,7 @@ export default class DetailedSongsView extends Component {
                 if(resp.status == 200 && resp.ok){
                     item.isSent = true
                     this.setState({ modalComplete: true });
-                    this.props.navigation.navigate('Jukebox', 'jukebox');                    
+                    this.props.navigation.navigate('Jukebox');                    
                 }
             })
             .catch(err => console.log(err))

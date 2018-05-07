@@ -18,11 +18,11 @@ export default class CustomListItem extends React.Component {
             return (
                 <TouchableOpacity onPress={() => showAlreadyAddedSong()} style={[jukeboxCustomItemStyles.listItem, { backgroundColor: "#fff" }]}>
                     <View style={jukeboxCustomItemStyles.cardAligment}>
-                        <Text style={jukeboxCustomItemStyles.itemTitle}>{this.state.item.props.title}</Text>
-                        <Text style={jukeboxCustomItemStyles.itemPrice}>PLN 0,99</Text>
+                        <Text style={[jukeboxCustomItemStyles.itemTitle, { color:'#b8bec6' }]}>{this.state.item.props.title}</Text>
+                        <Text style={[jukeboxCustomItemStyles.itemPrice, { color:'#b8bec6' }]}>PLN 0,99</Text>
                     </View>
                     <View renderToHardwareTextureAndroid={true}>
-                        <Text style={{ color: textColor }}>{this.state.item.props.author}</Text>
+                        <Text style={[jukeboxCustomItemStyles.itemAuthor, { color:'#b8bec6' }]}>{this.state.item.props.author}</Text>
                     </View>
                 </TouchableOpacity>
             )

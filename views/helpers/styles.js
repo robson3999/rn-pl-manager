@@ -146,6 +146,49 @@ export const jukeboxCustomItemStyles = StyleSheet.create({
     }
 });
 
+export const moviesCustomItemStyles = StyleSheet.create({
+    listItem: {
+        flex: 1,
+        justifyContent: 'space-between',
+        paddingLeft: 15,
+        paddingTop: 10,
+        paddingBottom: 10,
+        marginRight: 10,
+        marginLeft: 10,
+        marginTop: 5,
+        marginBottom: 5,
+        borderRadius: 15,
+        flexDirection: 'column',
+        flex: 1,
+        alignItems: 'flex-start',
+        borderBottomWidth: 0,
+        borderTopWidth: 0,
+        borderRightWidth: 0,
+        borderLeftWidth: 0,
+        backgroundColor: '#B53694'
+    },
+    cardItem: {
+        backgroundColor: '#B53694',
+        justifyContent: 'space-between',
+        width: '100%',
+        flexDirection: 'row'
+    },
+    itemTitle: {
+        color: '#FAE2EE',
+        fontSize: 20,
+        fontWeight: 'bold'
+    },
+    secondaryText: {
+        width: '80%',
+        color: '#FAE2EE'
+    },
+    priceText: {
+        color: '#FAE2EE',
+        fontWeight: 'bold',
+        fontSize: 18
+    }
+})
+
 export const detailedViewStyles = StyleSheet.create({
     headerBar: {
         backgroundColor: 'rgba(0, 0, 0, 0.45)',

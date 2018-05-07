@@ -55,7 +55,7 @@ export default class JukeboxHome extends Component {
               if(response.ok)
                 response.json().then(resp => {
                     if(resp.current == -1 && resp.total == -1 ){
-                    this.setState({ actuallyPlaying: { musicFile: {"title": '', "author": ''} } })
+                        this.setState({ actuallyPlaying: { musicFile: {"title": '', "author": ''} } })
                     } else {
                         this.setState({ 
                             actuallyPlaying: resp, 

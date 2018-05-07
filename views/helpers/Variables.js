@@ -1,4 +1,4 @@
-export const BASE_URL = 'http://192.168.1.77:8080'
+export const BASE_URL = 'http://192.168.1.24:8080'
 
 const parseMilisecondsToTime = (time) => {
     return new Date(time).getMinutes().toString() + ":" + (new Date(time).getSeconds() < 10 ? '0' : '').toString() + new Date(time).getSeconds()
