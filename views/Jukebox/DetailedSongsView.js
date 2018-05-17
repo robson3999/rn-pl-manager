@@ -7,7 +7,6 @@ import CustomListItem from './components/CustomListItemSong';
 import { detailedViewStyles } from '../helpers/styles';
 import { getUUID, doTrnDirect } from '../helpers/PaymentMethods';
 import { showSuccessBoughtSong, showFailedBoughtSong } from '../helpers/Toasts';
-import { BASE_URL } from '../helpers/Variables';
 
 export default class DetailedSongsView extends Component {
     constructor(props){
@@ -27,7 +26,7 @@ export default class DetailedSongsView extends Component {
         this.setState({ modalVisible: visible });
         this.setState({modalVisible: !visible});
         try{
-            let url = `${BASE_URL}/musicfile/add?ids=${item.id}`;
+            let url = `${global.SERVERIP}/musicfile/add?ids=${item.id}`;
             fetch(url, {
                 method: 'GET'
             })

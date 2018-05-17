@@ -5,7 +5,6 @@ import * as Progress from 'react-native-progress';
 import DownloadingView from '../helpers/DownloadingView';
 import ActuallyPlayingListItem from '../helpers/ActuallyPlayingListItem';
 import ProceedButton from './components/ProceedButton';
-import { BASE_URL } from '../helpers/Variables';
 import { parseMilisecondsToTime ,parseActualSongTime, parseTotalSongTime, computeProgress } from '../helpers/Variables';
 import { activityHomeStyles } from '../helpers/styles';
 
@@ -28,8 +27,8 @@ export default class JukeboxHome extends Component {
     _keyExtractor = (item, index) => item.id
 
     async fetchActualSongsAPI() {
-        const listUrl = `${BASE_URL}/musicfile/list`
-        const currentUrl = `${BASE_URL}/musicfile/current`
+        const listUrl = `${global.SERVERIP}/musicfile/list`
+        const currentUrl = `${global.SERVERIP}/musicfile/current`
 
         await fetch(listUrl)
             .then(response => {

@@ -3,7 +3,6 @@ import { View, FlatList, ScrollView, Image, ImageBackground } from 'react-native
 import { Container, Header, Title, Content, Card, CardItem, Body, Left, Text, ListItem, Icon, Button } from 'native-base'
 import * as Progress from 'react-native-progress';
 import DownloadingView from '../helpers/DownloadingView';
-import { BASE_URL } from '../helpers/Variables';
 import ActuallyPlayingListItem from '../helpers/ActuallyPlayingListItem'
 import ProceedButton from './components/ProceedButton';
 import { parseMilisecondsToTime, parseActualSongTime, parseTotalSongTime, computeProgress } from '../helpers/Variables';
@@ -29,8 +28,8 @@ export default class MoviesHome extends Component {
     _keyExtractor = (item, index) => item.id
 
     async fetchActualMoviesAPI() {
-        const listUrl = `${BASE_URL}/musicfile/list`
-        const currentUrl = `${BASE_URL}/musicfile/current`
+        const listUrl = `${global.SERVERIP}/musicfile/list`
+        const currentUrl = `${global.SERVERIP}/musicfile/current`
         await fetch(listUrl)
             .then(response => {
                 if(response.ok){

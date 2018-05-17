@@ -3,7 +3,6 @@ import { View, Text, StyleSheet, TouchableOpacity, ScrollView, NetInfo, ImageBac
 import { Container, Content, Spinner, Header, Left, Body, Title, Button, Icon } from 'native-base'
 import NoInternetView from '../helpers/NoInternetView'
 import { images } from '../helpers/GenreImages'
-import { BASE_URL } from '../helpers/Variables';
 
 const { height, width } = Dimensions.get('window');
 
@@ -18,7 +17,7 @@ export default class GenresList extends Component {
         header: null
     }
     async fetchGenres(){
-        let url = `${BASE_URL}/genre/list`
+        let url = `${global.SERVERIP}/genre/list`
         await fetch(url)
             .then(response => {
                 if (response.ok)

@@ -7,7 +7,6 @@ import CustomListItem from './components/CustomListItemMovie';
 import { detailedViewStyles } from '../helpers/styles';
 import { getUUID, doTrnDirect } from '../helpers/PaymentMethods';
 import { showFailedBoughtMovie, showSuccessBoughtMovie } from '../helpers/Toasts';
-import { BASE_URL } from '../helpers/Variables';
 export default class DetailedMoviesView extends Component {
     constructor(props) {
         super(props)
@@ -23,7 +22,7 @@ export default class DetailedMoviesView extends Component {
     }
 
     async fetchMovies() {
-        let url = `${BASE_URL}/genre/list`
+        let url = `${global.SERVERIP}/genre/list`
         await fetch(url)
             .then(response => {
                 if (response.ok)
@@ -51,7 +50,7 @@ export default class DetailedMoviesView extends Component {
 
     sendChosenSong(visible, item) {
         try {
-            let url = `${BASE_URL}/musicfile/add?ids=${item.id}`;
+            let url = `${global.SERVERIP}/musicfile/add?ids=${item.id}`;
             fetch(url, {
                 method: 'GET'
             })
