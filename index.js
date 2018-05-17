@@ -2,7 +2,6 @@ import { AppRegistry } from 'react-native';
 import App from './App';
 const dgram = require('react-native-udp')
 
-const enc = new TextDecoder("utf-8");
 let serverIP = '';
 const socket = dgram.createSocket('udp4')
 socket.bind(9999)
